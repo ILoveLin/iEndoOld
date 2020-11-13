@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <com.hjq.bar.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backButton="false"
+        app:title="@string/home_nav_index" />
+
+    <org.company.iendo.widget.HintLayout
+        android:id="@+id/hl_status_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/rl_status_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlEnablePreviewInEditMode="false"
+            tools:context=".ui.fragment.StatusFragment">
+
+            <com.hjq.widget.layout.WrapRecyclerView
+                android:id="@+id/rv_status_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listCount="10"
+                tools:listitem="@layout/picker_item" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </org.company.iendo.widget.HintLayout>
+</LinearLayout>

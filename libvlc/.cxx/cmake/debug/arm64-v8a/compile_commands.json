@@ -1,0 +1,13 @@
+[
+{
+  "directory": "C:/Users/Administrator/Desktop/Project/iEndo/libvlc/.cxx/cmake/debug/arm64-v8a",
+  "command": "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\ndk\\20.0.5594570\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=aarch64-none-linux-android21 --gcc-toolchain=C:/Users/Administrator/AppData/Local/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/Administrator/AppData/Local/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DyylRecord_EXPORTS -I../../../../include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles\\yylRecord.dir\\src\\main\\cpp\\yyl_record.c.o   -c C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\src\\main\\cpp\\yyl_record.c",
+  "file": "C:/Users/Administrator/Desktop/Project/iEndo/libvlc/src/main/cpp/yyl_record.c"
+},
+
+{
+  "directory": "C:/Users/Administrator/Desktop/Project/iEndo/libvlc/.cxx/cmake/debug/arm64-v8a",
+  "command": "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\ndk\\20.0.5594570\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=aarch64-none-linux-android21 --gcc-toolchain=C:/Users/Administrator/AppData/Local/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/Administrator/AppData/Local/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DyylRecord_EXPORTS -I../../../../include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles\\yylRecord.dir\\src\\main\\cpp\\yyl_log.c.o   -c C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\src\\main\\cpp\\yyl_log.c",
+  "file": "C:/Users/Administrator/Desktop/Project/iEndo/libvlc/src/main/cpp/yyl_log.c"
+}
+]

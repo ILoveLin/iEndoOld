@@ -1,0 +1,47 @@
+{
+  "stringTable": {
+    "0": "C:/Users/Administrator/Desktop/Project/iEndo/libvlc/.cxx/cmake/debug/x86",
+    "1": "--target=i686-none-linux-android17 --gcc-toolchain=C:/Users/Administrator/AppData/Local/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/Administrator/AppData/Local/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DyylRecord_EXPORTS -I../../../../include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security -O0 -fno-limit-debug-info -fPIC"
+  },
+  "buildFiles": [
+    "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\ndk\\20.0.5594570\\build\\cmake\\android.toolchain.cmake",
+    "C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\CMakeLists.txt",
+    "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\ndk\\20.0.5594570\\build\\cmake\\platforms.cmake"
+  ],
+  "cleanCommands": [
+    "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\.cxx\\cmake\\debug\\x86\" clean"
+  ],
+  "buildTargetsCommand": "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\.cxx\\cmake\\debug\\x86\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "yylRecord-Debug-x86": {
+      "buildCommand": "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\.cxx\\cmake\\debug\\x86\" yylRecord",
+      "buildType": "debug",
+      "toolchain": "254721708",
+      "abi": "x86",
+      "artifactName": "yylRecord",
+      "files": [
+        {
+          "src": "C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\src\\main\\cpp\\yyl_record.c",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        },
+        {
+          "src": "C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\src\\main\\cpp\\yyl_log.c",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        }
+      ],
+      "headers": [],
+      "output": "C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\build\\intermediates\\cmake\\debug\\obj\\x86\\libyylRecord.so"
+    }
+  },
+  "toolchains": {
+    "254721708": {
+      "cCompilerExecutable": "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\ndk\\20.0.5594570\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

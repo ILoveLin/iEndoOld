@@ -102,6 +102,8 @@ dependencies {
     implementation project(':widget')
     // 友盟封装
     implementation project(':umeng')
+    //VLC播放器
+    implementation project(':libvlc')
 
     // 网络请求框架：https://github.com/getActivity/EasyHttp
     implementation 'com.hjq:http:6.9'
@@ -172,4 +174,22 @@ dependencies {
     // 图片压缩：https://github.com/Curzibn/Luban
     // 对象存储：https://github.com/leavesC/DoKV
     // 对象注解：https://www.jianshu.com/p/f1f888e4a35f
+
+
+
+
+    //这里的版本号换成跟项目的appcompat一致，尽量减少一些未知的问题
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    //androidx
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.github.arcadefire:nice-spinner:1.4.4'
+    //greendao 数据库
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
+
+
+
+
+
+
+
 }

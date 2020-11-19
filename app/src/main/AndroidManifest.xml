@@ -51,7 +51,7 @@
 
         <!-- 闪屏界面 -->
         <activity
-            android:name="org.company.iendo.ui.activity.SplashActivity"
+            android:name="org.company.iendo.mineui.activity.SplashActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
@@ -66,6 +66,16 @@
             </intent-filter>
 
         </activity>
+
+        <!--        mineUI-->
+        <activity
+            android:name=".mineui.activity.AddServersActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/password_reset_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!---->
+
 
         <!-- 崩溃界面 -->
         <activity
@@ -95,7 +105,7 @@
 
         <!-- 登录界面 -->
         <activity
-            android:name="org.company.iendo.ui.activity.LoginActivity"
+            android:name="org.company.iendo.mineui.activity.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

@@ -14,7 +14,7 @@ import org.company.iendo.ui.activity.GuideActivity;
 import org.company.iendo.ui.activity.HomeActivity;
 import org.company.iendo.ui.activity.ImagePreviewActivity;
 import org.company.iendo.ui.activity.ImageSelectActivity;
-import org.company.iendo.ui.activity.LoginActivity;
+import org.company.iendo.mineui.activity.LoginActivity;
 import org.company.iendo.ui.activity.PasswordForgetActivity;
 import org.company.iendo.ui.activity.PasswordResetActivity;
 import org.company.iendo.ui.activity.PersonalDataActivity;

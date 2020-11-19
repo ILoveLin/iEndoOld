@@ -1,3 +1,4 @@
+include ':libvlc'
 include ':app'
 include ':base'
 include ':widget'

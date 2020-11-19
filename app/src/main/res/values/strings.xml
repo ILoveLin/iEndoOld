@@ -1,8 +1,21 @@
 <resources>
-    <string name="app_name">安卓架构</string>
+    <string name="app_name">iEndo</string>
+
+    <!--科室-->
+    <string-array name="section">
+        <item>耳鼻喉科</item>
+        <item>妇科</item>
+        <item>泌尿科</item>
+    </string-array>
+    <!--是否在线-->
+    <string-array name="getOnLine">
+        <item>在线登陆</item>
+        <item>离线登陆</item>
+    </string-array>
+
 
     <!-- 通用的 -->
-    <string name="common_phone_input_hint">输入手机号码</string>
+    <string name="common_phone_input_hint">请输入账号</string>
     <string name="common_phone_input_error">手机号输入不正确</string>
 
     <string name="common_password_input_error">请输入密码</string>

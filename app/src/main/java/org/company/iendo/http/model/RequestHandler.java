@@ -23,7 +23,7 @@ import org.company.iendo.http.json.IntegerTypeAdapter;
 import org.company.iendo.http.json.ListTypeAdapter;
 import org.company.iendo.http.json.LongTypeAdapter;
 import org.company.iendo.http.json.StringTypeAdapter;
-import org.company.iendo.ui.activity.LoginActivity;
+import org.company.iendo.mineui.activity.LoginActivity;
 import com.hjq.http.EasyLog;
 import com.hjq.http.config.IRequestHandler;
 import com.hjq.http.exception.CancelException;

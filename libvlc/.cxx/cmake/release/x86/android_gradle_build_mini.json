@@ -1,0 +1,19 @@
+{
+  "buildFiles": [
+    "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\ndk\\20.0.5594570\\build\\cmake\\android.toolchain.cmake",
+    "C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\CMakeLists.txt",
+    "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\ndk\\20.0.5594570\\build\\cmake\\platforms.cmake"
+  ],
+  "cleanCommands": [
+    "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\.cxx\\cmake\\release\\x86\" clean"
+  ],
+  "buildTargetsCommand": "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\.cxx\\cmake\\release\\x86\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "yylRecord-Release-x86": {
+      "artifactName": "yylRecord",
+      "buildCommand": "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\.cxx\\cmake\\release\\x86\" yylRecord",
+      "abi": "x86",
+      "output": "C:\\Users\\Administrator\\Desktop\\Project\\iEndo\\libvlc\\build\\intermediates\\cmake\\release\\obj\\x86\\libyylRecord.so"
+    }
+  }
+}

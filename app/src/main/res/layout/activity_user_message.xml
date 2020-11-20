@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="org.company.iendo.ui.fragment.HomeFragment"
+    tools:ignore="HardcodedText">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/white"
+        app:backButton="true"
+        app:barStyle="transparent"
+        app:layout_collapseMode="pin"
+        app:leftIcon="@drawable/selector_titlebar_registerleft"
+        app:lineColor="@color/colorLine"
+        app:lineSize="1px"
+        app:lineVisible="false"
+        app:title="用户信息"
+        app:titleColor="@color/color_333333" />
+    <!--状态布局-->
+    <org.company.iendo.widget.HintLayout
+        android:id="@+id/hl_status_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/smartRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlEnablePureScrollMode="true">
+
+            <!--纯滚动模式-->
+            <!--app:srlEnablePureScrollMode="true"-->
+            <!--刷新和加载更多设置-->
+            <!--app:srlEnableAutoLoadMore="false"-->
+            <!--app:srlEnableLoadMore="true"-->
+
+            <!--app:srlPrimaryColor="@android:color/white"-->
+
+            <!--app:srlDrawableProgress="@drawable/ic_progress_puzzle"-->
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srlClassicsSpinnerStyle="FixedBehind"
+                app:srlDrawableArrowSize="20dp"
+                app:srlDrawableMarginRight="20dp"
+                app:srlDrawableProgressSize="20dp"
+                app:srlEnableLastTime="true"
+                app:srlFinishDuration="500"
+                app:srlTextSizeTime="10dp"
+                app:srlTextSizeTitle="16sp"
+                app:srlTextTimeMarginTop="2dp" />
+            <!--        添加刷新的logo-->
+            <!--        app:srlDrawableProgress="@mipmap/icon_refresh_logo"-->
+
+            <!--纯滚动模式-->
+            <!--app:srlEnablePureScrollMode="true"-->
+            <!--刷新和加载更多设置-->
+            <!--app:srlEnableAutoLoadMore="false"-->
+            <!--app:srlEnableLoadMore="true"-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <!--用户名-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text="用户名:"
+                        android:textColor="@color/color_333333" />
+
+                    <TextView
+                        android:id="@+id/user_username"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/color_A4A4A4"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+                <!--描述-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text="描述:"
+                        android:textColor="@color/color_333333" />
+
+                    <TextView
+                        android:id="@+id/user_describe"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/color_A4A4A4"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+                <!--创建时间-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text="创建时间:"
+                        android:textColor="@color/color_333333" />
+
+                    <TextView
+                        android:id="@+id/user_create_time"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/color_A4A4A4"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+                <!--上次登录时间-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text="上次登录时间:"
+                        android:textColor="@color/color_333333" />
+
+                    <TextView
+                        android:id="@+id/user_lasttime_online"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/color_A4A4A4"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <!--登录次数-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text="登录次数:"
+                        android:textColor="@color/color_333333" />
+
+                    <TextView
+                        android:id="@+id/user_online_times"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/color_A4A4A4"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:weightSum="4">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_user_msg_leave_user"
+                        style="@style/RectButtonStyle"
+                        android:layout_width="@dimen/padding_120"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/padding_80"
+                        android:layout_weight="1"
+                        android:text="离线用户" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_user_msg_change_password"
+                        style="@style/RectButtonStyle"
+                        android:layout_width="@dimen/padding_120"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/padding_20"
+                        android:layout_weight="1"
+                        android:text="修改i密码" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_user_control_else_user"
+                        style="@style/RectButtonStyle"
+                        android:layout_width="@dimen/padding_120"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/padding_20"
+                        android:layout_weight="1"
+                        android:text="管理其他用户" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_user_exit"
+                        style="@style/RectButtonStyle"
+                        android:layout_width="@dimen/padding_120"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/padding_20"
+                        android:layout_weight="1"
+                        android:text="注销登陆" />
+
+
+                </LinearLayout>
+
+
+                <!--根节点-->
+            </LinearLayout>
+
+            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srlAccentColor="@color/gray" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </org.company.iendo.widget.HintLayout>
+
+</LinearLayout>

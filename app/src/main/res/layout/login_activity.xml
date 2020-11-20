@@ -44,6 +44,7 @@
         <com.hjq.widget.view.ClearEditText
             android:id="@+id/et_login_phone"
             style="@style/EditTextStyle"
+            android:text="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
@@ -66,6 +67,7 @@
             android:layout_marginTop="20dp"
             android:hint="@string/common_password_input_error"
             android:maxLength="20"
+            android:text="1"
             android:maxLines="1" />
 
         <View

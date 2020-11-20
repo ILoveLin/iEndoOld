@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -19,6 +17,7 @@ import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.adapter.AddServersAdapter;
 import org.company.iendo.widget.HintLayout;
+import org.company.iendo.widget.RecycleViewDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ import java.util.List;
  */
 public class AddServersActivity extends MyActivity implements BaseAdapter.OnItemClickListener, OnRefreshLoadMoreListener, StatusAction {
     private SmartRefreshLayout mRefreshLayout;
-    private RecyclerView mRecycleView;
+    private RecyclerView mRecyclerView;
     private AddServersAdapter mAdapter;
     private HintLayout mHintLayout;
 
@@ -51,15 +50,18 @@ public class AddServersActivity extends MyActivity implements BaseAdapter.OnItem
 //        // 给这个 ToolBar 设置顶部内边距，才能和 TitleBar 进行对齐
 //        ImmersionBar.setTitleBar(this, mToolbar);
 
-        mRecycleView = findViewById(R.id.recycleview);
+        mRecyclerView = findViewById(R.id.recycleview);
         mRefreshLayout = findViewById(R.id.smartRefresh);
         mHintLayout = findViewById(R.id.hl_status_hint);
         mAdapter = new AddServersAdapter(this);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setData(analogData());
         mRefreshLayout.setOnRefreshLoadMoreListener(this);
-        mRecycleView.setAdapter(mAdapter);
-
+        mRecyclerView.setAdapter(mAdapter);
+        // 禁用动画效果
+        mRecyclerView.setItemAnimator(null);
+        // 添加分割线
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(getActivity(), 1, R.drawable.shape_divideritem_decoration));
 
     }
 

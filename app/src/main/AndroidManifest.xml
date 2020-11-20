@@ -67,14 +67,33 @@
 
         </activity>
 
-        <!--        mineUI-->
+        <!--mineUI-->
         <activity
             android:name=".mineui.activity.login.AddServersActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <!---->
+        <activity
+            android:name=".mineui.activity.user.CaseManageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/password_reset_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mineui.activity.user.UserMessageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/password_reset_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mineui.activity.user.UserSearchActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/password_reset_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <!--mineUI-->
 
 
         <!-- 崩溃界面 -->
@@ -104,11 +123,11 @@
         <!--            android:screenOrientation="portrait" />-->
 
         <!-- 登录界面 -->
-<!--        <activity-->
-<!--            android:name="org.company.iendo.mineui.activity.LoginActivity"-->
-<!--            android:configChanges="orientation|screenSize|keyboardHidden"-->
-<!--            android:launchMode="singleTop"-->
-<!--            android:screenOrientation="portrait" />-->
+        <!--        <activity-->
+        <!--            android:name="org.company.iendo.mineui.activity.LoginActivity"-->
+        <!--            android:configChanges="orientation|screenSize|keyboardHidden"-->
+        <!--            android:launchMode="singleTop"-->
+        <!--            android:screenOrientation="portrait" />-->
 
         <!-- 注册界面 -->
         <activity

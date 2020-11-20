@@ -1,18 +1,13 @@
 package org.company.iendo.mineui;
 
-import android.view.KeyEvent;
 import android.view.View;
-
-import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.hjq.base.BaseFragmentAdapter;
 
 import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
-import org.company.iendo.common.MyFragment;
 import org.company.iendo.helper.ActivityStackManager;
 import org.company.iendo.helper.DoubleClickHelper;
+import org.company.iendo.mineui.activity.user.CaseManageActivity;
+import org.company.iendo.mineui.activity.user.UserMessageActivity;
 import org.company.iendo.other.KeyboardWatcher;
 
 /**
@@ -35,7 +30,23 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
 
     @Override
     protected void initData() {
+        setOnClickListener(R.id.cv_user, R.id.cv_case_manage, R.id.cv_live);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.cv_user:
+                startActivity(UserMessageActivity.class);
+                break;
+            case R.id.cv_case_manage:
+                startActivity(CaseManageActivity.class);
+
+                break;
+            case R.id.cv_live:
+                break;
+        }
     }
 
 
@@ -56,7 +67,6 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
             toast(R.string.home_exit_hint);
         }
     }
-
 
 
     /**

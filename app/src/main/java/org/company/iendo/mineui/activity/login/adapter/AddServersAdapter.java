@@ -51,7 +51,7 @@ public class AddServersAdapter extends MyAdapter<String> {
         //数据回写
         @Override
         public void onBindView(int position) {
-            mID.setText(position+"~~");
+            mID.setText(position+"");
             mPort.setText(getItem(position)+"");
         }
     }

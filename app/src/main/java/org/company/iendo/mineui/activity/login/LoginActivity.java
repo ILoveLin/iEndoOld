@@ -90,6 +90,8 @@ public final class LoginActivity extends MyActivity
         mAdd = findViewById(R.id.iv_add);
         setOnClickListener(mCommitView, mTitleBar.getLeftView(),mAdd,mSwithRemeber);
 
+
+
         InputTextHelper.with(this)
                 .addView(mPhoneView)
                 .addView(mPasswordView)
@@ -98,8 +100,8 @@ public final class LoginActivity extends MyActivity
                     @Override
                     public boolean onInputChange(InputTextHelper helper) {
 
-                        return mPhoneView.getText().toString().length() >= 1 &&
-                                mPasswordView.getText().toString().length() >= 1;
+                        return mPhoneView.getText().toString().length() >= 0 &&
+                                mPasswordView.getText().toString().length() >= 0;
                     }
                 })
                 .build();

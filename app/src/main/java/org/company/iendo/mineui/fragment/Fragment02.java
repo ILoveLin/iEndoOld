@@ -1,5 +1,6 @@
 package org.company.iendo.mineui.fragment;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -63,5 +64,10 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public HintLayout getHintLayout() {
         return mHintLayout;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("TAG","fragment02");
     }
 }

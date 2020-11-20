@@ -5,6 +5,7 @@ import android.view.View;
 import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.LoginActivity;
+import org.company.iendo.mineui.activity.user.UserSearchActivity;
 
 /**
  * LoveLin

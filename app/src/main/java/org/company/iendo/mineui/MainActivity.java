@@ -6,8 +6,8 @@ import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.helper.ActivityStackManager;
 import org.company.iendo.helper.DoubleClickHelper;
-import org.company.iendo.mineui.activity.user.CaseManageActivity;
 import org.company.iendo.mineui.activity.user.UserMessageActivity;
+import org.company.iendo.mineui.activity.casemsg.CaseManageActivity;
 import org.company.iendo.other.KeyboardWatcher;
 
 /**

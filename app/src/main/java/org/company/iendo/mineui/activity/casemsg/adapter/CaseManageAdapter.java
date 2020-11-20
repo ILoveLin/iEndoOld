@@ -1,4 +1,4 @@
-package org.company.iendo.mineui.activity.user.adapter;
+package org.company.iendo.mineui.activity.casemsg.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;

@@ -8,11 +8,11 @@
     tools:context="com.lovelin.frame.mineui.fragment.Fragment03"
     tools:ignore="HardcodedText">
 
-    <com.hjq.bar.TitleBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backButton="false"
-        app:title="@string/home_nav_message" />
+<!--    <com.hjq.bar.TitleBar-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:backButton="false"-->
+<!--        app:title="@string/home_nav_message" />-->
 
     <org.company.iendo.widget.HintLayout
         android:id="@+id/hl_status_hint"

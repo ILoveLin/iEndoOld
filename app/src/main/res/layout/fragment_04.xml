@@ -7,11 +7,11 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <com.hjq.bar.TitleBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backButton="false"
-        app:title="@string/home_nav_me" />
+<!--    <com.hjq.bar.TitleBar-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:backButton="false"-->
+<!--        app:title="@string/home_nav_me" />-->
 
     <org.company.iendo.widget.HintLayout
         android:id="@+id/hl_status_hint"

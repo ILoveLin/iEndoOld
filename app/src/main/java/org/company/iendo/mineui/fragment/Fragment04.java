@@ -1,6 +1,8 @@
 package org.company.iendo.mineui.fragment;
 
 
+import android.util.Log;
+
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyFragment;
@@ -35,11 +37,18 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     protected void initData() {
 
     }
+
     @Override
     public boolean isStatusBarEnabled() {
         // 使用沉浸式状态栏
         return !super.isStatusBarEnabled();
     }
+
+    public void onResume() {
+        super.onResume();
+        Log.e("TAG", "fragment04");
+    }
+
     @Override
     public HintLayout getHintLayout() {
         return mHintLayout;

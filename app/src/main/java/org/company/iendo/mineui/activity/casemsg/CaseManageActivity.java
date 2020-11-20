@@ -1,4 +1,4 @@
-package org.company.iendo.mineui.activity.user;
+package org.company.iendo.mineui.activity.casemsg;
 
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,7 +12,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyActivity;
-import org.company.iendo.mineui.activity.user.adapter.CaseManageAdapter;
+import org.company.iendo.mineui.activity.casemsg.adapter.CaseManageAdapter;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 
@@ -87,7 +87,8 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-        toast("第" + position + "被点击了");
+        toast("第" + position + "条目被点击了");
+        startActivity(CaseDetailMsgActivity.class);
     }
 
 

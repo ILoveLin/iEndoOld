@@ -1,5 +1,6 @@
 package org.company.iendo.mineui.fragment;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -54,18 +55,7 @@ public class Fragment01 extends MyFragment<MainActivity> implements BaseAdapter.
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        TextView headerView = mRecyclerView.addHeaderView(R.layout.picker_item);
-        headerView.setText("我是头部");
-        headerView.setOnClickListener(v -> toast("点击了头部"));
-
-        TextView footerView = mRecyclerView.addFooterView(R.layout.picker_item);
-        footerView.setText("我是尾部");
-        footerView.setOnClickListener(v -> toast("点击了尾部"));
-
         mRefreshLayout.setOnRefreshLoadMoreListener(this);
-
-//        StatusManager mStatusManager = new StatusManager();
-//        mStatusManager.showLoading(getActivity());
 
     }
 
@@ -155,7 +145,11 @@ public class Fragment01 extends MyFragment<MainActivity> implements BaseAdapter.
         }, 1000);
 
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("TAG","fragment01");
+    }
 
     @Override
     public HintLayout getHintLayout() {

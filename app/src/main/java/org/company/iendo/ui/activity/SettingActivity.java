@@ -12,7 +12,7 @@ import org.company.iendo.helper.CacheDataManager;
 import org.company.iendo.http.glide.GlideApp;
 import org.company.iendo.http.model.HttpData;
 import org.company.iendo.http.request.LogoutApi;
-import org.company.iendo.mineui.activity.LoginActivity;
+import org.company.iendo.mineui.activity.login.LoginActivity;
 import org.company.iendo.other.AppConfig;
 import org.company.iendo.ui.dialog.MenuDialog;
 import org.company.iendo.ui.dialog.SafeDialog;

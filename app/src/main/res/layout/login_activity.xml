@@ -8,7 +8,7 @@
     android:gravity="center_horizontal"
     android:layoutAnimation="@anim/from_bottom_layout"
     android:orientation="vertical"
-    tools:context="org.company.iendo.mineui.activity.LoginActivity"
+    tools:context="org.company.iendo.mineui.activity.login.LoginActivity"
     tools:layoutAnimation="@null">
     <!--    android:src="@drawable/selector_titlebar_registerleft"-->
 

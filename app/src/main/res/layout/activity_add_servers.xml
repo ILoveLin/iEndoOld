@@ -1,89 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="org.company.iendo.ui.fragment.HomeFragment"
     tools:ignore="HardcodedText">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.hjq.bar.TitleBar
+        android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:elevation="0px">
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/white"
+        app:backButton="true"
+        app:barStyle="transparent"
+        app:layout_collapseMode="pin"
+        app:leftIcon="@drawable/selector_titlebar_registerleft"
+        app:lineColor="@color/colorLine"
+        app:lineSize="1px"
+        app:lineVisible="false"
+        app:rightColor="@color/color_333333"
+        app:rightTitle="完成"
+        app:title="添加服务器"
+        app:titleColor="@color/color_333333" />
+    <!--状态布局-->
+    <org.company.iendo.widget.HintLayout
+        android:id="@+id/hl_status_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-
-        <org.company.iendo.widget.XCollapsingToolbarLayout
-            android:id="@+id/ctl_home_bar"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/smartRefresh"
             android:layout_width="match_parent"
-            android:layout_height="256dp"
-            app:contentScrim="@color/white"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:scrimVisibleHeightTrigger="100dp">
+            android:layout_height="match_parent"
+            app:srlEnablePureScrollMode="false"
+            app:srlEnableAutoLoadMore="false"
+            app:srlEnableLoadMore="true">
 
-            <LinearLayout
+            <!--纯滚动模式-->
+            <!--app:srlEnablePureScrollMode="true"-->
+            <!--刷新和加载更多设置-->
+            <!--app:srlEnableAutoLoadMore="false"-->
+            <!--app:srlEnableLoadMore="true"-->
+
+            <!--app:srlPrimaryColor="@android:color/white"-->
+
+            <!--app:srlDrawableProgress="@drawable/ic_progress_puzzle"-->
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"
-                app:srcCompat="@drawable/example_bg">
+                app:srlClassicsSpinnerStyle="FixedBehind"
+                app:srlDrawableArrowSize="20dp"
+                app:srlDrawableMarginRight="20dp"
+                app:srlDrawableProgressSize="20dp"
+                app:srlEnableLastTime="true"
+                app:srlFinishDuration="500"
+                app:srlTextSizeTime="10dp"
+                app:srlTextSizeTitle="16sp"
+                app:srlTextTimeMarginTop="2dp" />
+            <!--        添加刷新的logo-->
+            <!--        app:srlDrawableProgress="@mipmap/icon_refresh_logo"-->
 
-                <TextView
+            <!--纯滚动模式-->
+            <!--app:srlEnablePureScrollMode="true"-->
+            <!--刷新和加载更多设置-->
+            <!--app:srlEnableAutoLoadMore="false"-->
+            <!--app:srlEnableLoadMore="true"-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <!--设备名称-->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="256dp"
-                    android:background="@color/red"
-                    android:scaleType="centerCrop"
-                    app:layout_collapseMode="parallax" />
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/padding_20"
+                        android:text="名称:"
+                        android:textColor="@color/color_333333" />
+
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/et_device_type"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:hint="请输入设备名称"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <!--ip地址-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/padding_20"
+                        android:text="ip地址:"
+                        android:textColor="@color/color_333333" />
+
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/et_ip"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:hint="请输入ip地址"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+                <!--端口号-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/padding_20"
+                        android:text="端口号:"
+                        android:textColor="@color/color_333333" />
+
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/et_port"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:hint="请输入端口号"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+                <!--提交-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/color_333333" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        style="@style/ButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/padding_10"
+                        android:paddingTop="@dimen/padding_10"
+                        android:paddingBottom="@dimen/padding_10"
+                        android:text="提交" />
+
+
+                </LinearLayout>
+
+                <include layout="@layout/header_addservers" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+                <!--根节点-->
             </LinearLayout>
 
-            <!--            <androidx.appcompat.widget.AppCompatImageView-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:scaleType="centerCrop"-->
-            <!--                app:layout_collapseMode="parallax"-->
-            <!--                app:srcCompat="@drawable/example_bg" />-->
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tb_home_title"
+            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:layout_marginEnd="20dp"
-                app:layout_collapseMode="pin" />
+                android:layout_height="wrap_content"
+                app:srlAccentColor="@color/gray" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </org.company.iendo.widget.HintLayout>
 
-            <com.hjq.bar.TitleBar
-                android:id="@+id/titlebar"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                app:backButton="true"
-                app:barStyle="transparent"
-                app:layout_collapseMode="pin"
-                app:leftIcon="@drawable/selector_titlebar_registerleft"
-                app:lineColor="@color/colorLine"
-                app:lineSize="1px"
-                app:lineVisible="false"
-                app:rightColor="@color/color_333333"
-                app:rightTitle="完成"
-                app:title="添加服务器"
-                app:titleColor="@color/color_333333" />
-
-        </org.company.iendo.widget.XCollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/recycleview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black30"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/recycleview"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

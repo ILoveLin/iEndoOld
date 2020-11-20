@@ -1,4 +1,4 @@
-package org.company.iendo.mineui.activity;
+package org.company.iendo.mineui.activity.login;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;

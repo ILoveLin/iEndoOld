@@ -1,8 +1,7 @@
-package org.company.iendo.mineui.activity;
+package org.company.iendo.mineui.activity.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,6 @@ import org.company.iendo.common.MyActivity;
 import org.company.iendo.http.model.HttpData;
 import org.company.iendo.http.request.UserInfoApi;
 import org.company.iendo.http.response.UserInfoBean;
-import org.company.iendo.mineui.MainActivity;
-import org.company.iendo.mineui.activity.LoginActivity;
 import org.company.iendo.other.AppConfig;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;

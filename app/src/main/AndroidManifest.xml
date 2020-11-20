@@ -51,7 +51,7 @@
 
         <!-- 闪屏界面 -->
         <activity
-            android:name="org.company.iendo.mineui.activity.SplashActivity"
+            android:name="org.company.iendo.mineui.activity.login.LoginActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
@@ -69,7 +69,7 @@
 
         <!--        mineUI-->
         <activity
-            android:name=".mineui.activity.AddServersActivity"
+            android:name=".mineui.activity.login.AddServersActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
@@ -104,11 +104,11 @@
         <!--            android:screenOrientation="portrait" />-->
 
         <!-- 登录界面 -->
-        <activity
-            android:name="org.company.iendo.mineui.activity.LoginActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+<!--        <activity-->
+<!--            android:name="org.company.iendo.mineui.activity.LoginActivity"-->
+<!--            android:configChanges="orientation|screenSize|keyboardHidden"-->
+<!--            android:launchMode="singleTop"-->
+<!--            android:screenOrientation="portrait" />-->
 
         <!-- 注册界面 -->
         <activity

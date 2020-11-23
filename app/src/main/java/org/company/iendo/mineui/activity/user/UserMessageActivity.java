@@ -6,6 +6,7 @@ import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.LoginActivity;
 import org.company.iendo.mineui.activity.user.UserSearchActivity;
+import org.company.iendo.util.SharePreferenceUtil;
 
 /**
  * LoveLin
@@ -43,6 +44,7 @@ public class UserMessageActivity extends MyActivity {
 
                 break;
             case R.id.btn_user_exit:
+                SharePreferenceUtil.put(getActivity(), SharePreferenceUtil.is_login, false);
                 startActivity(LoginActivity.class);
                 break;
         }

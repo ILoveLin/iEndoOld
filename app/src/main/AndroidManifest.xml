@@ -51,7 +51,7 @@
 
         <!-- 闪屏界面 -->
         <activity
-            android:name="org.company.iendo.mineui.activity.login.LoginActivity"
+            android:name="org.company.iendo.mineui.activity.login.SplashActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
@@ -68,6 +68,23 @@
         </activity>
 
         <!--mineUI-->
+        <!-- 引导界面 -->
+        <activity
+            android:name=".mineui.activity.login.GuideActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mineui.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mineui.activity.login.LoginActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/password_reset_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".mineui.activity.login.AddServersActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -111,16 +128,7 @@
             android:screenOrientation="landscape" />
 
         <!-- 引导界面 -->
-        <activity
-            android:name="org.company.iendo.ui.activity.GuideActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".mineui.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+
         <!--        &lt;!&ndash; App 首页 &ndash;&gt;-->
         <!--        <activity-->
         <!--            android:name="org.company.iendo.ui.activity.HomeActivity"-->

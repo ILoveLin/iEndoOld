@@ -49,8 +49,20 @@ import okhttp3.OkHttpClient;
  */
 public final class MyApplication extends Application implements LifecycleOwner {
 
+    private static MyApplication app;
+    public MyApplication() {
+        app = this;
+    }
+
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
+
+    public static synchronized MyApplication getInstance(){
+        if (app == null) {
+            app = new MyApplication();
+        }
+        return app;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -162,7 +174,7 @@ public final class MyApplication extends Application implements LifecycleOwner {
 
     private DaoSession daoSession;
 
-    public DaoSession getDaoSession() {
+    public    DaoSession getDaoSession() {
         return daoSession;
     }
 

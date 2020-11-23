@@ -12,35 +12,48 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseDialog;
+
 import org.company.iendo.R;
 import org.company.iendo.action.SwipeAction;
 import org.company.iendo.action.TitleBarAction;
 import org.company.iendo.action.ToastAction;
 import org.company.iendo.http.model.HttpData;
 import org.company.iendo.ui.dialog.WaitDialog;
+
 import com.hjq.http.listener.OnHttpListener;
 
 import okhttp3.Call;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2018/10/18
- *    desc   : 项目中的 Activity 基类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2018/10/18
+ * desc   : 项目中的 Activity 基类
  */
 public abstract class MyActivity extends BaseActivity
         implements ToastAction, TitleBarAction,
         SwipeAction, OnHttpListener {
 
-    /** 标题栏对象 */
+
+
+    /**
+     * 标题栏对象
+     */
     private TitleBar mTitleBar;
-    /** 状态栏沉浸 */
+    /**
+     * 状态栏沉浸
+     */
     private ImmersionBar mImmersionBar;
 
-    /** 加载对话框 */
+    /**
+     * 加载对话框
+     */
     private BaseDialog mDialog;
-    /** 对话框数量 */
+    /**
+     * 对话框数量
+     */
     private int mDialogTotal;
+
 
     /**
      * 当前加载对话框是否在显示中
@@ -98,6 +111,10 @@ public abstract class MyActivity extends BaseActivity
                 ImmersionBar.setTitleBar(this, getTitleBar());
             }
         }
+
+        // activity的管理类,管理全局的activity
+        ActivityCollector.getInstance().addActivity(this);
+
     }
 
     /**
@@ -212,6 +229,8 @@ public abstract class MyActivity extends BaseActivity
             hideDialog();
         }
         mDialog = null;
+        //移除activity 管理器
+        ActivityCollector.getInstance().removeActivity(this);
         super.onDestroy();
     }
 }

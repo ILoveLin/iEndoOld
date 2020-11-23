@@ -9,8 +9,8 @@
     </string-array>
     <!--是否在线-->
     <string-array name="getOnLine">
-        <item>在线登陆</item>
-        <item>离线登陆</item>
+        <item>在线登录</item>
+        <item>离线登录</item>
     </string-array>
 
 

@@ -7,10 +7,10 @@ import android.view.View;
 import org.company.iendo.R;
 import org.company.iendo.aop.SingleClick;
 import org.company.iendo.common.MyFragment;
+import org.company.iendo.mineui.activity.login.GuideActivity;
 import org.company.iendo.ui.activity.AboutActivity;
 import org.company.iendo.ui.activity.BrowserActivity;
 import org.company.iendo.ui.activity.DialogActivity;
-import org.company.iendo.ui.activity.GuideActivity;
 import org.company.iendo.ui.activity.HomeActivity;
 import org.company.iendo.ui.activity.ImagePreviewActivity;
 import org.company.iendo.ui.activity.ImageSelectActivity;
@@ -95,7 +95,7 @@ public final class MeFragment extends MyFragment<HomeActivity> {
                 startActivity(AboutActivity.class);
                 break;
             case R.id.btn_me_guide:
-                startActivity(GuideActivity.class);
+//                startActivity(GuideActivity.class);
                 break;
             case R.id.btn_me_browser:
                 BrowserActivity.start(getAttachActivity(), "https://www.jianshu.com/u/f7bb67d86765");

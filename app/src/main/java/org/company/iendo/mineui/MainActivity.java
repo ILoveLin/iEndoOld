@@ -21,6 +21,9 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
         return R.layout.activity_main_only;
     }
 
+
+
+    
     @Override
     protected void initView() {
 

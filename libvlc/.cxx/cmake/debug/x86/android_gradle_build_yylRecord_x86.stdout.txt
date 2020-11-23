@@ -1,4 +1,2 @@
 ninja: Entering directory `C:\Users\Administrator\Desktop\Project\iEndo\libvlc\.cxx\cmake\debug\x86'
-[1/3] Building C object CMakeFiles/yylRecord.dir/src/main/cpp/yyl_log.c.o
-[2/3] Building C object CMakeFiles/yylRecord.dir/src/main/cpp/yyl_record.c.o
-[3/3] Linking C shared library ..\..\..\..\build\intermediates\cmake\debug\obj\x86\libyylRecord.so
+ninja: no work to do.

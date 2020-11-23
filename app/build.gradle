@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-aspectjx'
 apply from: '../config.gradle'
 apply from: 'proguard.gradle'
-
+apply plugin: 'org.greenrobot.greendao' // apply plugin
 android {
 
     defaultConfig {
@@ -92,7 +92,18 @@ android {
             outputFileName += '.apk'
         }
     }
+
+    greendao {
+        schemaVersion 1 //数据库版本号
+        daoPackage 'org.company.iendo.my.db'
+// 设置DaoMaster、DaoSession、Dao 包名
+        targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录,请注意，这里路径用/不要用.
+        generateTests false //设置为true以自动生成单元测试。
+        targetGenDirTests 'src/main/java' //应存储生成的单元测试的基本目录。默认为 src / androidTest / java。
+    }
+
 }
+
 
 // api 与 implementation 的区别：https://www.jianshu.com/p/8962d6ba936e
 dependencies {

@@ -1,6 +1,7 @@
 package org.company.iendo.common;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -15,14 +16,19 @@ import androidx.lifecycle.LifecycleRegistry;
 import com.billy.android.swipe.SmartSwipeBack;
 import com.hjq.bar.TitleBar;
 import com.hjq.bar.style.TitleBarLightStyle;
+
 import org.company.iendo.R;
 import org.company.iendo.action.SwipeAction;
 import org.company.iendo.helper.ActivityStackManager;
 import org.company.iendo.http.model.RequestHandler;
 import org.company.iendo.http.server.ReleaseServer;
 import org.company.iendo.http.server.TestServer;
+import org.company.iendo.my.db.DaoMaster;
+import org.company.iendo.my.db.DaoSession;
 import org.company.iendo.other.AppConfig;
 import org.company.iendo.other.CrashHandler;
+import org.greenrobot.greendao.AbstractDaoMaster;
+
 import com.hjq.http.EasyConfig;
 import com.hjq.http.config.IRequestServer;
 import com.hjq.toast.ToastInterceptor;
@@ -36,10 +42,10 @@ import com.tencent.bugly.crashreport.CrashReport;
 import okhttp3.OkHttpClient;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2018/10/18
- *    desc   : 项目中的 Application 基类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2018/10/18
+ * desc   : 项目中的 Application 基类
  */
 public final class MyApplication extends Application implements LifecycleOwner {
 
@@ -50,6 +56,7 @@ public final class MyApplication extends Application implements LifecycleOwner {
         super.onCreate();
         mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         initSdk(this);
+        initGreenDao();
     }
 
     @NonNull
@@ -142,4 +149,22 @@ public final class MyApplication extends Application implements LifecycleOwner {
             return true;
         });
     }
+
+    /**
+     * 初始化GreenDao,直接在Application中进行初始化操作
+     */
+    private void initGreenDao() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "my.db");
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+    }
+
+    private DaoSession daoSession;
+
+    public DaoSession getDaoSession() {
+        return daoSession;
+    }
+
+
 }

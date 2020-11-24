@@ -1,20 +1,14 @@
 package org.company.iendo.mineui.activity.login.adapter;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.hjq.base.BaseAdapter;
-
 import org.company.iendo.R;
 import org.company.iendo.common.MyAdapter;
-import org.company.iendo.mineui.beandb.AddServersBeanDB;
 import org.company.iendo.mineui.beandb.ServersDBBean;
-
-import java.util.ArrayList;
 
 /**
  * LoveLin

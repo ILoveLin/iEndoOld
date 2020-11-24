@@ -197,11 +197,10 @@ public final class LoginActivity extends MyActivity
                                 @Override
                                 public void onSucceed(HttpData<LoginBean> data) {
                                     // 更新 Token
-                                    EasyConfig.getInstance()
-                                            .addParam("token", data.getData().getToken());
+
                                     // 跳转到主页
 //                            startActivity(HomeActivity.class);
-                                    finish();
+//                                    finish();
                                 }
                             });
 
@@ -296,14 +295,6 @@ public final class LoginActivity extends MyActivity
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-        String o = (String) SharePreferenceUtil.get(LoginActivity.this, SharePreferenceUtil.Current_IP, "");
-        toast(o);
-    }
 
     @Override
     public boolean isSwipeEnable() {

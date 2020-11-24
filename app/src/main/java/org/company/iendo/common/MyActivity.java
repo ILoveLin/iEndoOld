@@ -19,6 +19,7 @@ import org.company.iendo.action.TitleBarAction;
 import org.company.iendo.action.ToastAction;
 import org.company.iendo.http.model.HttpData;
 import org.company.iendo.ui.dialog.WaitDialog;
+import org.company.iendo.util.SharePreferenceUtil;
 
 import com.hjq.http.listener.OnHttpListener;
 
@@ -185,6 +186,11 @@ public abstract class MyActivity extends BaseActivity
         onBackPressed();
     }
 
+    public Boolean getCurrentOnlineType(){
+        Boolean isOnline = (Boolean) SharePreferenceUtil.get(this, SharePreferenceUtil.isOnline, true);
+        return isOnline;
+
+    }
     @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         super.startActivityForResult(intent, requestCode, options);

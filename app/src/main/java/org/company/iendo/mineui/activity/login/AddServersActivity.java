@@ -20,7 +20,6 @@ import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.adapter.AddServersAdapter;
-import org.company.iendo.mineui.beandb.AddServersBeanDB;
 import org.company.iendo.mineui.beandb.ServersDBBean;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.db.ServersDBUtils;

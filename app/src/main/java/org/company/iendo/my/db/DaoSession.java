@@ -8,11 +8,9 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import org.company.iendo.mineui.beandb.AddServersBeanDB;
 import org.company.iendo.mineui.beandb.ServersDBBean;
 import org.company.iendo.mineui.beandb.UserDBBean;
 
-import org.company.iendo.my.db.AddServersBeanDBDao;
 import org.company.iendo.my.db.ServersDBBeanDao;
 import org.company.iendo.my.db.UserDBBeanDao;
 
@@ -25,11 +23,9 @@ import org.company.iendo.my.db.UserDBBeanDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig addServersBeanDBDaoConfig;
     private final DaoConfig serversDBBeanDaoConfig;
     private final DaoConfig userDBBeanDaoConfig;
 
-    private final AddServersBeanDBDao addServersBeanDBDao;
     private final ServersDBBeanDao serversDBBeanDao;
     private final UserDBBeanDao userDBBeanDao;
 
@@ -37,32 +33,22 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
-        addServersBeanDBDaoConfig = daoConfigMap.get(AddServersBeanDBDao.class).clone();
-        addServersBeanDBDaoConfig.initIdentityScope(type);
-
         serversDBBeanDaoConfig = daoConfigMap.get(ServersDBBeanDao.class).clone();
         serversDBBeanDaoConfig.initIdentityScope(type);
 
         userDBBeanDaoConfig = daoConfigMap.get(UserDBBeanDao.class).clone();
         userDBBeanDaoConfig.initIdentityScope(type);
 
-        addServersBeanDBDao = new AddServersBeanDBDao(addServersBeanDBDaoConfig, this);
         serversDBBeanDao = new ServersDBBeanDao(serversDBBeanDaoConfig, this);
         userDBBeanDao = new UserDBBeanDao(userDBBeanDaoConfig, this);
 
-        registerDao(AddServersBeanDB.class, addServersBeanDBDao);
         registerDao(ServersDBBean.class, serversDBBeanDao);
         registerDao(UserDBBean.class, userDBBeanDao);
     }
     
     public void clear() {
-        addServersBeanDBDaoConfig.clearIdentityScope();
         serversDBBeanDaoConfig.clearIdentityScope();
         userDBBeanDaoConfig.clearIdentityScope();
-    }
-
-    public AddServersBeanDBDao getAddServersBeanDBDao() {
-        return addServersBeanDBDao;
     }
 
     public ServersDBBeanDao getServersDBBeanDao() {

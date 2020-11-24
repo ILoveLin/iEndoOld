@@ -253,7 +253,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="@dimen/padding_20"
                         android:layout_weight="1"
-                        android:text="修改i密码" />
+                        android:text="修改密码" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_user_control_else_user"
@@ -275,7 +275,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="@dimen/padding_20"
                         android:layout_weight="1"
-                        android:text="注销登陆" />
+                        android:text="注销登录" />
 
 
                 </LinearLayout>

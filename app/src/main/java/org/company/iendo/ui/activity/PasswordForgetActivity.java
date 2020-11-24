@@ -68,7 +68,6 @@ public final class PasswordForgetActivity extends MyActivity {
                 mCountdownView.start();
                 return;
             }
-
             // 获取验证码
             EasyHttp.post(this)
                     .api(new GetCodeApi()

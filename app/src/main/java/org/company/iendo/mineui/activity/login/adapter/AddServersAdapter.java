@@ -11,6 +11,8 @@ import com.hjq.base.BaseAdapter;
 
 import org.company.iendo.R;
 import org.company.iendo.common.MyAdapter;
+import org.company.iendo.mineui.beandb.AddServersBeanDB;
+import org.company.iendo.mineui.beandb.ServersDBBean;
 
 import java.util.ArrayList;
 
@@ -19,7 +21,7 @@ import java.util.ArrayList;
  * <p>
  * Describe 添加服务器的adapter
  */
-public class AddServersAdapter extends MyAdapter<String> {
+public class AddServersAdapter extends MyAdapter<ServersDBBean> {
 
     public AddServersAdapter(@NonNull Context context) {
         super(context);
@@ -51,8 +53,12 @@ public class AddServersAdapter extends MyAdapter<String> {
         //数据回写
         @Override
         public void onBindView(int position) {
-            mID.setText(position+"");
-            mPort.setText(getItem(position)+"");
+            mID.setText(position + "");
+            mName.setText(getItem(position).getName());
+            mIP.setText(getItem(position).getIp());
+            mPort.setText(getItem(position).getPort());
+
+
         }
     }
 

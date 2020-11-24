@@ -34,9 +34,9 @@
             android:id="@+id/smartRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlEnablePureScrollMode="false"
             app:srlEnableAutoLoadMore="false"
-            app:srlEnableLoadMore="true">
+            app:srlEnableLoadMore="true"
+            app:srlEnablePureScrollMode="false">
 
             <!--纯滚动模式-->
             <!--app:srlEnablePureScrollMode="true"-->
@@ -195,13 +195,14 @@
                         android:textColor="@color/color_333333" />
 
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/submit_add_servers"
                         style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/padding_10"
                         android:paddingTop="@dimen/padding_10"
                         android:paddingBottom="@dimen/padding_10"
-                        android:text="提交" />
+                        android:text="添加" />
 
 
                 </LinearLayout>

@@ -2,36 +2,32 @@ package org.company.iendo.mineui.beandb;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Unique;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * LoveLin
  * <p>
- * Describe 服务器的dbbean
+ * Describe
  */
 @Entity
-public class AddServersBeanDB {
+public class ServersDBBean {
     @Id(autoincrement = true)
     private Long id;
 
     private String name;  //名称
-
-    @Unique
     private String ip;  //ip
     private String port;  //端口
     private String tag;  //tag
-    @Generated(hash = 1334347072)
-    public AddServersBeanDB(Long id, String name, String ip, String port,
-            String tag) {
+    @Generated(hash = 26812560)
+    public ServersDBBean(Long id, String name, String ip, String port, String tag) {
         this.id = id;
         this.name = name;
         this.ip = ip;
         this.port = port;
         this.tag = tag;
     }
-    @Generated(hash = 906828719)
-    public AddServersBeanDB() {
+    @Generated(hash = 426272784)
+    public ServersDBBean() {
     }
     public Long getId() {
         return this.id;

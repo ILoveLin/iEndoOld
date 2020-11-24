@@ -1,46 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.company.iendo.widget.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeMenuLay"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/padding_50"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    app:ios="false"
+    app:leftSwipe="true"
+    app:swipeEnable="true">
 
-    <TextView
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/linear_item_servers"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_50"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/add_id"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="ID"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/padding_15" />
+
+        <TextView
+            android:id="@+id/add_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="名称"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/padding_15" />
+
+        <TextView
+            android:id="@+id/add_ip"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="ip地址"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/padding_15" />
+
+        <TextView
+            android:id="@+id/add_port"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="端口号"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/padding_15" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_servers_delBtn"
+        android:layout_width="@dimen/padding_80"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="ID"
-        android:id="@+id/add_id"
-        android:textColor="@color/color_333333"
+        android:background="@color/red"
+        android:text="删除"
+        android:textColor="@color/white"
         android:textSize="@dimen/padding_15" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="名称"
-        android:id="@+id/add_name"
-        android:textColor="@color/color_333333"
-        android:textSize="@dimen/padding_15" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:text="ip地址"
-        android:id="@+id/add_ip"
-        android:textColor="@color/color_333333"
-        android:textSize="@dimen/padding_15" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="端口号"
-        android:id="@+id/add_port"
-        android:textColor="@color/color_333333"
-        android:textSize="@dimen/padding_15" />
-</LinearLayout>
+</org.company.iendo.widget.SwipeMenuLayout>

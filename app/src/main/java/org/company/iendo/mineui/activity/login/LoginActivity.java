@@ -16,6 +16,9 @@ import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.L;
 import com.hjq.bar.TitleBar;
+import com.hjq.http.EasyConfig;
+import com.hjq.http.EasyHttp;
+import com.hjq.http.listener.HttpCallback;
 import com.hjq.umeng.UmengClient;
 import com.hjq.widget.view.SwitchButton;
 
@@ -27,6 +30,9 @@ import org.company.iendo.aop.SingleClick;
 import org.company.iendo.common.ActivityCollector;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.helper.InputTextHelper;
+import org.company.iendo.http.model.HttpData;
+import org.company.iendo.http.request.LoginApi;
+import org.company.iendo.http.response.LoginBean;
 import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.beandb.UserDBBean;
 import org.company.iendo.other.IntentKey;
@@ -102,7 +108,6 @@ public final class LoginActivity extends MyActivity
         mIfOnLine = findViewById(R.id.niceSpinnerGetOnLine);
         mSection = findViewById(R.id.niceSpinnerSection);
         mAdd = findViewById(R.id.iv_add);
-
         //系统默认不记住密码,在线登录,耳鼻喉科
         SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.isOnline, true);
         SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Choose_Section, "耳鼻喉科");
@@ -123,6 +128,7 @@ public final class LoginActivity extends MyActivity
 
 
     }
+
 
 
     @Override
@@ -172,7 +178,32 @@ public final class LoginActivity extends MyActivity
                 LogUtils.e("==ifOnline====000==" + ifOnline);
 
                 if (ifOnline) {
+
                     LogUtils.e("==ifOnline==1==" + ifOnline);
+//
+//                    EasyHttp.get(this)
+//                            .api(new LoginApi().setPhone(username)
+//                            .setPassword(password))
+//                            .request(new HttpCallback(new HttpData<LoginBean>(this)){
+//
+//                                     };
+
+                    EasyHttp.post(this)
+                            .api(new LoginApi()
+                                    .setPhone(username)
+                                    .setPassword(password))
+                            .request(new HttpCallback<HttpData<LoginBean>>(this) {
+
+                                @Override
+                                public void onSucceed(HttpData<LoginBean> data) {
+                                    // 更新 Token
+                                    EasyConfig.getInstance()
+                                            .addParam("token", data.getData().getToken());
+                                    // 跳转到主页
+//                            startActivity(HomeActivity.class);
+                                    finish();
+                                }
+                            });
 
                 } else {//离线登录
                     LogUtils.e("==ifOnline==2==" + ifOnline);
@@ -265,6 +296,14 @@ public final class LoginActivity extends MyActivity
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        String o = (String) SharePreferenceUtil.get(LoginActivity.this, SharePreferenceUtil.Current_IP, "");
+        toast(o);
+    }
 
     @Override
     public boolean isSwipeEnable() {

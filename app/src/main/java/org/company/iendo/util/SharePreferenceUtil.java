@@ -41,6 +41,16 @@ public class SharePreferenceUtil {
     public static final String Current_UserType = "1";  //0普通  1超级管理员
     public static final String Current_ID = "1";
 
+
+    /**
+     * 添加服务器界面
+     */
+
+    public static final String Current_DeviceType = "一体机";
+    public static final String Current_IP = "ip";
+    public static final String Current_Port = "port";
+
+
     //用户登入次数
     public static final String Current_UserTimes = "times";
     //用户登入时间

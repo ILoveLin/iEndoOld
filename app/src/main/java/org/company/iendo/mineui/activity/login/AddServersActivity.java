@@ -1,25 +1,32 @@
 package org.company.iendo.mineui.activity.login;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
 import com.hjq.base.BaseAdapter;
+import com.hjq.widget.view.ClearEditText;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.adapter.AddServersAdapter;
+import org.company.iendo.mineui.beandb.AddServersBeanDB;
+import org.company.iendo.mineui.beandb.ServersDBBean;
+import org.company.iendo.util.SharePreferenceUtil;
+import org.company.iendo.util.db.ServersDBUtils;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,11 +34,41 @@ import java.util.List;
  * <p>
  * Describe添加服务器界面
  */
-public class AddServersActivity extends MyActivity implements BaseAdapter.OnItemClickListener, OnRefreshLoadMoreListener, StatusAction {
+public class AddServersActivity extends MyActivity implements StatusAction {
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private AddServersAdapter mAdapter;
     private HintLayout mHintLayout;
+    private AppCompatButton mSubmitServers;
+    private ClearEditText mDeviceType;
+    private ClearEditText mIP;
+    private ClearEditText mPort;
+    private String deviceType;
+    private String ip;
+    private String port;
+
+    private static final int Handler_OkCode = 1;
+    private static final int Handler_Update = 2;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:              //添加了服务器,删除item,重新加载列表
+                    initData();
+                    break;
+                case 2:
+                    mDeviceType.setText(currentItemBean.getName());
+                    mIP.setText(currentItemBean.getIp());
+                    mPort.setText(currentItemBean.getPort());
+                    break;
+
+            }
+        }
+    };
+    private ServersDBBean currentItemBean;
+    private TitleBar mTitleBar;
+
 
     public static void start(BaseActivity activity, OnServersSelectedListener mListener) {
         //这里做服务器被选中的监听,数据会写到LoginActivity中去
@@ -46,17 +83,19 @@ public class AddServersActivity extends MyActivity implements BaseAdapter.OnItem
 
     @Override
     protected void initView() {
-//        Toolbar mToolbar = findViewById(R.id.tb_home_title);
-//        // 给这个 ToolBar 设置顶部内边距，才能和 TitleBar 进行对齐
-//        ImmersionBar.setTitleBar(this, mToolbar);
-
+        mTitleBar = findViewById(R.id.titlebar);
         mRecyclerView = findViewById(R.id.recycleview);
         mRefreshLayout = findViewById(R.id.smartRefresh);
         mHintLayout = findViewById(R.id.hl_status_hint);
+        mDeviceType = findViewById(R.id.et_device_type);
+        mIP = findViewById(R.id.et_ip);
+        mPort = findViewById(R.id.et_port);
+        mSubmitServers = findViewById(R.id.submit_add_servers);
         mAdapter = new AddServersAdapter(this);
-        mAdapter.setOnItemClickListener(this);
-        mAdapter.setData(analogData());
-        mRefreshLayout.setOnRefreshLoadMoreListener(this);
+
+//        mAdapter.setData(analogData());
+//        mRefreshLayout.setOnRefreshLoadMoreListener(this);
+        responseListener();
         mRecyclerView.setAdapter(mAdapter);
         // 禁用动画效果
         mRecyclerView.setItemAnimator(null);
@@ -67,45 +106,101 @@ public class AddServersActivity extends MyActivity implements BaseAdapter.OnItem
 
     @Override
     protected void initData() {
-
-    }
-
-    /**
-     * 模拟数据
-     */
-    private List<String> analogData() {
-        List<String> data = new ArrayList<>();
-        for (int i = mAdapter.getItemCount(); i < mAdapter.getItemCount() + 10; i++) {
-            data.add("我是第" + i + "条目");
+        List list = ServersDBUtils.queryAll(ServersDBBean.class);
+        if (list != null) {
+            showComplete();
+            mAdapter.setData(list);
+        } else {
+            showEmpty();
         }
-        return data;
-    }
 
-    @Override
-    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        postDelayed(() -> {
-            mAdapter.clearData();
-            mAdapter.setData(analogData());
-            mRefreshLayout.finishRefresh();
-            toast("刷新完成");
-        }, 1000);
 
     }
 
-    @Override
-    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        postDelayed(() -> {
-            mAdapter.addData(analogData());
-            mRefreshLayout.finishLoadMore();
-            toast("加载完成");
+    private void responseListener() {
 
-        }, 1000);
+        setOnClickListener(R.id.submit_add_servers);
+
+        mAdapter.setOnChildClickListener(R.id.add_servers_delBtn, new BaseAdapter.OnChildClickListener() {
+            @Override
+            public void onChildClick(RecyclerView recyclerView, View childView, int position) {
+                toast("马上,删除第:" + position + "条item数据");
+                ServersDBBean itemBean = mAdapter.getItem(position);
+                ServersDBUtils.deleteData(itemBean);
+                mHandler.sendEmptyMessage(Handler_OkCode);
+            }
+        });
+        mAdapter.setOnChildClickListener(R.id.linear_item_servers, new BaseAdapter.OnChildClickListener() {
+            @Override
+            public void onChildClick(RecyclerView recyclerView, View childView, int position) {
+                toast("第:" + position + "条item数据");
+                currentItemBean = mAdapter.getItem(position);
+                mHandler.sendEmptyMessage(Handler_Update);
+
+
+            }
+        });
+
+        mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(View v) {
+
+            }
+
+            @Override
+            public void onTitleClick(View v) {
+
+            }
+
+            @Override
+            public void onRightClick(View v) {
+                //选择当前的服务器,并且存入缓存sp
+                checkAddServersDataAndInsertData("config");
+
+            }
+        });
+
 
     }
 
     @Override
-    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-        toast("第===" + position + "个,被点击了~~");
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.submit_add_servers:  //提交添加的服务器
+                checkAddServersDataAndInsertData("insert");
+
+                break;
+        }
+    }
+
+
+    private void checkAddServersDataAndInsertData(String type) {
+        deviceType = mDeviceType.getText().toString().trim();
+        ip = mIP.getText().toString().trim();
+        port = mPort.getText().toString().trim();
+        if ("".equals(deviceType)) {
+            toast("名称不能为空");
+            return;
+        } else if ("".equals(ip)) {
+            toast("ip不能为空");
+            return;
+        } else if ("".equals(port)) {
+            toast("端口号不能为空");
+            return;
+        } else if (type.equals("insert")) {
+            ServersDBBean serversBeanDB = new ServersDBBean();
+            serversBeanDB.setName(deviceType);
+            serversBeanDB.setIp(ip);
+            serversBeanDB.setPort(port);
+            serversBeanDB.setTag(deviceType);
+            ServersDBUtils.insertOrReplaceData(serversBeanDB);
+            mHandler.sendEmptyMessage(Handler_OkCode);
+        } else if (type.equals("config")) {
+            SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_DeviceType, deviceType);
+            SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_IP, ip);
+            SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_Port, port);
+            finish();
+        }
     }
 
 

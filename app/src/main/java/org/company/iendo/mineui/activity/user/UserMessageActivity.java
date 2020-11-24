@@ -2,13 +2,10 @@ package org.company.iendo.mineui.activity.user;
 
 import android.view.View;
 import android.widget.TextView;
-
 import com.hjq.base.BaseDialog;
-
 import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.LoginActivity;
-import org.company.iendo.mineui.activity.user.UserSearchActivity;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.SharePreferenceUtil;
 

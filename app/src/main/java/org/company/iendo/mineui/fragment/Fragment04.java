@@ -7,6 +7,8 @@ import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
+import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
+import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.widget.HintLayout;
 
 /**
@@ -14,12 +16,13 @@ import org.company.iendo.widget.HintLayout;
  * <p>
  * Describe 第一个fragment
  */
-public class Fragment04 extends MyFragment<MainActivity> implements StatusAction {
+public class Fragment04 extends MyFragment<MainActivity> implements StatusAction, CaseOperatorAction {
 
     private HintLayout mHintLayout;
+    private CaseDetailMsgActivity mActivity;
 
-    public static Fragment04 newInstance() {
-        return new Fragment04();
+    public Fragment04(CaseDetailMsgActivity Activity) {
+        this.mActivity = Activity;
     }
 
     @Override
@@ -30,6 +33,7 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     @Override
     protected void initView() {
         mHintLayout = findViewById(R.id.hl_status_hint);
+        mActivity.setCaseOperatorAction(this);
         showError(this);
     }
 
@@ -52,5 +56,30 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public HintLayout getHintLayout() {
         return mHintLayout;
+    }
+
+    @Override
+    public void onLive() {
+        
+    }
+
+    @Override
+    public void onPrint() {
+
+    }
+
+    @Override
+    public void onDelete() {
+
+    }
+
+    @Override
+    public void onDownload() {
+
+    }
+
+    @Override
+    public void onEdit() {
+
     }
 }

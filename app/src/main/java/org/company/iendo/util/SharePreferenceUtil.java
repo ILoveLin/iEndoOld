@@ -38,7 +38,7 @@ public class SharePreferenceUtil {
     public static final String is_Remember_Password = "is_remember_password";  //默认不记住
     public static final String Current_Username = "Admin";     // 虽然是不同字段表示，但是"admin" 如果同时存储username和password  后者会覆盖前者
     public static final String Current_Password = "";    //
-    public static final String Current_UserType = "1";  //0普通  1超级管理员
+    public static final String Current_UserType = "11";  //0普通  1超级管理员
     public static final String Current_ID = "1";
 
 

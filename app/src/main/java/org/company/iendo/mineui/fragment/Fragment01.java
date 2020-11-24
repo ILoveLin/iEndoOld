@@ -18,6 +18,8 @@ import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
+import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
+import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.ui.adapter.StatusAdapter;
 import org.company.iendo.widget.HintLayout;
 
@@ -30,15 +32,17 @@ import java.util.List;
  * Describe 第一个fragment
  */
 public class Fragment01 extends MyFragment<MainActivity> implements BaseAdapter.OnItemClickListener,
-        OnRefreshLoadMoreListener, StatusAction {
+        OnRefreshLoadMoreListener, StatusAction, CaseOperatorAction {
     private SmartRefreshLayout mRefreshLayout;
     private WrapRecyclerView mRecyclerView;
     private HintLayout mHintLayout;
     private StatusAdapter mAdapter;
+    private CaseDetailMsgActivity mActivity;
 
-    public static Fragment01 newInstance() {
-        return new Fragment01();
+    public Fragment01(CaseDetailMsgActivity Activity){
+        this.mActivity= Activity;
     }
+
 
     @Override
     protected int getLayoutId() {
@@ -56,7 +60,7 @@ public class Fragment01 extends MyFragment<MainActivity> implements BaseAdapter.
         mRecyclerView.setAdapter(mAdapter);
 
         mRefreshLayout.setOnRefreshLoadMoreListener(this);
-
+        mActivity.setCaseOperatorAction(this);
     }
 
     @Override
@@ -145,14 +149,41 @@ public class Fragment01 extends MyFragment<MainActivity> implements BaseAdapter.
         }, 1000);
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("TAG","fragment01");
+        Log.e("TAG", "fragment01");
     }
 
     @Override
     public HintLayout getHintLayout() {
         return mHintLayout;
+    }
+
+    @Override
+    public void onLive() {
+        Log.e("TAG", "fragment01=====onLive");
+
+    }
+
+    @Override
+    public void onPrint() {
+
+    }
+
+    @Override
+    public void onDelete() {
+
+    }
+
+    @Override
+    public void onDownload() {
+
+    }
+
+    @Override
+    public void onEdit() {
+
     }
 }

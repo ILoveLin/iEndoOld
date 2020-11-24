@@ -253,14 +253,14 @@ public final class LoginActivity extends MyActivity
             List<UserDBBean> mList = UserDBUtils.queryListByMessage(username);
             String dbusername = mList.get(0).getUsername().toString().trim();
             String dbpassword = mList.get(0).getPassword().toString().trim();
-            String dbusertype = mList.get(0).getUserType();
+            String dbusertype = mList.get(0).getUserType().toString().trim();
             Long id = mList.get(0).getId();
             LogUtils.e("TAG==登录--dbusername===" + dbusername + "====dbpassword==" + dbpassword + "====dbusertype==" + dbusertype + "====id==" + id);
             if (password.equals(dbpassword)) {  //判断数据库密码和输入密码是否一致,之后更新SP的当前用户信息
                 //登录 就要存入当前用户名,密码,用户权限类型,是否记住密码,
-                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Username, dbusername);
-                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Password, dbpassword);
-                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, dbusertype);
+                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Username, dbusername+"");
+                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Password, dbpassword+"");
+                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, dbusertype+"");
 //                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.isOnline, ifOnline);
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.is_Remember_Password, mSwithRemeber.isChecked());  //是否记住密码
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_ID, id);

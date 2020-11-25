@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/white"
+        app:backButton="true"
+        app:barStyle="transparent"
+        app:layout_collapseMode="pin"
+        app:leftIcon="@drawable/selector_titlebar_registerleft"
+        app:lineColor="@color/colorLine"
+        app:lineSize="1px"
+        app:lineVisible="false"
+        app:title="直播"
+        app:titleColor="@color/color_333333" />
+</LinearLayout>

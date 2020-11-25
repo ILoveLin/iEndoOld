@@ -6,6 +6,7 @@ import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.helper.ActivityStackManager;
 import org.company.iendo.helper.DoubleClickHelper;
+import org.company.iendo.mineui.activity.live.LiveActivity;
 import org.company.iendo.mineui.activity.user.UserMessageActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseManageActivity;
 import org.company.iendo.other.KeyboardWatcher;
@@ -22,8 +23,6 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
     }
 
 
-
-    
     @Override
     protected void initView() {
 
@@ -45,9 +44,9 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
                 break;
             case R.id.cv_case_manage:
                 startActivity(CaseManageActivity.class);
-
                 break;
             case R.id.cv_live:
+                startActivity(LiveActivity.class);
                 break;
         }
     }

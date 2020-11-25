@@ -34,27 +34,13 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
 
     @Override
     protected void initView() {
-        TextView tv_02 = findViewById(R.id.tv_02);
         mHintLayout = findViewById(R.id.hl_status_hint);
         mActivity.setCaseOperatorAction(this);
-        tv_02.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
-        tv_02.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                return false;
-            }
-        });
     }
 
     @Override
     protected void initData() {
-        showLoading();
     }
 
     @Override

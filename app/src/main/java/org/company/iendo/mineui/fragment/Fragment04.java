@@ -34,7 +34,6 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     protected void initView() {
         mHintLayout = findViewById(R.id.hl_status_hint);
         mActivity.setCaseOperatorAction(this);
-        showError(this);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
 
     @Override
     public void onLive() {
-        
+
     }
 
     @Override

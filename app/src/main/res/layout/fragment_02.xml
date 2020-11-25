@@ -7,26 +7,28 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-<!--    <com.hjq.bar.TitleBar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:backButton="false"-->
-<!--        app:title="@string/home_nav_found" />-->
+    <!--    <com.hjq.bar.TitleBar-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:backButton="false"-->
+    <!--        app:title="@string/home_nav_found" />-->
 
     <org.company.iendo.widget.HintLayout
         android:id="@+id/hl_status_hint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/rl_status_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlEnablePreviewInEditMode="false"
+            app:srlEnablePureScrollMode="true">
 
-    <TextView
-        android:id="@+id/tv_02"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="02"
-        android:textColor="@color/black"
-        android:textSize="25dp" />
+            <include layout="@layout/include_fragment02_part" />
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
     </org.company.iendo.widget.HintLayout>
 
 </LinearLayout>

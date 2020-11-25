@@ -12,7 +12,7 @@ import org.company.iendo.util.SharePreferenceUtil;
 /**
  * LoveLin
  * <p>
- * Describe 用户管理
+ * Describe 用户信息
  */
 public class UserMessageActivity extends MyActivity {
 

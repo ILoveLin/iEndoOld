@@ -8,23 +8,26 @@
     tools:context="com.lovelin.frame.mineui.fragment.Fragment03"
     tools:ignore="HardcodedText">
 
-<!--    <com.hjq.bar.TitleBar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:backButton="false"-->
-<!--        app:title="@string/home_nav_message" />-->
+    <!--    <com.hjq.bar.TitleBar-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:backButton="false"-->
+    <!--        app:title="@string/home_nav_message" />-->
 
     <org.company.iendo.widget.HintLayout
         android:id="@+id/hl_status_hint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/rl_status_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="03"
-            android:textColor="@color/black"
-            android:textSize="25dp" />
+            app:srlEnablePreviewInEditMode="false"
+            app:srlEnablePureScrollMode="true">
+
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
     </org.company.iendo.widget.HintLayout>
 </LinearLayout>

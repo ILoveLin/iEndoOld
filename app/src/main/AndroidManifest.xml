@@ -114,6 +114,11 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait" />    <activity
+            android:name=".mineui.activity.live.LiveActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/password_reset_title"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <!--mineUI-->

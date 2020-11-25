@@ -37,7 +37,11 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     protected void initView() {
         mHintLayout = findViewById(R.id.hl_status_hint);
         mActivity.setCaseOperatorAction(this);
-        showEmpty();
+
+
+
+
+
     }
 
     @Override

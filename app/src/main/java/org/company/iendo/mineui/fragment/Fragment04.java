@@ -1,6 +1,7 @@
 package org.company.iendo.mineui.fragment;
 
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
+import org.company.iendo.mineui.activity.live.SMBPlayerActivity;
 import org.company.iendo.mineui.fragment.adapter.VideoAdapter;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
@@ -85,7 +87,10 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast(position);
-
+        String item = mAdapter.getItem(position);
+        Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
+        intent.putExtra("url", item + "");
+        startActivity(intent);
     }
 
     @Override

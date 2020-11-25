@@ -1,13 +1,27 @@
 package org.company.iendo.mineui.activity.user;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
 import com.hjq.base.BaseDialog;
+
 import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.LoginActivity;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.SharePreferenceUtil;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * LoveLin
@@ -29,7 +43,7 @@ public class UserMessageActivity extends MyActivity {
         mUsername = findViewById(R.id.user_username);
         mDescribe = findViewById(R.id.user_describe);
         setOnClickListener(R.id.btn_user_msg_leave_user, R.id.btn_user_msg_change_password,
-                R.id.btn_user_control_else_user, R.id.btn_user_exit);
+                R.id.btn_user_control_else_user, R.id.btn_user_exit, R.id.copy);
     }
 
     @Override
@@ -49,6 +63,28 @@ public class UserMessageActivity extends MyActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.copy:  //离线用户
+                try {
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        int REQUEST_CODE_CONTACT = 101;
+                        String[] permissions = {
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        //验证是否许可权限
+                        for (String str : permissions) {
+                            if (checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                                //申请权限
+                                requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                                return;
+                            } else {
+                                //这里就是权限打开之后自己要操作的逻辑
+                                writPic();
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
             case R.id.btn_user_msg_leave_user:  //离线用户
                 break;
             case R.id.btn_user_msg_change_password:
@@ -123,5 +159,82 @@ public class UserMessageActivity extends MyActivity {
 
     }
 
+    /**
+     * 本地App文件的拷贝,比如SD卡Image的图片拷贝到SD卡MyImage目录中去
+     * @throws IOException
+     */
+    private void writPic() throws IOException {
+        try {
+            Log.e("========rootfile=====", "Environment==out=" + Environment.getExternalStorageDirectory());
+            File toFile = new File(Environment.getExternalStorageDirectory() + "/Image/4027" + File.separator);
+            if (!toFile.exists()) {
+                toFile.mkdirs();
+            }
+
+            File localFile = new File(Environment.getExternalStorageDirectory() + "/Pictures" + File.separator);
+            Log.e("========rootfile=====", "Environment==localFile=" + localFile.getAbsolutePath());
+            copy(localFile.getAbsolutePath(), toFile.getAbsolutePath());
+        } catch (Exception e) {
+            Log.e("========root=====", "Exception===");
+
+            e.printStackTrace();
+        }
+    }
+
+    public int copy(String fromFile, String toFile) {
+        //要复制的文件目录
+        File[] currentFiles;
+        File root = new File(fromFile);
+        //如同判断SD卡是否存在或者文件是否存在
+        //如果不存在则 return出去
+        if (!root.exists()) {
+            return -1;
+        }
+        //如果存在则获取当前目录下的全部文件 填充数组
+        currentFiles = root.listFiles();
+
+        //目标目录
+        File targetDir = new File(toFile);
+        //创建目录
+        if (!targetDir.exists()) {
+            targetDir.mkdirs();
+        }
+        //遍历要复制该目录下的全部文件
+        for (int i = 0; i < currentFiles.length; i++) {
+            if (currentFiles[i].isDirectory())//如果当前项为子目录 进行递归
+            {
+                Log.e("========root=====", "目录==from===" + currentFiles[i].getPath() + "/");
+                Log.e("========root=====", "目录==toFile=" + toFile + currentFiles[i].getName() + "/");
+
+                copy(currentFiles[i].getPath() + "/", toFile + "/" + currentFiles[i].getName() );
+            } else//如果当前项为文件则进行文件拷贝
+            {
+                CopySdcardFile(currentFiles[i].getPath(), toFile + "/" + currentFiles[i].getName());
+            }
+        }
+        return 0;
+    }
+
+    //文件拷贝
+    //要复制的目录下的所有非子目录(文件夹)文件拷贝
+    public int CopySdcardFile(String fromFile, String toFile) {
+        Log.e("========root=====", "文件拷贝==fromFile===" + fromFile);
+        Log.e("========root=====", "文件拷贝==toFile=====" + toFile);
+        try {
+            InputStream fosfrom = new FileInputStream(fromFile);
+            OutputStream fosto = new FileOutputStream(toFile);
+            byte bt[] = new byte[1024];
+            int c;
+            while ((c = fosfrom.read(bt)) > 0) {
+                fosto.write(bt, 0, c);
+            }
+            fosfrom.close();
+            fosto.close();
+            return 0;
+
+        } catch (Exception ex) {
+            return -1;
+        }
+    }
 
 }

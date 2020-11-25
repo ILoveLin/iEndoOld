@@ -231,7 +231,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:weightSum="4">
+                    android:weightSum="5">
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_user_msg_leave_user"
@@ -276,7 +276,16 @@
                         android:layout_marginTop="@dimen/padding_20"
                         android:layout_weight="1"
                         android:text="注销登录" />
-
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/copy"
+                        style="@style/RectButtonStyle"
+                        android:layout_width="@dimen/padding_120"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/padding_20"
+                        android:layout_weight="1"
+                        android:text="拷贝图片" />
 
                 </LinearLayout>
 

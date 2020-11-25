@@ -1,16 +1,21 @@
 package org.company.iendo.ui.pager;
 
 import android.app.Activity;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import org.company.iendo.aop.SingleClick;
 import org.company.iendo.http.glide.GlideApp;
+import org.company.iendo.mineui.MainActivity;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -45,11 +50,17 @@ public final class ImagePagerAdapter extends PagerAdapter
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         PhotoView view = new PhotoView(mActivity);
         view.setOnClickListener(this);
+//          加载远程图片
+//        GlideApp.with(container.getContext())
+//                .load(mData.get(position))
+//                .into(view);
 
-        GlideApp.with(container.getContext())
-                .load(mData.get(position))
+        File file = new File(mData.get(position));
+        Log.e("Item","======file==path=="+mData.get(position));
+        Log.e("Item","======file===="+file.exists());
+        Glide.with(container.getContext())
+                .load(file)
                 .into(view);
-
         container.addView(view);
         return view;
     }

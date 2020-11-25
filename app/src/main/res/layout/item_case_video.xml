@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/padding_50"
     android:orientation="vertical">
 
     <TextView
@@ -13,6 +13,6 @@
         android:gravity="center_vertical"
         android:textSize="@dimen/padding_20"
         android:paddingLeft="@dimen/padding_10"
-        android:text="22222" />
+        android:text="52613684566129.mp4" />
 
 </LinearLayout>

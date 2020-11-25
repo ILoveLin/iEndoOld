@@ -39,7 +39,7 @@ public class VideoAdapter extends MyAdapter<String> {
 
         @Override
         public void onBindView(int position) {
-            mVideo.setText("第" + position + ":条视频:  " + getItem(position));
+            mVideo.setText(getItem(position) + "");
             Log.e("tag", "" + getItem(position) + "");
         }
     }

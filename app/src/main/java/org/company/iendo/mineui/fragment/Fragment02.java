@@ -15,7 +15,7 @@ import org.company.iendo.widget.HintLayout;
 /**
  * LoveLin
  * <p>
- * Describe 第一个fragment
+ * Describe 第二个fragment
  */
 public class Fragment02 extends MyFragment<MainActivity> implements StatusAction, CaseOperatorAction {
 

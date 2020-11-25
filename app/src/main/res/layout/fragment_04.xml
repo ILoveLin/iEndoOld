@@ -25,13 +25,11 @@
             app:srlEnablePreviewInEditMode="false"
             app:srlEnablePureScrollMode="true">
 
-            <TextView
+            <com.hjq.widget.layout.WrapRecyclerView
+                android:id="@+id/recycleview_case04"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="04"
-                android:textColor="@color/black"
-                android:textSize="25dp" />
+                android:layout_height="match_parent" />
+
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     </org.company.iendo.widget.HintLayout>

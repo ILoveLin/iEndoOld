@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 import org.company.iendo.R;
 import org.company.iendo.common.MyAdapter;
-import org.company.iendo.mineui.beandb.ServersDBBean;
+import org.company.iendo.bean.beandb.ServersDBBean;
 
 /**
  * LoveLin

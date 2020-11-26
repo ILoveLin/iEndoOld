@@ -11,7 +11,7 @@ import org.company.iendo.R;
 import org.company.iendo.aop.SingleClick;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.MainActivity;
-import org.company.iendo.mineui.beandb.UserDBBean;
+import org.company.iendo.bean.beandb.UserDBBean;
 import org.company.iendo.ui.pager.GuidePagerAdapter;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;

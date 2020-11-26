@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
+import com.google.gson.Gson;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseActivity;
@@ -53,6 +54,7 @@ public abstract class MyActivity extends BaseActivity
      * 对话框数量
      */
     private int mDialogTotal;
+    public Gson mGson;
 
 
     /**
@@ -97,7 +99,7 @@ public abstract class MyActivity extends BaseActivity
     @Override
     protected void initLayout() {
         super.initLayout();
-
+        mGson = new Gson();
         if (getTitleBar() != null) {
             getTitleBar().setOnTitleBarListener(this);
         }
@@ -183,6 +185,15 @@ public abstract class MyActivity extends BaseActivity
     @Override
     public void onLeftClick(View v) {
         onBackPressed();
+    }
+
+    /**
+     * 设置登录模式
+     *
+     * @return
+     */
+    public void setCurrentOnlineType(Boolean type) {
+        SharePreferenceUtil.put(this, SharePreferenceUtil.isOnline, type);
     }
 
     /**

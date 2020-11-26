@@ -3,7 +3,7 @@ package org.company.iendo.util.db;
 import android.util.Log;
 
 import org.company.iendo.common.MyApplication;
-import org.company.iendo.mineui.beandb.ServersDBBean;
+import org.company.iendo.bean.beandb.ServersDBBean;
 import org.company.iendo.my.db.DaoSession;
 import org.greenrobot.greendao.query.QueryBuilder;
 

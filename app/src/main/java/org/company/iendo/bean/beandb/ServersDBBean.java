@@ -1,4 +1,4 @@
-package org.company.iendo.mineui.beandb;
+package org.company.iendo.bean.beandb;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

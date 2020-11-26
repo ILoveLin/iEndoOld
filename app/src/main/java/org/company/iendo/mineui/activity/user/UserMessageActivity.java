@@ -32,6 +32,9 @@ public class UserMessageActivity extends MyActivity {
 
     private TextView mUsername;
     private TextView mDescribe;
+    private TextView mCreateTime;
+    private TextView mLastOnlineTime;
+    private TextView mLoginOnlineTimes;
 
     @Override
     protected int getLayoutId() {
@@ -42,6 +45,9 @@ public class UserMessageActivity extends MyActivity {
     protected void initView() {
         mUsername = findViewById(R.id.user_username);
         mDescribe = findViewById(R.id.user_describe);
+        mCreateTime = findViewById(R.id.user_create_time);
+        mLastOnlineTime = findViewById(R.id.user_lasttime_online);
+        mLoginOnlineTimes = findViewById(R.id.user_online_times);
         setOnClickListener(R.id.btn_user_msg_leave_user, R.id.btn_user_msg_change_password,
                 R.id.btn_user_control_else_user, R.id.btn_user_exit, R.id.copy);
     }
@@ -57,6 +63,19 @@ public class UserMessageActivity extends MyActivity {
             mDescribe.setText("普通用户");
         }
 
+        //根据不同的在线模式显示 创建时间,登录次数,上次登录时间
+        if (getCurrentOnlineType()) {   //在线登录
+            String loginTimes = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_LoginOnlineTime, "");
+            String createTime = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_CreateTime, "");
+            String lastTime = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_LastOnlineTime, "");
+            mCreateTime.setText("" + createTime);
+            mLastOnlineTime.setText("" + lastTime);
+            mLoginOnlineTimes.setText("" + loginTimes);
+        } else {                        //离线模式
+            mCreateTime.setText("");
+            mLastOnlineTime.setText("");
+            mLoginOnlineTimes.setText("");
+        }
     }
 
 
@@ -161,6 +180,7 @@ public class UserMessageActivity extends MyActivity {
 
     /**
      * 本地App文件的拷贝,比如SD卡Image的图片拷贝到SD卡MyImage目录中去
+     *
      * @throws IOException
      */
     private void writPic() throws IOException {
@@ -206,7 +226,7 @@ public class UserMessageActivity extends MyActivity {
                 Log.e("========root=====", "目录==from===" + currentFiles[i].getPath() + "/");
                 Log.e("========root=====", "目录==toFile=" + toFile + currentFiles[i].getName() + "/");
 
-                copy(currentFiles[i].getPath() + "/", toFile + "/" + currentFiles[i].getName() );
+                copy(currentFiles[i].getPath() + "/", toFile + "/" + currentFiles[i].getName());
             } else//如果当前项为文件则进行文件拷贝
             {
                 CopySdcardFile(currentFiles[i].getPath(), toFile + "/" + currentFiles[i].getName());

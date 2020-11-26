@@ -18,10 +18,9 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
-import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.adapter.AddServersAdapter;
-import org.company.iendo.mineui.beandb.ServersDBBean;
+import org.company.iendo.bean.beandb.ServersDBBean;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.db.ServersDBUtils;
@@ -103,6 +102,7 @@ public class AddServersActivity extends MyActivity implements StatusAction {
         // 添加分割线
         mRecyclerView.addItemDecoration(new RecycleViewDivider(getActivity(), 1, R.drawable.shape_divideritem_decoration));
 
+
     }
 
     @Override
@@ -145,6 +145,7 @@ public class AddServersActivity extends MyActivity implements StatusAction {
         mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
             @Override
             public void onLeftClick(View v) {
+                finish();
 
             }
 
@@ -200,7 +201,7 @@ public class AddServersActivity extends MyActivity implements StatusAction {
             SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_DeviceType, deviceType);
             LogUtils.e("==ifOnline==1==" + ip);
             http:
-//192.168.128.146:8009/  users.aspx
+            //192.168.128.146:8009/  users.aspx
             SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_IP, ip);
             SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_Port, port);
             SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_Host, "http://" + ip + ":" + port + "/");

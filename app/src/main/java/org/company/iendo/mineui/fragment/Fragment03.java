@@ -113,11 +113,10 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
 //        Environment.getExternalStorageDirectory()
 //    /storage/emulated/0/Image/4027    1604308388100.jpg     1604308389673.jpg  1604308398878.jpg
 
-        String s = Environment.getExternalStorageDirectory() + "/Image/4027/1604308398878.jpg";
-        String s1 = Environment.getExternalStorageDirectory() + "/Image/4027/1604308388100.jpg";
-        String s2 = Environment.getExternalStorageDirectory() + "/Image/4027/1604308389673.jpg";
-        String s3 = Environment.getExternalStorageDirectory() + "/Image/4027/1604308398878.jpg";
-
+        String s = Environment.getExternalStorageDirectory() + "/Image/4027/Image (1).jpg";
+        String s1 = Environment.getExternalStorageDirectory() + "/Image/4027/Image (3).jpg";
+        String s2 = Environment.getExternalStorageDirectory() + "/Image/4027/Image (4).jpg";
+        String s3 = Environment.getExternalStorageDirectory() + "/Image/4027/Image (5).jpg";
         images.add("https://www.baidu.com/img/bd_logo.png");
         images.add(s);
         images.add(s1);

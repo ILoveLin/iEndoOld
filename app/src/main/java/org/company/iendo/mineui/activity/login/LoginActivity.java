@@ -14,9 +14,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.reflect.TypeToken;
 import com.hjq.bar.TitleBar;
-import com.hjq.http.EasyHttp;
-import com.hjq.http.listener.HttpCallback;
 import com.hjq.umeng.UmengClient;
 import com.hjq.widget.view.SwitchButton;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -27,14 +26,12 @@ import org.angmarch.views.OnSpinnerItemSelectedListener;
 import org.company.iendo.R;
 import org.company.iendo.aop.DebugLog;
 import org.company.iendo.aop.SingleClick;
+import org.company.iendo.bean.LoginBean;
 import org.company.iendo.common.ActivityCollector;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
-import org.company.iendo.http.model.HttpData;
-import org.company.iendo.http.request.LoginApi;
-import org.company.iendo.http.response.LoginBean;
 import org.company.iendo.mineui.MainActivity;
-import org.company.iendo.mineui.beandb.UserDBBean;
+import org.company.iendo.bean.beandb.UserDBBean;
 import org.company.iendo.other.IntentKey;
 import org.company.iendo.other.KeyboardWatcher;
 import org.company.iendo.util.LogUtils;
@@ -42,6 +39,7 @@ import org.company.iendo.util.MD5ChangeUtil;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.db.UserDBUtils;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import okhttp3.Call;
@@ -182,11 +180,11 @@ public final class LoginActivity extends MyActivity
                 if (ifOnline) {
                     LogUtils.e("==ifOnline==1==" + ifOnline);
                     try {
-                        LogUtils.e("==ifOnline==url==" + getCurrentHost()+HttpConstant.Login);
-
+                        LogUtils.e("==ifOnline==url==" + getCurrentHost() + HttpConstant.Login);
+                        showDialog();
                         OkHttpUtils
                                 .get()
-                                .url(getCurrentHost()+HttpConstant.Login)
+                                .url(getCurrentHost() + HttpConstant.Login)
                                 .addParams("username", username)
                                 .addParams("userpassword", MD5ChangeUtil.Md5_32(password))
                                 .build()
@@ -194,22 +192,44 @@ public final class LoginActivity extends MyActivity
                                     @Override
                                     public void onError(Call call, Exception e, int id) {
                                         LogUtils.e("=TAG=password=hy=onFail==" + e.toString());
-
+                                        hideDialog();
                                     }
 
                                     @Override
                                     public void onResponse(String response, int id) {
-                                        LogUtils.e("=TAGpassword=hy=onSucceed==" + response.toString());
+//                                        返回值 0传入参数为空或用户名不存在, -1密码不正确 1登陆成功
+                                        hideDialog();
+                                        if ("0".equals(response)) {
+                                            toast("用户名不存在或者参数为空");
+                                        } else if ("-1".equals(response)) {
+                                            toast("密码不正确");
+                                        } else {
+                                            LogUtils.e("=TAGpassword=hy=onSucceed==" + response.toString());
+                                            Type type = new TypeToken<LoginBean>() {
+                                            }.getType();
+                                            LoginBean mBean = mGson.fromJson(response, type);
+                                            for (int i = 0; i < mBean.getDs().size(); i++) {
+                                                if (i == 0) {
+                                                    String createdAt = mBean.getDs().get(i).getCreatedAt();
+                                                    String lastLoginAt = mBean.getDs().get(i).getLastLoginAt();
+                                                    String loginTimes = mBean.getDs().get(i).getLoginTimes();
+
+                                                    SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LoginOnlineTime, loginTimes + "");
+                                                    SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_CreateTime, createdAt + "");
+                                                    SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LastOnlineTime, lastLoginAt + "");
+                                                    setCurrentOnlineType(true);
+                                                    startActivity(MainActivity.class);
+
+                                                }
+                                            }
+                                        }
 
                                     }
-
                                 });
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         toast("请求地址有错,请确认无误后再试！");
-
+                        hideDialog();
                     }
-
-
 
                 } else {//离线登录
                     LogUtils.e("==ifOnline==2==" + ifOnline);
@@ -217,33 +237,6 @@ public final class LoginActivity extends MyActivity
                     checkDBDataToChangeCurrentUserMsg();
 
                 }
-
-//                if (true) {
-//                    showDialog();
-//                    postDelayed(() -> {
-//                        hideDialog();
-//                        startActivity(MainActivity.class);
-//                        finish();
-//                    }, 2000);
-//                    return;
-//                }
-//
-//                EasyHttp.post(this)
-//                        .api(new LoginApi()
-//                                .setPhone(mPhoneView.getText().toString())
-//                                .setPassword(mPasswordView.getText().toString()))
-//                        .request(new HttpCallback<HttpData<LoginBean>>(this) {
-//
-//                            @Override
-//                            public void onSucceed(HttpData<LoginBean> data) {
-//                                // 更新 Token
-//                                EasyConfig.getInstance()
-//                                        .addParam("token", data.getData().getToken());
-//                                // 跳转到主页
-////                            startActivity(HomeActivity.class);
-//                                finish();
-//                            }
-//                        });
                 break;
 
         }
@@ -275,6 +268,7 @@ public final class LoginActivity extends MyActivity
 
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.is_First_in, false);   //false 表示不是第一次登入了  因为默认是第一次登入(true)
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.is_login, true);   // 是否登录
+                setCurrentOnlineType(false);
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             } else {

@@ -166,30 +166,30 @@ public final class MyApplication extends Application implements LifecycleOwner {
         ActivityStackManager.getInstance().init(application);
 
         // 网络请求框架初始化
-//        IRequestServer server;
-//        server = new ReleaseServer();
-//
-////        if (AppConfig.isDebug()) {
-////            server = new TestServer();
-////        } else {
-////            server = new ReleaseServer();
-////        }
-//
-//        EasyConfig.with(new OkHttpClient())
-//                // 是否打印日志
-//                //.setLogEnabled(AppConfig.isDebug())
-//                // 设置服务器配置
-//                .setServer(server)
-//                // 设置请求处理策略
-//                .setHandler(new RequestHandler(application))
-//                // 设置请求重试次数
-//                .setRetryCount(1)
-//                // 添加全局请求参数
-//                //.addParam("token", "6666666")
-//                // 添加全局请求头
-//                //.addHeader("time", "20191030")
-//                // 启用配置
-//                .into();
+        IRequestServer server;
+        server = new ReleaseServer();
+
+//        if (AppConfig.isDebug()) {
+//            server = new TestServer();
+//        } else {
+//            server = new ReleaseServer();
+//        }
+
+        EasyConfig.with(new OkHttpClient())
+                // 是否打印日志
+                //.setLogEnabled(AppConfig.isDebug())
+                // 设置服务器配置
+                .setServer(server)
+                // 设置请求处理策略
+                .setHandler(new RequestHandler(application))
+                // 设置请求重试次数
+                .setRetryCount(1)
+                // 添加全局请求参数
+                //.addParam("token", "6666666")
+                // 添加全局请求头
+                //.addHeader("time", "20191030")
+                // 启用配置
+                .into();
 
         // Activity 侧滑返回
         SmartSwipeBack.activitySlidingBack(application, activity -> {

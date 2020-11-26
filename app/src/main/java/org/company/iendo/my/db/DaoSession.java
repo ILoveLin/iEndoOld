@@ -8,8 +8,8 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import org.company.iendo.mineui.beandb.ServersDBBean;
-import org.company.iendo.mineui.beandb.UserDBBean;
+import org.company.iendo.bean.beandb.ServersDBBean;
+import org.company.iendo.bean.beandb.UserDBBean;
 
 import org.company.iendo.my.db.ServersDBBeanDao;
 import org.company.iendo.my.db.UserDBBeanDao;

@@ -9,6 +9,8 @@ package org.company.iendo.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.company.iendo.R;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -27,18 +29,18 @@ public class SharePreferenceUtil {
      * 引导界面
      */
     //引导页
-    public static final String is_First_in = "is_first_in";  //是否第一次登入   默认是第一次登入  true
-    public static final String is_login = "is_login";          //是否已经登入   默认是未登录     false
+    public static final String is_First_in = "is_first_in";                    //是否第一次登入   默认是第一次登入  true
+    public static final String is_login = "is_login";                          //是否已经登入   默认是未登录     false
     /**
      * 登录界面
      */
     //这个是登入模式
-    public static final String isOnline = "online";          //默认在线登录
+    public static final String isOnline = "online";                            //默认在线登录
     public static final String Choose_Section = "section";
     public static final String is_Remember_Password = "is_remember_password";  //默认不记住
-    public static final String Current_Username = "Admin";     // 虽然是不同字段表示，但是"admin" 如果同时存储username和password  后者会覆盖前者
-    public static final String Current_Password = "";    //
-    public static final String Current_UserType = "11";  //0普通  1超级管理员
+    public static final String Current_Username = "Admin";                     // 虽然是不同字段表示，但是"admin" 如果同时存储username和password  后者会覆盖前者
+    public static final String Current_Password = "";
+    public static final String Current_UserType = "11";                        //0普通  1超级管理员
     public static final String Current_ID = "1";
 
 
@@ -51,11 +53,12 @@ public class SharePreferenceUtil {
     public static final String Current_Port = "port";
     public static final String Current_Host = "host";
 
-
     //用户登入次数
-    public static final String Current_UserTimes = "times";
+    public static final String Current_LoginOnlineTime = "times";
     //用户登入时间
-    public static final String Current_UserOnlineData = "online_data";
+    public static final String Current_CreateTime = "online_data";
+    //上次登录时间
+    public static final String Current_LastOnlineTime = "last_online_data";
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法

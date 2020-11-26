@@ -8,9 +8,14 @@ package org.company.iendo.http.response;
  */
 public final class LoginBean {
 
-    private String token;
 
-    public String getToken() {
-        return token;
+    private String data;
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

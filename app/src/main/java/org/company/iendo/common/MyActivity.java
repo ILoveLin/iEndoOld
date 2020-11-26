@@ -36,7 +36,6 @@ public abstract class MyActivity extends BaseActivity
         SwipeAction, OnHttpListener {
 
 
-
     /**
      * 标题栏对象
      */
@@ -186,11 +185,29 @@ public abstract class MyActivity extends BaseActivity
         onBackPressed();
     }
 
-    public Boolean getCurrentOnlineType(){
+    /**
+     * 获取登录模式
+     *
+     * @return
+     */
+    public Boolean getCurrentOnlineType() {
         Boolean isOnline = (Boolean) SharePreferenceUtil.get(this, SharePreferenceUtil.isOnline, true);
         return isOnline;
 
     }
+
+    /**
+     * 获取登录模式
+     *
+     * @return
+     */
+    public String getCurrentHost() {
+        String Host = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_Host, "");
+
+        return Host;
+
+    }
+
     @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         super.startActivityForResult(intent, requestCode, options);

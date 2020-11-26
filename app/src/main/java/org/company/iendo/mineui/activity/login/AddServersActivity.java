@@ -18,9 +18,11 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.adapter.AddServersAdapter;
 import org.company.iendo.mineui.beandb.ServersDBBean;
+import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.db.ServersDBUtils;
 import org.company.iendo.widget.HintLayout;
@@ -196,8 +198,12 @@ public class AddServersActivity extends MyActivity implements StatusAction {
             mHandler.sendEmptyMessage(Handler_OkCode);
         } else if (type.equals("config")) {
             SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_DeviceType, deviceType);
+            LogUtils.e("==ifOnline==1==" + ip);
+            http:
+//192.168.128.146:8009/  users.aspx
             SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_IP, ip);
             SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_Port, port);
+            SharePreferenceUtil.put(AddServersActivity.this, SharePreferenceUtil.Current_Host, "http://" + ip + ":" + port + "/");
             finish();
         }
     }

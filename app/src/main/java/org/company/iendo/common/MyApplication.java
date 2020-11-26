@@ -38,6 +38,15 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.cookie.CookieJarImpl;
+import com.zhy.http.okhttp.cookie.store.MemoryCookieStore;
+import com.zhy.http.okhttp.https.HttpsUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 
 import okhttp3.OkHttpClient;
 
@@ -50,6 +59,7 @@ import okhttp3.OkHttpClient;
 public final class MyApplication extends Application implements LifecycleOwner {
 
     private static MyApplication app;
+
     public MyApplication() {
         app = this;
     }
@@ -57,18 +67,42 @@ public final class MyApplication extends Application implements LifecycleOwner {
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
 
-    public static synchronized MyApplication getInstance(){
+    public static synchronized MyApplication getInstance() {
         if (app == null) {
             app = new MyApplication();
         }
         return app;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
         mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         initSdk(this);
         initGreenDao();
+        initOkHttp();
+
+
+    }
+
+    private void initOkHttp() {
+        //Okhttp请求头
+        //请求工具的拦截器  ,可以设置证书,设置可访问所有的https网站,参考https://www.jianshu.com/p/64cc92c52650
+        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
+                .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
+                .cookieJar(new CookieJarImpl(new MemoryCookieStore()))                  //内存存储cookie
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .addInterceptor(new MyInterceptor(this))                      //拦截器,可以添加header 一些信息
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .hostnameVerifier(new HostnameVerifier() {//允许访问https网站,并忽略证书
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+
+        OkHttpUtils.initClient(okHttpClientBuilder.build());
     }
 
     @NonNull
@@ -81,6 +115,8 @@ public final class MyApplication extends Application implements LifecycleOwner {
      * 初始化一些第三方框架
      */
     public static void initSdk(Application application) {
+
+
         // 吐司工具类
         ToastUtils.init(application);
 
@@ -130,28 +166,30 @@ public final class MyApplication extends Application implements LifecycleOwner {
         ActivityStackManager.getInstance().init(application);
 
         // 网络请求框架初始化
-        IRequestServer server;
-        if (AppConfig.isDebug()) {
-            server = new TestServer();
-        } else {
-            server = new ReleaseServer();
-        }
-
-        EasyConfig.with(new OkHttpClient())
-                // 是否打印日志
-                //.setLogEnabled(AppConfig.isDebug())
-                // 设置服务器配置
-                .setServer(server)
-                // 设置请求处理策略
-                .setHandler(new RequestHandler(application))
-                // 设置请求重试次数
-                .setRetryCount(1)
-                // 添加全局请求参数
-                //.addParam("token", "6666666")
-                // 添加全局请求头
-                //.addHeader("time", "20191030")
-                // 启用配置
-                .into();
+//        IRequestServer server;
+//        server = new ReleaseServer();
+//
+////        if (AppConfig.isDebug()) {
+////            server = new TestServer();
+////        } else {
+////            server = new ReleaseServer();
+////        }
+//
+//        EasyConfig.with(new OkHttpClient())
+//                // 是否打印日志
+//                //.setLogEnabled(AppConfig.isDebug())
+//                // 设置服务器配置
+//                .setServer(server)
+//                // 设置请求处理策略
+//                .setHandler(new RequestHandler(application))
+//                // 设置请求重试次数
+//                .setRetryCount(1)
+//                // 添加全局请求参数
+//                //.addParam("token", "6666666")
+//                // 添加全局请求头
+//                //.addHeader("time", "20191030")
+//                // 启用配置
+//                .into();
 
         // Activity 侧滑返回
         SmartSwipeBack.activitySlidingBack(application, activity -> {
@@ -174,7 +212,7 @@ public final class MyApplication extends Application implements LifecycleOwner {
 
     private DaoSession daoSession;
 
-    public    DaoSession getDaoSession() {
+    public DaoSession getDaoSession() {
         return daoSession;
     }
 

@@ -14,11 +14,12 @@ public class ReleaseServer implements IRequestServer {
     //    Path：除主机地址之外的路径
     //
     //    Api：业务模块地址
-//    http://192.168.64.17:8009/users.aspx   ?username=%E9%B8%BF%E6%B4%8B&&userpassword=XXXXXXX
+
+//    http://192.168.128.146:8009/users.aspx   ?username=%E9%B8%BF%E6%B4%8B&&userpassword=XXXXXXX
 
     @Override
     public String getHost() {
-        return "http://192.168.64.17:8009/";
+        return "http://192.168.128.146:8009/";
     }
 
     @Override

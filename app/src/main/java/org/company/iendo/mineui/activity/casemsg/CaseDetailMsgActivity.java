@@ -94,6 +94,7 @@ public class CaseDetailMsgActivity extends MyActivity {
             case R.id.titile_download:
                 break;
             case R.id.titile_edit:
+                startActivity(EditActivity.class);
                 break;
 
         }

@@ -22,17 +22,17 @@ public final class LoginApi implements IRequestApi {
     }
 
     /** 手机号 */
-    private String phone;
+    private String username;
     /** 登录密码 */
-    private String password;
+    private String userpassword;
 
-    public LoginApi setPhone(String phone) {
-        this.phone = phone;
+    public LoginApi setUsername(String username) {
+        this.username = username;
         return this;
     }
 
-    public LoginApi setPassword(String password) {
-        this.password = password;
+    public LoginApi setUserPassWord(String userpassword) {
+        this.userpassword = userpassword;
         return this;
     }
 }

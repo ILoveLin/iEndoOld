@@ -14,13 +14,13 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
-import com.airbnb.lottie.L;
 import com.hjq.bar.TitleBar;
-import com.hjq.http.EasyConfig;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.hjq.umeng.UmengClient;
 import com.hjq.widget.view.SwitchButton;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.angmarch.views.NiceSpinner;
 import org.angmarch.views.OnSpinnerItemSelectedListener;
@@ -28,8 +28,8 @@ import org.company.iendo.R;
 import org.company.iendo.aop.DebugLog;
 import org.company.iendo.aop.SingleClick;
 import org.company.iendo.common.ActivityCollector;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
-import org.company.iendo.helper.InputTextHelper;
 import org.company.iendo.http.model.HttpData;
 import org.company.iendo.http.request.LoginApi;
 import org.company.iendo.http.response.LoginBean;
@@ -38,10 +38,13 @@ import org.company.iendo.mineui.beandb.UserDBBean;
 import org.company.iendo.other.IntentKey;
 import org.company.iendo.other.KeyboardWatcher;
 import org.company.iendo.util.LogUtils;
+import org.company.iendo.util.MD5ChangeUtil;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.db.UserDBUtils;
 
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * author : Android 轮子哥
@@ -130,7 +133,6 @@ public final class LoginActivity extends MyActivity
     }
 
 
-
     @Override
     protected void initData() {
 
@@ -178,31 +180,36 @@ public final class LoginActivity extends MyActivity
                 LogUtils.e("==ifOnline====000==" + ifOnline);
 
                 if (ifOnline) {
-
                     LogUtils.e("==ifOnline==1==" + ifOnline);
-//
-//                    EasyHttp.get(this)
-//                            .api(new LoginApi().setPhone(username)
-//                            .setPassword(password))
-//                            .request(new HttpCallback(new HttpData<LoginBean>(this)){
-//
-//                                     };
+                    try {
+                        LogUtils.e("==ifOnline==url==" + getCurrentHost()+HttpConstant.Login);
 
-                    EasyHttp.post(this)
-                            .api(new LoginApi()
-                                    .setPhone(username)
-                                    .setPassword(password))
-                            .request(new HttpCallback<HttpData<LoginBean>>(this) {
+                        OkHttpUtils
+                                .get()
+                                .url(getCurrentHost()+HttpConstant.Login)
+                                .addParams("username", username)
+                                .addParams("userpassword", MD5ChangeUtil.Md5_32(password))
+                                .build()
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
+                                        LogUtils.e("=TAG=password=hy=onFail==" + e.toString());
 
-                                @Override
-                                public void onSucceed(HttpData<LoginBean> data) {
-                                    // 更新 Token
+                                    }
 
-                                    // 跳转到主页
-//                            startActivity(HomeActivity.class);
-//                                    finish();
-                                }
-                            });
+                                    @Override
+                                    public void onResponse(String response, int id) {
+                                        LogUtils.e("=TAGpassword=hy=onSucceed==" + response.toString());
+
+                                    }
+
+                                });
+                    }catch (Exception e){
+                        toast("请求地址有错,请确认无误后再试！");
+
+                    }
+
+
 
                 } else {//离线登录
                     LogUtils.e("==ifOnline==2==" + ifOnline);
@@ -258,9 +265,9 @@ public final class LoginActivity extends MyActivity
             LogUtils.e("TAG==登录--dbusername===" + dbusername + "====dbpassword==" + dbpassword + "====dbusertype==" + dbusertype + "====id==" + id);
             if (password.equals(dbpassword)) {  //判断数据库密码和输入密码是否一致,之后更新SP的当前用户信息
                 //登录 就要存入当前用户名,密码,用户权限类型,是否记住密码,
-                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Username, dbusername+"");
-                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Password, dbpassword+"");
-                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, dbusertype+"");
+                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Username, dbusername + "");
+                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Password, dbpassword + "");
+                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, dbusertype + "");
 //                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.isOnline, ifOnline);
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.is_Remember_Password, mSwithRemeber.isChecked());  //是否记住密码
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_ID, id);

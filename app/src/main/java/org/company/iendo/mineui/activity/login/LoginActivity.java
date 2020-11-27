@@ -109,6 +109,7 @@ public final class LoginActivity extends MyActivity
         mIfOnLine = findViewById(R.id.niceSpinnerGetOnLine);
         mSection = findViewById(R.id.niceSpinnerSection);
         mAdd = findViewById(R.id.iv_add);
+
         //系统默认不记住密码,在线登录,耳鼻喉科
         SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.isOnline, true);
         SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Choose_Section, "耳鼻喉科");

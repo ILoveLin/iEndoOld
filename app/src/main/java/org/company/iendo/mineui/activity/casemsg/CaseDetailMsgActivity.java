@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.gyf.immersionbar.ImmersionBar;
+import com.hjq.base.BaseDialog;
 import com.hjq.base.BaseFragmentAdapter;
 import com.vlc.lib.listener.util.LogUtils;
 
@@ -19,10 +20,12 @@ import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
+import org.company.iendo.mineui.activity.user.UserSearchActivity;
 import org.company.iendo.mineui.fragment.Fragment01;
 import org.company.iendo.mineui.fragment.Fragment02;
 import org.company.iendo.mineui.fragment.Fragment03;
 import org.company.iendo.mineui.fragment.Fragment04;
+import org.company.iendo.ui.dialog.MessageDialog;
 
 /**
  * LoveLin
@@ -90,6 +93,7 @@ public class CaseDetailMsgActivity extends MyActivity {
             case R.id.titile_print:
                 break;
             case R.id.titile_delete:
+                showDeleteDialog();
                 break;
             case R.id.titile_download:
                 break;
@@ -98,6 +102,38 @@ public class CaseDetailMsgActivity extends MyActivity {
                 break;
 
         }
+    }
+
+    private void showDeleteDialog() {
+
+
+
+        new MessageDialog.Builder(CaseDetailMsgActivity.this)
+                // 标题可以不用填写
+                .setTitle("提示")
+                // 内容必须要填写
+                .setMessage("确定删除吗？")
+                // 确定按钮文本
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                // 设置点击按钮后不关闭对话框
+                //.setAutoDismiss(false)
+                .setListener(new MessageDialog.OnListener() {
+
+                    @Override
+                    public void onConfirm(BaseDialog dialog) {
+                        toast("确定");
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                        toast("取消");
+
+                    }
+                })
+                .show();
+
     }
 
     /**

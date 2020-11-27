@@ -13,6 +13,8 @@ import com.hjq.base.BaseDialog;
 import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.LoginActivity;
+import org.company.iendo.ui.dialog.DateDialog;
+import org.company.iendo.ui.dialog.DayDialog;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.SharePreferenceUtil;
 
@@ -22,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Calendar;
 
 /**
  * LoveLin
@@ -49,7 +52,7 @@ public class UserMessageActivity extends MyActivity {
         mLastOnlineTime = findViewById(R.id.user_lasttime_online);
         mLoginOnlineTimes = findViewById(R.id.user_online_times);
         setOnClickListener(R.id.btn_user_msg_leave_user, R.id.btn_user_msg_change_password,
-                R.id.btn_user_control_else_user, R.id.btn_user_exit, R.id.copy);
+                R.id.btn_user_control_else_user, R.id.btn_user_exit, R.id.copy, R.id.text);
     }
 
     @Override
@@ -114,6 +117,48 @@ public class UserMessageActivity extends MyActivity {
                 break;
             case R.id.btn_user_exit:
                 exit();
+                break;
+            case R.id.text:
+                // 日期选择对话框
+                new DayDialog.Builder(this)
+                        .setTitle(getString(R.string.age_title))
+                        // 确定按钮文本
+                        .setConfirm(getString(R.string.common_confirm))
+                        // 设置 null 表示不显示取消按钮
+                        .setCancel(getString(R.string.common_cancel))
+                        // 设置日期
+                        //.setDate("2018-12-31")
+                        //.setDate("20181231")
+                        //.setDate(1546263036137)
+                        // 设置年份
+                        .setYear(20)
+                        // 设置月份
+                        .setMonth(6)
+                        // 设置天数
+                        .setDay(18)
+                        // 不选择天数
+                        //.setIgnoreDay()
+                        .setListener(new DayDialog.OnListener() {
+                            @Override
+                            public void onSelected(BaseDialog dialog, int year, int month, int day) {
+                                toast(year + "岁" + month + getString(R.string.common_month) + day + getString(R.string.common_day));
+
+//                                // 如果不指定时分秒则默认为现在的时间
+//                                Calendar calendar = Calendar.getInstance();
+//                                calendar.set(Calendar.YEAR, year);
+//                                // 月份从零开始，所以需要减 1
+//                                calendar.set(Calendar.MONTH, month - 1);
+//                                calendar.set(Calendar.DAY_OF_MONTH, day);
+//                                toast("时间戳：" + calendar.getTimeInMillis());
+                                //toast(new SimpleDateFormat("yyyy年MM月dd日 kk:mm:ss").format(calendar.getTime()));
+                            }
+
+                            @Override
+                            public void onCancel(BaseDialog dialog) {
+                                toast("取消了");
+                            }
+                        })
+                        .show();
                 break;
         }
     }

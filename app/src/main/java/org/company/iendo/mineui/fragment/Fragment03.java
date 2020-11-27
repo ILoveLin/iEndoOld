@@ -20,6 +20,7 @@ import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.mineui.fragment.adapter.PictureAdapter;
+import org.company.iendo.other.IntentKey;
 import org.company.iendo.ui.activity.ImagePreviewActivity;
 import org.company.iendo.widget.HintLayout;
 
@@ -123,6 +124,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
         images.add(s2);
         images.add(s3);
         images.add(s);
+
         ImagePreviewActivity.start(getAttachActivity(), images, images.size() - 1);
     }
 

@@ -18,7 +18,6 @@
         app:lineSize="1px"
         app:lineVisible="false"
         app:rightColor="@color/color_333333"
-
         app:rightTitle="完成"
         app:title="病例信息"
         app:titleColor="@color/color_333333" />
@@ -31,6 +30,288 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+
+            <!--开始-->
+            <!--病例号-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="病例号:"
+                    android:textColor="@color/color_333333" />
+
+
+                <com.hjq.widget.view.ClearEditText
+                    android:id="@+id/case03_case_number"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入检查号"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <!--姓名-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="姓名:"
+                    android:textColor="@color/color_333333" />
+
+
+                <com.hjq.widget.view.ClearEditText
+                    android:id="@+id/case03_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入姓名"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <!--性别   弹出单选框-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="性别:"
+                    android:textColor="@color/color_333333" />
+
+
+                <TextView
+                    android:id="@+id/case03_sex"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:hint="请选择性别"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <!--年纪-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="姓名:"
+                    android:textColor="@color/color_333333" />
+
+
+                <com.hjq.widget.view.ClearEditText
+                    android:id="@+id/case03_age"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入姓名"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <!--职业-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="职业:"
+                    android:textColor="@color/color_333333" />
+
+
+                <com.hjq.widget.view.ClearEditText
+                    android:id="@+id/case03_profession"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入职业"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <!--电话-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="电话:"
+                    android:textColor="@color/color_333333" />
+
+
+                <com.hjq.widget.view.ClearEditText
+                    android:id="@+id/case03_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入电话"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <!--住址-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="住址:"
+                    android:textColor="@color/color_333333" />
+
+
+                <com.hjq.widget.view.ClearEditText
+                    android:id="@+id/case03_address"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入住址"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <!--病史-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="病史:"
+                    android:textColor="@color/color_333333" />
+
+
+                <TextView
+                    android:id="@+id/case03_history"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingTop="@dimen/padding_6"
+                    android:paddingRight="@dimen/padding_10"
+                    android:paddingBottom="@dimen/padding_6"
+                    android:textColor="@color/color_333333"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
             <!--检查号-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,7 +333,7 @@
 
 
                 <com.hjq.widget.view.ClearEditText
-                    android:id="@+id/case03_check_number"
+                    android:id="@+id/case03_check_num"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
@@ -66,7 +347,7 @@
                     android:textSize="15sp" />
 
             </LinearLayout>
-            <!--复诊-->
+            <!--复诊  弹出单选框-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -86,14 +367,14 @@
                     android:textColor="@color/color_333333" />
 
 
-                <com.hjq.widget.view.ClearEditText
-                    android:id="@+id/case03_name"
+                <TextView
+                    android:id="@+id/case03_see_again"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
                     android:gravity="center_vertical"
-                    android:hint="请输入"
+                    android:hint="请选择"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10"
                     android:singleLine="true"
@@ -122,13 +403,13 @@
 
 
                 <com.hjq.widget.view.ClearEditText
-                    android:id="@+id/case03_charge"
+                    android:id="@+id/case03_sea_charge"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
                     android:gravity="center_vertical"
-                    android:hint="请输入"
+                    android:hint="请输入费用"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10"
                     android:singleLine="true"
@@ -162,6 +443,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
+                    android:hint="请输入送检医生姓名"
 
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/padding_10"
@@ -171,6 +453,8 @@
                     android:textSize="15sp" />
 
             </LinearLayout>
+
+            <!-- 从这里开始 下拉选择框和edit一起使用  -->
             <!--设备-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,19 +474,35 @@
                     android:text="设备:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_device"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_device"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请选择设备"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
             <!--科室-->
@@ -224,26 +524,41 @@
                     android:text="科室:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_case"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_office"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请选择科室"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
-            <!--主诉-->
+            <!--主述-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="80dp"
                 android:layout_marginTop="@dimen/padding_10"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -256,29 +571,45 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/padding_20"
-                    android:text="主诉:"
+                    android:text="主述:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_say"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_say"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/white"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
             <!--临床诊断-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="80dp"
                 android:layout_marginTop="@dimen/padding_10"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -294,26 +625,42 @@
                     android:text="临床诊断:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_bed_see"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_bed_sea"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/white"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
             <!--镜检所见-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="@dimen/padding_10"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -329,22 +676,87 @@
                     android:text="镜检所见:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_mirror_see"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_mirror_see"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/white"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
+            <!--镜检诊断-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/padding_20"
+                    android:text="镜检诊断:"
+                    android:textColor="@color/color_333333" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_mirror_see_result"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/white"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
             <!--活检-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -364,19 +776,35 @@
                     android:text="活检:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_live_see"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_live_see"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -399,22 +827,37 @@
                     android:text="试验:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_test"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_test"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
             <!--细胞学-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -434,23 +877,37 @@
                     android:text="细胞学:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_cytology"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_cytology"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
-
             <!--病理学-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -470,22 +927,37 @@
                     android:text="病理学:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_pathology"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_pathology"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
             <!--建议-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -505,19 +977,35 @@
                     android:text="建议:"
                     android:textColor="@color/color_333333" />
 
-
-                <TextView
-                    android:id="@+id/case03_advise"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:singleLine="true"
-                    android:textColor="@color/color_333333"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal">
+
+                    <com.hjq.widget.view.ClearEditText
+                        android:id="@+id/case03_advise"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:singleLine="true"
+                        android:textColor="@color/color_333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_add" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -541,13 +1029,14 @@
                     android:textColor="@color/color_333333" />
 
 
-                <TextView
+                <com.hjq.widget.view.ClearEditText
                     android:id="@+id/case03_check_doctor"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
                     android:gravity="center_vertical"
+                    android:hint="请输入"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10"
                     android:singleLine="true"
@@ -555,6 +1044,7 @@
                     android:textSize="15sp" />
 
             </LinearLayout>
+
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

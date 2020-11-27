@@ -12,6 +12,15 @@
         <item>在线登录</item>
         <item>离线登录</item>
     </string-array>
+    <!--  编辑界面-->
+    <!--  设备-->
+    <string-array name="case03_Device">
+        <item></item>
+        <item>设备</item>
+        <item>KS822</item>
+        <item>US522</item>
+        <item>LC3088</item>
+    </string-array>
 
 
     <!-- 通用的 -->
@@ -74,7 +83,8 @@
 
     <!-- 时间对话框 -->
     <string name="time_title">请选择时间</string>
-
+    <!-- 年纪对话框 -->
+    <string name="age_title">请选择年龄</string>
     <!-- 升级对话框 -->
     <string name="update_title">发现新版本</string>
 

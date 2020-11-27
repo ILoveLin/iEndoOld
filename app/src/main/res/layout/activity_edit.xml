@@ -298,7 +298,7 @@
                     android:textColor="@color/color_333333" />
 
 
-                <TextView
+                <com.hjq.widget.view.ClearEditText
                     android:id="@+id/case03_history"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -437,7 +437,7 @@
                     android:textColor="@color/color_333333" />
 
 
-                <TextView
+                <com.hjq.widget.view.ClearEditText
                     android:id="@+id/case03_doctor"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -496,6 +496,7 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_device"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
@@ -544,13 +545,12 @@
                         android:singleLine="true"
                         android:textColor="@color/color_333333"
                         android:textSize="15sp" />
-
                     <ImageView
+                        android:id="@+id/iv_case_office"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
-
                 </LinearLayout>
 
 
@@ -596,9 +596,10 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_say"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
+                        android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -647,9 +648,10 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_bed"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
+                        android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -698,11 +700,11 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_mirror_see"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
+                        android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
-
                 </LinearLayout>
 
 
@@ -748,9 +750,10 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_see_result"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
+                        android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -798,6 +801,7 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_live_see"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
@@ -849,6 +853,7 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_test"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
@@ -899,11 +904,11 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_cytology"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
-
                 </LinearLayout>
 
 
@@ -949,6 +954,7 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_pathology"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
@@ -999,6 +1005,7 @@
                         android:textSize="15sp" />
 
                     <ImageView
+                        android:id="@+id/iv_case_advise"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"

@@ -2,21 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/linear_all"
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
 
-
     <LinearLayout
         android:id="@+id/linear_sheare"
-        android:transitionName="anim_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_60"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:transitionName="anim_search">
 
         <TextView
             android:id="@+id/tv_back"
@@ -57,7 +56,7 @@
             android:id="@+id/rl_status_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlEnablePreviewInEditMode="false"
+            app:srlEnablePureScrollMode="true"
             tools:context="org.company.iendo.ui.fragment.StatusFragment">
 
             <com.hjq.widget.layout.WrapRecyclerView

@@ -15,10 +15,10 @@ import org.company.iendo.common.MyAdapter;
 /**
  * LoveLin
  * <p>
- * Describe 病例管理的adapter
+ * Describe
  */
-public class CaseManageAdapter extends MyAdapter<CaseManagerListBean.DsDTO> {
-    public CaseManageAdapter(@NonNull Context context) {
+public class SearchAdapter extends MyAdapter<CaseManagerListBean.DsDTO> {
+    public SearchAdapter(@NonNull Context context) {
         super(context);
     }
 

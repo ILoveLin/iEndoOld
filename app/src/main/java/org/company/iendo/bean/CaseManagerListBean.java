@@ -1,5 +1,7 @@
 package org.company.iendo.bean;
 
+import java.util.List;
+
 /**
  * LoveLin
  * <p>
@@ -8,57 +10,69 @@ package org.company.iendo.bean;
 public class CaseManagerListBean {
 
 
-    /**
-     * ID : 4029
-     * Name : one
-     * Pathology :
-     * RecordDate : 2020/11/18 8:37:45
-     * EndoType : 3
-     */
+    private List<DsDTO> ds;
 
-    private String ID;
-    private String Name;
-    private String Pathology;
-    private String RecordDate;
-    private String EndoType;
-
-    public String getID() {
-        return ID;
+    public List<DsDTO> getDs() {
+        return ds;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setDs(List<DsDTO> ds) {
+        this.ds = ds;
     }
 
-    public String getName() {
-        return Name;
-    }
+    public static class DsDTO {
+        /**
+         * ID : 4037
+         * Name : qq
+         * Pathology :
+         * RecordDate : 2020/11/27 16:06:08
+         * EndoType : 3
+         */
 
-    public void setName(String Name) {
-        this.Name = Name;
-    }
+        private String ID;
+        private String Name;
+        private String Pathology;
+        private String RecordDate;
+        private String EndoType;
 
-    public String getPathology() {
-        return Pathology;
-    }
+        public String getID() {
+            return ID;
+        }
 
-    public void setPathology(String Pathology) {
-        this.Pathology = Pathology;
-    }
+        public void setID(String ID) {
+            this.ID = ID;
+        }
 
-    public String getRecordDate() {
-        return RecordDate;
-    }
+        public String getName() {
+            return Name;
+        }
 
-    public void setRecordDate(String RecordDate) {
-        this.RecordDate = RecordDate;
-    }
+        public void setName(String Name) {
+            this.Name = Name;
+        }
 
-    public String getEndoType() {
-        return EndoType;
-    }
+        public String getPathology() {
+            return Pathology;
+        }
 
-    public void setEndoType(String EndoType) {
-        this.EndoType = EndoType;
+        public void setPathology(String Pathology) {
+            this.Pathology = Pathology;
+        }
+
+        public String getRecordDate() {
+            return RecordDate;
+        }
+
+        public void setRecordDate(String RecordDate) {
+            this.RecordDate = RecordDate;
+        }
+
+        public String getEndoType() {
+            return EndoType;
+        }
+
+        public void setEndoType(String EndoType) {
+            this.EndoType = EndoType;
+        }
     }
 }

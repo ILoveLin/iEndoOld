@@ -53,6 +53,7 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     private CaseManageAdapter mAdapter;
     private TitleBar mTitleBar;
     private String endoType;
+    public static List<CaseManagerListBean.DsDTO> mList;
 
 
     @Override
@@ -68,7 +69,7 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         mTitleBar = findViewById(R.id.titlebar);
 
         mAdapter = new CaseManageAdapter(this);
-        mAdapter.setData(analogData());
+//        mAdapter.setData(analogData());
         responseListener();
 
         mRecyclerView.setAdapter(mAdapter);
@@ -76,7 +77,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         mRecyclerView.addItemDecoration(new RecycleViewDivider(this, 1, R.drawable.shape_divideritem_decoration));
 
         LinearLayout mHeaderView = mRecyclerView.addHeaderView(R.layout.header_user_search);
-//        ClearEditText userSearch = mHeaderView.findViewById(R.id.cet_user_search);
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(this);
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(this);
 
@@ -179,8 +179,9 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
                         } else {
                             Type type = new TypeToken<CaseManagerListBean>() {
                             }.getType();
-
-
+                            CaseManagerListBean mBean = mGson.fromJson(response, type);
+                            mList = mBean.getDs();
+                            mAdapter.setData(mList);
                         }
                     }
                 });
@@ -207,16 +208,16 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     }
 
 
-    /**
-     * 模拟数据
-     */
-    private List<String> analogData() {
-        List<String> data = new ArrayList<>();
-        for (int i = mAdapter.getItemCount(); i < mAdapter.getItemCount() + 20; i++) {
-            data.add("我是第" + i + "条目");
-        }
-        return data;
-    }
+//    /**
+//     * 模拟数据
+//     */
+//    private List<String> analogData() {
+//        List<String> data = new ArrayList<>();
+//        for (int i = mAdapter.getItemCount(); i < mAdapter.getItemCount() + 20; i++) {
+//            data.add("我是第" + i + "条目");
+//        }
+//        return data;
+//    }
 
 
     @Override

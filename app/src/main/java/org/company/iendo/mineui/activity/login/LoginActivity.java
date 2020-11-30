@@ -50,9 +50,7 @@ import okhttp3.Call;
  * time   : 2018/10/18
  * desc   : 登录界面
  */
-public final class LoginActivity extends MyActivity
-        implements KeyboardWatcher.SoftKeyboardStateListener {
-
+public final class LoginActivity extends MyActivity implements KeyboardWatcher.SoftKeyboardStateListener {
     private TitleBar mTitleBar;
     private SwitchButton mSwithRemeber;
     private ImageView mAdd;

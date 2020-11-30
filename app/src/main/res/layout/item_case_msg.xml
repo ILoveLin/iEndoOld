@@ -15,7 +15,7 @@
 
 
         <TextView
-            android:id="@+id/user_search_change_password"
+            android:id="@+id/tv_created_time"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -23,21 +23,35 @@
             android:lines="1"
             android:paddingLeft="@dimen/padding_10"
             android:paddingRight="@dimen/padding_20"
-            android:text="修改密码"
+            android:text="2020/11/27 16:06:08"
             android:textColor="@color/black70"
-            android:textSize="@dimen/padding_14" />
+            android:textSize="@dimen/padding_12" />
 
 
         <TextView
-            android:id="@+id/tv_text"
+            android:id="@+id/tv_id"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:lines="1"
             android:paddingLeft="@dimen/padding_20"
-            android:text="测试数据"
+            android:text="01"
             android:textColor="@color/black80"
             android:textSize="@dimen/padding_15" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/tv_id"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:paddingLeft="@dimen/padding_20"
+            android:text="QQ"
+            android:textColor="@color/black80"
+            android:textSize="@dimen/padding_15" />
+
+
     </RelativeLayout>
 
     <!--    <Button-->

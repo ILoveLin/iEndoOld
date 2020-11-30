@@ -303,6 +303,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
+                    android:hint="请输入"
                     android:background="@color/white"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingTop="@dimen/padding_6"
@@ -497,8 +498,9 @@
 
                     <ImageView
                         android:id="@+id/iv_case_device"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
@@ -547,8 +549,9 @@
                         android:textSize="15sp" />
                     <ImageView
                         android:id="@+id/iv_case_office"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
                 </LinearLayout>
@@ -597,8 +600,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_say"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
@@ -649,8 +654,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_bed"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
@@ -701,8 +708,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_mirror_see"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
                 </LinearLayout>
@@ -751,8 +760,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_see_result"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
@@ -802,8 +813,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_live_see"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
@@ -854,8 +867,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_test"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
@@ -905,8 +920,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_cytology"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
                 </LinearLayout>
@@ -955,8 +972,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_pathology"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 
@@ -1006,8 +1025,10 @@
 
                     <ImageView
                         android:id="@+id/iv_case_advise"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginRight="@dimen/padding_10"
+
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
 

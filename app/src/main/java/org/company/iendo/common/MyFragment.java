@@ -5,33 +5,44 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseFragment;
+
 import org.company.iendo.action.TitleBarAction;
 import org.company.iendo.action.ToastAction;
 import org.company.iendo.http.model.HttpData;
+import org.company.iendo.util.SharePreferenceUtil;
+
 import com.hjq.http.listener.OnHttpListener;
 
 import okhttp3.Call;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2018/10/18
- *    desc   : 项目中 Fragment 懒加载基类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2018/10/18
+ * desc   : 项目中 Fragment 懒加载基类
  */
 public abstract class MyFragment<A extends MyActivity> extends BaseFragment<A>
         implements ToastAction, TitleBarAction, OnHttpListener {
 
-    /** 标题栏对象 */
+    /**
+     * 标题栏对象
+     */
     private TitleBar mTitleBar;
-    /** 状态栏沉浸 */
+    /**
+     * 状态栏沉浸
+     */
     private ImmersionBar mImmersionBar;
+    public Gson mGson;
 
     @Override
     protected void initFragment() {
         super.initFragment();
+        mGson = new Gson();
+
         if (getTitleBar() != null) {
             getTitleBar().setOnTitleBarListener(this);
         }
@@ -45,6 +56,47 @@ public abstract class MyFragment<A extends MyActivity> extends BaseFragment<A>
                 ImmersionBar.setTitleBar(this, getTitleBar());
             }
         }
+    }
+
+    /**
+     * 获取userId
+     *
+     * @return
+     */
+    public String getUserId() {
+        return (String) SharePreferenceUtil.get(getAttachActivity(), SharePreferenceUtil.UserId, "");
+    }
+
+    /**
+     * 设置登录模式
+     *
+     * @return
+     */
+    public void setCurrentOnlineType(Boolean type) {
+        SharePreferenceUtil.put(getAttachActivity(), SharePreferenceUtil.isOnline, type);
+    }
+
+    /**
+     * 获取登录模式
+     *
+     * @return
+     */
+    public Boolean getCurrentOnlineType() {
+        Boolean isOnline = (Boolean) SharePreferenceUtil.get(getAttachActivity(), SharePreferenceUtil.isOnline, true);
+        return isOnline;
+
+    }
+
+    /**
+     * 获取登录模式
+     *
+     * @return
+     */
+    public String getCurrentHost() {
+        String Host = (String) SharePreferenceUtil.get(getAttachActivity(), SharePreferenceUtil.Current_Host, "");
+
+        return Host;
+
     }
 
     /**

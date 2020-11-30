@@ -11,12 +11,16 @@ import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.reflect.TypeToken;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseDialog;
 import com.hjq.base.BaseFragmentAdapter;
-import com.vlc.lib.listener.util.LogUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
+import org.company.iendo.bean.CaseDetailMsgBean;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
@@ -26,6 +30,13 @@ import org.company.iendo.mineui.fragment.Fragment02;
 import org.company.iendo.mineui.fragment.Fragment03;
 import org.company.iendo.mineui.fragment.Fragment04;
 import org.company.iendo.ui.dialog.MessageDialog;
+import org.company.iendo.util.LogUtils;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * LoveLin
@@ -43,6 +54,8 @@ public class CaseDetailMsgActivity extends MyActivity {
     private TextView mDelete;
     private TextView mDownload;
     private TextView mEdit;
+    private static String id;
+    private static CaseDetailMsgBean.DsDTO mCurrentBean;
 
     @Override
     protected int getLayoutId() {
@@ -66,6 +79,8 @@ public class CaseDetailMsgActivity extends MyActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = statusBarHeight + 23;
         mTitleBar.setLayoutParams(params);
+
+        id = getIntent().getStringExtra("ID");
         mPagerAdapter = new BaseFragmentAdapter<>(this);
         Fragment01 fragment01 = new Fragment01(this);
         Fragment02 fragment02 = new Fragment02(this);
@@ -86,7 +101,7 @@ public class CaseDetailMsgActivity extends MyActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.titile_live:
-                if(mAction!=null){
+                if (mAction != null) {
                     mAction.onLive();
                 }
                 break;
@@ -105,9 +120,6 @@ public class CaseDetailMsgActivity extends MyActivity {
     }
 
     private void showDeleteDialog() {
-
-
-
         new MessageDialog.Builder(CaseDetailMsgActivity.this)
                 // 标题可以不用填写
                 .setTitle("提示")
@@ -136,6 +148,7 @@ public class CaseDetailMsgActivity extends MyActivity {
 
     }
 
+
     /**
      * 利用反射获取状态栏高度
      *
@@ -153,12 +166,19 @@ public class CaseDetailMsgActivity extends MyActivity {
 
     @Override
     protected void initData() {
+
         mLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+    }
+
+
+
+    public static String getCurrentID() {
+        return id;
     }
 
     @Override

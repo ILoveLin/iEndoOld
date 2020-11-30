@@ -74,5 +74,16 @@ public class CaseManagerListBean {
         public void setEndoType(String EndoType) {
             this.EndoType = EndoType;
         }
+
+        @Override
+        public String toString() {
+            return "DsDTO{" +
+                    "ID='" + ID + '\'' +
+                    ", Name='" + Name + '\'' +
+                    ", Pathology='" + Pathology + '\'' +
+                    ", RecordDate='" + RecordDate + '\'' +
+                    ", EndoType='" + EndoType + '\'' +
+                    '}';
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.company.iendo.mineui.activity.casemsg;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -99,53 +100,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     }
 
 
-    private void responseListener() {
-        mAdapter.setOnItemClickListener(this);
-        mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
-            @Override
-            public void onLeftClick(View v) {
-                finish();
-            }
-
-            @Override
-            public void onTitleClick(View v) {
-
-            }
-
-            @Override
-            public void onRightClick(View v) {
-                if (getCurrentOnlineType()) {
-
-                } else {
-                    new MessageDialog.Builder(CaseManageActivity.this)
-                            // 标题可以不用填写
-                            .setTitle("提示")
-                            // 内容必须要填写
-                            .setMessage("离线用户无法添加用户")
-                            // 确定按钮文本
-                            .setConfirm(getString(R.string.common_confirm))
-                            // 设置 null 表示不显示取消按钮
-                            .setCancel(getString(R.string.common_cancel))
-                            // 设置点击按钮后不关闭对话框
-                            //.setAutoDismiss(false)
-                            .setListener(new MessageDialog.OnListener() {
-
-                                @Override
-                                public void onConfirm(BaseDialog dialog) {
-                                }
-
-                                @Override
-                                public void onCancel(BaseDialog dialog) {
-                                }
-                            })
-                            .show();
-                }
-            }
-        });
-
-
-    }
-
     @Override
     protected void initData() {
         endoType = (String) SharePreferenceUtil.get(CaseManageActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
@@ -204,20 +158,61 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast("第" + position + "条目被点击了");
-        startActivity(CaseDetailMsgActivity.class);
+        LogUtils.e("=TAG=hy=position==" + mAdapter.getItem(position).toString());
+        Intent intent = new Intent(CaseManageActivity.this, CaseDetailMsgActivity.class);
+        intent.putExtra("ID", mAdapter.getItem(position).getID());
+        startActivity(intent);
     }
 
+    private void responseListener() {
+        mAdapter.setOnItemClickListener(this);
+        mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(View v) {
+                finish();
+            }
 
-//    /**
-//     * 模拟数据
-//     */
-//    private List<String> analogData() {
-//        List<String> data = new ArrayList<>();
-//        for (int i = mAdapter.getItemCount(); i < mAdapter.getItemCount() + 20; i++) {
-//            data.add("我是第" + i + "条目");
-//        }
-//        return data;
-//    }
+            @Override
+            public void onTitleClick(View v) {
+
+            }
+
+            @Override
+            public void onRightClick(View v) {
+                if (getCurrentOnlineType()) {
+
+                    toast("添加");
+
+
+                } else {
+                    new MessageDialog.Builder(CaseManageActivity.this)
+                            // 标题可以不用填写
+                            .setTitle("提示")
+                            // 内容必须要填写
+                            .setMessage("离线用户无法添加用户")
+                            // 确定按钮文本
+                            .setConfirm(getString(R.string.common_confirm))
+                            // 设置 null 表示不显示取消按钮
+                            .setCancel(getString(R.string.common_cancel))
+                            // 设置点击按钮后不关闭对话框
+                            //.setAutoDismiss(false)
+                            .setListener(new MessageDialog.OnListener() {
+
+                                @Override
+                                public void onConfirm(BaseDialog dialog) {
+                                }
+
+                                @Override
+                                public void onCancel(BaseDialog dialog) {
+                                }
+                            })
+                            .show();
+                }
+            }
+        });
+
+
+    }
 
 
     @Override

@@ -1,16 +1,26 @@
 package org.company.iendo.mineui.fragment;
 
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
+
+import com.google.gson.reflect.TypeToken;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
+import org.company.iendo.bean.CaseDetailMsgBean;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
+import org.company.iendo.util.LogUtils;
 import org.company.iendo.widget.HintLayout;
+
+import java.lang.reflect.Type;
+
+import okhttp3.Call;
 
 /**
  * LoveLin
@@ -22,6 +32,23 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
 
     private HintLayout mHintLayout;
     private CaseDetailMsgActivity mActivity;
+    private TextView case02_check_number;
+    private TextView case02_again_see;
+    private TextView case02_charge;
+    private TextView case02_doctor;
+    private TextView case02_device;
+    private TextView case02_case;
+    private TextView case02_say;
+    private TextView case02_bed_see;
+    private TextView case02_mirror_see;
+    private TextView case02_mirror_see_result;
+    private TextView case02_live_see;
+    private TextView case02_test;
+    private TextView case02_cytology;
+    private TextView case02_pathology;
+    private TextView case02_advise;
+    private TextView case02_check_doctor;
+    private CaseDetailMsgBean.DsDTO mBean;
 
     public Fragment02(CaseDetailMsgActivity Activity) {
         this.mActivity = Activity;
@@ -35,12 +62,67 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
     @Override
     protected void initView() {
         mHintLayout = findViewById(R.id.hl_status_hint);
+        case02_check_number = findViewById(R.id.case02_check_number);
+        case02_again_see = findViewById(R.id.case02_again_see);
+        case02_charge = findViewById(R.id.case02_charge);
+        case02_doctor = findViewById(R.id.case02_doctor);
+        case02_device = findViewById(R.id.case02_device);
+        case02_case = findViewById(R.id.case02_case);
+        case02_say = findViewById(R.id.case02_say);
+        case02_bed_see = findViewById(R.id.case02_bed_see);
+        case02_mirror_see = findViewById(R.id.case02_mirror_see);
+        case02_mirror_see_result = findViewById(R.id.case02_mirror_see_result);
+        case02_live_see = findViewById(R.id.case02_live_see);
+        case02_test = findViewById(R.id.case02_test);
+        case02_cytology = findViewById(R.id.case02_cytology);
+        case02_pathology = findViewById(R.id.case02_pathology);
+        case02_advise = findViewById(R.id.case02_advise);
+        case02_check_doctor = findViewById(R.id.case02_check_doctor);
         mActivity.setCaseOperatorAction(this);
-
     }
 
     @Override
     protected void initData() {
+        sendRequest();
+    }
+
+    private void sendRequest() {
+        showDialog();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Case_Detail)
+                .addParams("patientsid", mActivity.getCurrentID())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        if ("0".equals(response)) {
+                            toast("请求参数有误");
+                        } else {
+                            LogUtils.e("TAG--02" + response);
+                            Type type = new TypeToken<CaseDetailMsgBean>() {
+                            }.getType();
+                            CaseDetailMsgBean bean = mGson.fromJson(response, type);
+                            if (bean.getDs().size() >= 0) {
+                                mBean = bean.getDs().get(0);
+                                case02_check_number.setText(mBean.getCaseNo() + "");
+
+                                if (mBean.getReturnVisit().equals("False")) {
+                                    case02_again_see.setText("否");
+                                } else {
+                                    case02_again_see.setText("是");
+                                }
+                            }
+                        }
+
+
+                    }
+                });
     }
 
     @Override

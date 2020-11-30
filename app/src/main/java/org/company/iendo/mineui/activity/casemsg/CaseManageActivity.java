@@ -1,28 +1,44 @@
 package org.company.iendo.mineui.activity.casemsg;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.reflect.TypeToken;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
 import com.hjq.widget.layout.WrapRecyclerView;
+import com.hjq.widget.view.ClearEditText;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
+import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.casemsg.adapter.CaseManageAdapter;
-import org.company.iendo.mineui.activity.user.UserSearchActivity;
 import org.company.iendo.ui.dialog.MessageDialog;
+import org.company.iendo.util.LogUtils;
+import org.company.iendo.util.SharePreferenceUtil;
+import org.company.iendo.util.anim.EasyTransition;
+import org.company.iendo.util.anim.EasyTransitionOptions;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * LoveLin
@@ -36,6 +52,7 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     private HintLayout mHintLayout;
     private CaseManageAdapter mAdapter;
     private TitleBar mTitleBar;
+    private String endoType;
 
 
     @Override
@@ -59,20 +76,28 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         mRecyclerView.addItemDecoration(new RecycleViewDivider(this, 1, R.drawable.shape_divideritem_decoration));
 
         LinearLayout mHeaderView = mRecyclerView.addHeaderView(R.layout.header_user_search);
+//        ClearEditText userSearch = mHeaderView.findViewById(R.id.cet_user_search);
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(this);
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(this);
 
 
-//        mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(v -> {
-//            toast("点击搜索");
-//
-//        });
-//        mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(v -> {
-//            toast("开始搜索啦~");
-//
-//        });
+        mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(v -> {
+            toast("点击搜索");
+            EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageActivity.this, mHeaderView);
+            Intent intent = new Intent(CaseManageActivity.this, SearchActivity.class);
+            EasyTransition.startActivity(intent, options);
+
+
+        });
+        mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(v -> {
+            toast("点击搜索");
+            EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageActivity.this, mHeaderView);
+            Intent intent = new Intent(CaseManageActivity.this, SearchActivity.class);
+            EasyTransition.startActivity(intent, options);
+        });
 
     }
+
 
     private void responseListener() {
         mAdapter.setOnItemClickListener(this);
@@ -89,9 +114,9 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
             @Override
             public void onRightClick(View v) {
-                if(getCurrentOnlineType()){
+                if (getCurrentOnlineType()) {
 
-                }else{
+                } else {
                     new MessageDialog.Builder(CaseManageActivity.this)
                             // 标题可以不用填写
                             .setTitle("提示")
@@ -123,6 +148,42 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
     @Override
     protected void initData() {
+        endoType = (String) SharePreferenceUtil.get(CaseManageActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
+        sendRequest();
+    }
+
+    /**
+     * 发送请求
+     */
+    private void sendRequest() {
+        LogUtils.e("=TAG=hy=onError==" + endoType);
+        showDialog();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_List)
+                .addParams("endoType", endoType)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        LogUtils.e("=TAG=hy=onError==" + e.toString());
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("=TAG=hy=onSucceed==" + response.toString());
+                        if ("0".equals(response)) {
+                            toast("用户名不存在或者参数为空");
+                        } else {
+                            Type type = new TypeToken<CaseManagerListBean>() {
+                            }.getType();
+
+
+                        }
+                    }
+                });
 
     }
 

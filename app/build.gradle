@@ -204,6 +204,6 @@ dependencies {
     //https://www.jianshu.com/p/721381cf974f     okhttputils使用链接
     implementation 'com.zhy:okhttputils:2.6.2'
 
-
+//    implementation 'com.github.huzenan:EasyTransition:v1.0.0'
 
 }

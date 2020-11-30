@@ -14,5 +14,11 @@ public class HttpConstant {
     public static final String Login = "users.aspx";
 
 
+    /**
+     * 病例管理
+     */
+
+    public static final String CaseManager_List = "patients_list.aspx";
+
 
 }

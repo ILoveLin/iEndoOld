@@ -29,22 +29,30 @@
     <style name="FullScreenTheme" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
     </style>
-   <!--   主界面tab底部 Navigation选中的时候，取消变大-->
+    <!--   主界面tab底部 Navigation选中的时候，取消变大-->
     <style name="myNavigationDrawerStyle">
         <item name="android:textSize">12sp</item>
     </style>
 
-<!--    <color name="font_hint">#989898</color>-->
-<!--    &lt;!&ndash;没有选中的样式&ndash;&gt;-->
-<!--    <style name="bottom_normal_text">-->
-<!--        <item name="android:textColor">@color/font_hint</item>-->
-<!--        <item name="android:textSize">14sp</item>-->
-<!--    </style>-->
-<!--    &lt;!&ndash;选中的样式&ndash;&gt;-->
-<!--    <style name="bottom_selected_text">-->
-<!--        <item name="android:textColor">@color/colorPrimary</item>-->
-<!--        <item name="android:textSize">14sp</item>-->
-<!--    </style>-->
+
+    <!--透明主题-->
+    <style name="Translucent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+
+    <!--    <color name="font_hint">#989898</color>-->
+    <!--    &lt;!&ndash;没有选中的样式&ndash;&gt;-->
+    <!--    <style name="bottom_normal_text">-->
+    <!--        <item name="android:textColor">@color/font_hint</item>-->
+    <!--        <item name="android:textSize">14sp</item>-->
+    <!--    </style>-->
+    <!--    &lt;!&ndash;选中的样式&ndash;&gt;-->
+    <!--    <style name="bottom_selected_text">-->
+    <!--        <item name="android:textColor">@color/colorPrimary</item>-->
+    <!--        <item name="android:textSize">14sp</item>-->
+    <!--    </style>-->
     <!-- 默认圆角按钮样式 -->
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:paddingStart">15dp</item>
@@ -79,6 +87,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
     <style name="LineItemStyleE0E0E0">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>

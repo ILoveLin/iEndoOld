@@ -8,11 +8,11 @@
     android:background="@color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:id="@+id/linear_sheare"
+    android:transitionName="anim_search"
     android:paddingLeft="@dimen/padding_10"
     android:paddingRight="@dimen/padding_10">
-
-
-    <com.hjq.widget.view.ClearEditText
+    <TextView
         android:id="@+id/cet_user_search"
         style="@style/EditTextStyle"
         android:layout_width="0px"
@@ -23,6 +23,18 @@
         android:background="@drawable/home_search_bar_transparent_bg"
         android:hint="搜索..."
         android:singleLine="true" />
+
+<!--    <com.hjq.widget.view.ClearEditText-->
+<!--        android:id="@+id/cet_user_search"-->
+<!--        style="@style/EditTextStyle"-->
+<!--        android:layout_width="0px"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="@dimen/padding_10"-->
+<!--        android:layout_marginRight="@dimen/padding_10"-->
+<!--        android:layout_weight="1"-->
+<!--        android:background="@drawable/home_search_bar_transparent_bg"-->
+<!--        android:hint="搜索..."-->
+<!--        android:singleLine="true" />-->
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_user_search"

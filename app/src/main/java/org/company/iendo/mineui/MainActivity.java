@@ -25,7 +25,6 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
 
     @Override
     protected void initView() {
-
         KeyboardWatcher.with(this)
                 .setListener(this);
     }
@@ -39,13 +38,13 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cv_user:
+            case R.id.cv_user:          //用户管理
                 startActivity(UserMessageActivity.class);
                 break;
-            case R.id.cv_case_manage:
+            case R.id.cv_case_manage:   //病例管理
                 startActivity(CaseManageActivity.class);
                 break;
-            case R.id.cv_live:
+            case R.id.cv_live:          //直播
                 startActivity(LiveActivity.class);
                 break;
         }

@@ -24,6 +24,8 @@ public class SharePreferenceUtil {
      */
     public static final String FILE_NAME = "share_data";
     public static final String UID = "uid";
+    public static final String UserId = "userid";
+
 
     /**
      * 引导界面
@@ -36,12 +38,13 @@ public class SharePreferenceUtil {
      */
     //这个是登入模式
     public static final String isOnline = "online";                            //默认在线登录
-    public static final String Choose_Section = "section";
+    public static final String Choose_Section = "section";                     //耳鼻喉科,妇科,泌尿科
     public static final String is_Remember_Password = "is_remember_password";  //默认不记住
     public static final String Current_Username = "Admin";                     // 虽然是不同字段表示，但是"admin" 如果同时存储username和password  后者会覆盖前者
     public static final String Current_Password = "";
     public static final String Current_UserType = "11";                        //0普通  1超级管理员
     public static final String Current_ID = "1";
+    public static final String Current_Case_Num = "3";                             //3耳鼻喉科,4妇科,6泌尿科,存的是数字
 
 
     /**

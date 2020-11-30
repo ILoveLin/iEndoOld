@@ -115,7 +115,7 @@ public class UserMessageActivity extends MyActivity {
             case R.id.btn_user_control_else_user:
                 startActivity(UserSearchActivity.class);
                 break;
-            case R.id.btn_user_exit:
+            case R.id.btn_user_exit:   //退出
                 exit();
                 break;
             case R.id.text:
@@ -180,6 +180,7 @@ public class UserMessageActivity extends MyActivity {
                     @Override
                     public void onConfirm(BaseDialog dialog) {
                         SharePreferenceUtil.put(getActivity(), SharePreferenceUtil.is_login, false);
+                        SharePreferenceUtil.put(getActivity(), SharePreferenceUtil.UserId, "");
                         startActivity(LoginActivity.class);
 
                     }

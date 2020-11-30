@@ -70,6 +70,7 @@ public final class LoginActivity extends MyActivity
     private boolean isRemember;
     private String username;
     private String password;
+    private String endoType = "3";
 
 
     @DebugLog
@@ -175,9 +176,7 @@ public final class LoginActivity extends MyActivity
                 break;
             case R.id.btn_login_commit://登入
                 checkData();  //检查数据 如果是离线直接登录其次才是网络请求在线登录
-
                 LogUtils.e("==ifOnline====000==" + ifOnline);
-
                 if (ifOnline) {
                     LogUtils.e("==ifOnline==1==" + ifOnline);
                     try {
@@ -214,10 +213,15 @@ public final class LoginActivity extends MyActivity
                                                     String createdAt = mBean.getDs().get(i).getCreatedAt();
                                                     String lastLoginAt = mBean.getDs().get(i).getLastLoginAt();
                                                     String loginTimes = mBean.getDs().get(i).getLoginTimes();
+                                                    String userid = mBean.getDs().get(i).getUserID();
 
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LoginOnlineTime, loginTimes + "");
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_CreateTime, createdAt + "");
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LastOnlineTime, lastLoginAt + "");
+
+                                                    SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Case_Num, endoType);
+                                                    //存入当前科室
+
                                                     setCurrentOnlineType(true);
                                                     startActivity(MainActivity.class);
 
@@ -330,22 +334,23 @@ public final class LoginActivity extends MyActivity
                 toast(item);
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Choose_Section, item);
                 mChooseSection = (String) SharePreferenceUtil.get(LoginActivity.this, SharePreferenceUtil.Choose_Section, "耳鼻喉科");
-
-//                switch (item) {
-//                    case "耳鼻喉科":
-//                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Section, item);
-//                        break;
-//                    case "妇科":
-//                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Section, item);
-//
-//                        break;
-//                    case "泌尿科":
-//                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Section, item);
-//
-//                        break;
-//                }
-
-
+                switch (item) {
+                    case "耳鼻喉科":
+                        endoType = "3";
+                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Choose_Section, item);
+                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Case_Num, endoType);
+                        break;
+                    case "妇科":
+                        endoType = "4";
+                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Choose_Section, item);
+                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Case_Num, endoType);
+                        break;
+                    case "泌尿科":
+                        endoType = "6";
+                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Choose_Section, item);
+                        SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Case_Num, endoType);
+                        break;
+                }
             }
         });
 

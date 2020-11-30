@@ -65,7 +65,7 @@ public class EditActivity extends MyActivity {
 
     @Override
     protected void initView() {
-        ClearEditText mCaseNumber = findViewById(R.id.case03_case_number);
+        mCaseNumber = findViewById(R.id.case03_case_number);
         mCaseName = findViewById(R.id.case03_name);
         //弹出单选框
         mCaseSex = findViewById(R.id.case03_sex);
@@ -88,33 +88,21 @@ public class EditActivity extends MyActivity {
         mIVCaseSay = findViewById(R.id.iv_case_say);
         mCaseBedSea = findViewById(R.id.case03_bed_sea);
         mIVCaseBed = findViewById(R.id.iv_case_bed);
-
-
         mCaseMirrorSee = findViewById(R.id.case03_mirror_see);
         mIVCaseMirrorSee = findViewById(R.id.iv_case_mirror_see);
-
         mCaseMirrorSeeResult = findViewById(R.id.case03_mirror_see_result);
         mIVCaseSeeResult = findViewById(R.id.iv_case_see_result);
-
         mCaseLiveSee = findViewById(R.id.case03_live_see);
         mIVCaseLive_see = findViewById(R.id.iv_case_live_see);
-
         mCaseTest = findViewById(R.id.case03_test);
         mIVCaseTest = findViewById(R.id.iv_case_test);
-
-
         mCaseCytology = findViewById(R.id.case03_cytology);
         mIVCaseCytology = findViewById(R.id.iv_case_cytology);
-
         mCasePathology = findViewById(R.id.case03_pathology);
         mIVCasePathology = findViewById(R.id.iv_case_pathology);
-
         mCaseAdvise = findViewById(R.id.case03_advise);
         mIVCaseAdvise = findViewById(R.id.iv_case_advise);
-
         responseListener();
-
-
     }
 
 

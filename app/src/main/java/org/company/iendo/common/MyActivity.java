@@ -188,6 +188,15 @@ public abstract class MyActivity extends BaseActivity
     }
 
     /**
+     * 获取userId
+     *
+     * @return
+     */
+    public String getUserId() {
+        return (String) SharePreferenceUtil.get(this, SharePreferenceUtil.UserId, "");
+    }
+
+    /**
      * 设置登录模式
      *
      * @return

@@ -190,6 +190,7 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                                     @Override
                                     public void onError(Call call, Exception e, int id) {
                                         LogUtils.e("=TAG=password=hy=onFail==" + e.toString());
+                                        toast(e.toString());
                                         hideDialog();
                                     }
 

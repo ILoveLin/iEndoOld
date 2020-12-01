@@ -1,6 +1,7 @@
 package org.company.iendo.mineui.fragment.adapter;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.bumptech.glide.Glide;
 import com.hjq.base.BaseAdapter;
 
 import org.company.iendo.R;
 import org.company.iendo.common.MyAdapter;
+import org.company.iendo.mineui.MainActivity;
+
+import java.io.File;
 
 /**
  * LoveLin
@@ -39,7 +44,11 @@ public class PictureAdapter extends MyAdapter<String> {
 
         @Override
         public void onBindView(int position) {
-            Log.e("tag", "" + getItem(position) + "");
+            File file = new File(getItem(position));
+            Glide.with(getContext())
+                    .load(file)
+                    .into(mImage);
+            Log.e("adapter", "item==path==" + file.getAbsolutePath() + "");
         }
     }
 

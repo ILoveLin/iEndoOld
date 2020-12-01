@@ -9,7 +9,6 @@
 
     <!--病例号-->
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="@dimen/padding_10"
@@ -21,21 +20,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/padding_20"
             android:text="病例号:"
             android:textColor="@color/color_333333" />
+
 
         <TextView
             android:id="@+id/case01_number"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
+            android:background="@color/white"
             android:gravity="center_vertical|center"
             android:paddingLeft="@dimen/padding_10"
+            android:paddingTop="@dimen/padding_6"
             android:paddingRight="@dimen/padding_10"
-            android:singleLine="true"
-            android:text=""
+            android:paddingBottom="@dimen/padding_6"
             android:textColor="@color/color_333333"
             android:textSize="15sp" />
 
@@ -45,7 +47,6 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="@dimen/padding_10"
-        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="5">
@@ -54,6 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/padding_20"
             android:text="姓名:"
@@ -65,20 +67,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
+            android:background="@color/white"
             android:gravity="center_vertical|center"
             android:paddingLeft="@dimen/padding_10"
+            android:paddingTop="@dimen/padding_6"
             android:paddingRight="@dimen/padding_10"
-            android:singleLine="true"
+            android:paddingBottom="@dimen/padding_6"
             android:textColor="@color/color_333333"
             android:textSize="15sp" />
 
     </LinearLayout>
 
+
     <!--性别-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white"
         android:layout_marginTop="@dimen/padding_10"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -88,6 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/padding_20"
             android:text="性别:"
@@ -99,14 +104,18 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
+            android:background="@color/white"
             android:gravity="center_vertical|center"
             android:paddingLeft="@dimen/padding_10"
+            android:paddingTop="@dimen/padding_6"
             android:paddingRight="@dimen/padding_10"
-            android:singleLine="true"
+            android:paddingBottom="@dimen/padding_6"
             android:textColor="@color/color_333333"
             android:textSize="15sp" />
 
     </LinearLayout>
+
+
     <!--年龄-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -135,8 +144,9 @@
             android:background="@color/white"
             android:gravity="center_vertical|center"
             android:paddingLeft="@dimen/padding_10"
+            android:paddingTop="@dimen/padding_6"
             android:paddingRight="@dimen/padding_10"
-            android:singleLine="true"
+            android:paddingBottom="@dimen/padding_6"
             android:textColor="@color/color_333333"
             android:textSize="15sp" />
 
@@ -167,15 +177,16 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@color/white"
-
             android:gravity="center_vertical|center"
             android:paddingLeft="@dimen/padding_10"
+            android:paddingTop="@dimen/padding_6"
             android:paddingRight="@dimen/padding_10"
-            android:singleLine="true"
+            android:paddingBottom="@dimen/padding_6"
             android:textColor="@color/color_333333"
             android:textSize="15sp" />
 
     </LinearLayout>
+
     <!--电话-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -204,8 +215,9 @@
             android:background="@color/white"
             android:gravity="center_vertical|center"
             android:paddingLeft="@dimen/padding_10"
+            android:paddingTop="@dimen/padding_6"
             android:paddingRight="@dimen/padding_10"
-            android:singleLine="true"
+            android:paddingBottom="@dimen/padding_6"
             android:textColor="@color/color_333333"
             android:textSize="15sp" />
 

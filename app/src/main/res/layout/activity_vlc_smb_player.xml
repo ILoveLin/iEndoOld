@@ -8,7 +8,6 @@
     android:background="@android:color/black">
 
 
-
     <org.company.iendo.widget.MyVlcVideoView
         android:id="@+id/player"
         android:layout_width="match_parent"

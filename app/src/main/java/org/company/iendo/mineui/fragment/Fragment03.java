@@ -53,7 +53,7 @@ import jcifs.smb.SmbSession;
 /**
  * LoveLin
  * <p>
- * Describe 第三个fragment
+ * Describe 第三个fragment   读取SMB 共享图片界面
  */
 
 

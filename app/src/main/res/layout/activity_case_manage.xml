@@ -38,6 +38,8 @@
 
             <com.hjq.widget.layout.WrapRecyclerView
                 android:id="@+id/rv_status_caselist"
+                android:scrollbars="vertical"
+                android:fadeScrollbars="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <!--            tools:listitem="@layout/picker_item"-->

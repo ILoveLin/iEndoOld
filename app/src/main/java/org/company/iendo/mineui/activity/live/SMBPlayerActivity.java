@@ -1,7 +1,6 @@
 package org.company.iendo.mineui.activity.live;
 
 import android.content.pm.ActivityInfo;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,27 +32,22 @@ import moe.codeest.enviews.ENDownloadView;
  * Describe   查看SMB的视频
  */
 public class SMBPlayerActivity extends MyActivity {
-    // public static final String path = "http://121.18.168.149/cache.ott.ystenlive.itv.cmvideo.cn:80/000000001000/1000000001000010606/1.m3u8?stbId=005301FF001589101611549359B92C46&channel-id=ystenlive&Contentid=1000000001000010606&mos=jbjhhzstsl&livemode=1&version=1.0&owaccmark=1000000001000010606&owchid=ystenlive&owsid=5474771579530255373&AuthInfo=2TOfGIahP4HrGWrHbpJXVOhAZZf%2B%2BRvFCOimr7PCGr%2Bu3lLj0NrV6tPDBIsVEpn3QZdNn969VxaznG4qedKIxPvWqo6nkyvxK0SnJLSEP%2FF4Wxm5gCchMH9VO%2BhWyofF";
     //public static final String path = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
     //public static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
 //    public static final String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
-    public String path = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
-    //    public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.146/ImageData/Videos/2448/伏尔思20200810103559952.mp4";
-    //        public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.146/ImageData/Videos/4027/220201116141454985.mp4";
-//    public String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
+//    public String path = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
+//    public String path = "smb://192.168.128.96/ImageData/Videos/3764/祝柳思20200827165247927.mp4";
+    public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3771/祝期玲20200827172726951.mp4";
+    //    public String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
 //smb://cmeftproot:lzjdzh19861207@192.168.128.146/ImageData/Videos/4027/220201116141454985.mp4
     private MyVlcVideoView player;
     private VlcVideoView vlcVideoView;
-    private TextView mTitleView;
-    private View mLeftView;
     private RelativeLayout mTopLayout;
     private ImageView mLockView;
     private AppCompatImageView mControlView;
     private ENDownloadView mLoadingView;
     private ImageView mTopBack;
-    private TextView mTopTitle;
     private TextView mTopChange;
-    private RelativeLayout mAll;
     private LinearLayout mBottomLayout;
     private AppCompatTextView mTotalTime;
     private AppCompatTextView mPlayTime;
@@ -64,15 +58,12 @@ public class SMBPlayerActivity extends MyActivity {
     public boolean isFullscreen = true;
     private TextView mErrorView;
     private boolean locked = false;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //设置沉浸式观影模式体验
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-
-    }
+    private FrameLayout ff_all;
+    private RelativeLayout playout;
+    private boolean isFirstin = true;
+    private boolean isError = false;
+    private String url;
+    private TextView mTopTitle;
 
     @Override
     protected int getLayoutId() {
@@ -84,13 +75,11 @@ public class SMBPlayerActivity extends MyActivity {
         player = findViewById(R.id.player);
         mAllRelat = findViewById(R.id.activity_vlc_player);
         vlcVideoView = player.findViewById(R.id.vlc_video_view);
-
         //控制按钮
         mLockView = player.findViewById(R.id.lock_screen);
         mControlView = player.findViewById(R.id.iv_player_view_control);
         mLoadingView = player.findViewById(R.id.loading);
         mErrorView = player.findViewById(R.id.error_text);
-
         //titlebar
         mTopLayout = player.findViewById(R.id.layout_top);
         mTopBack = player.findViewById(R.id.top_back);
@@ -100,16 +89,23 @@ public class SMBPlayerActivity extends MyActivity {
         mPlayTime = player.findViewById(R.id.tv_player_view_play_time);
         mTotalTime = player.findViewById(R.id.tv_player_view_total_time);
         mProgressView = player.findViewById(R.id.sb_player_view_progress);
-        RelativeLayout playout = player.findViewById(R.id.activity_vlc_player_layout);
-        FrameLayout ff_all = player.findViewById(R.id.ff_all);
-
+        playout = player.findViewById(R.id.activity_vlc_player_layout);
+        ff_all = player.findViewById(R.id.ff_all);
         mLockView.setTag("unLock");
+        path = getIntent().getStringExtra("url");
+        mTopTitle.setText("" + getIntent().getStringExtra("title"));
+    }
 
+    @Override
+    protected void initData() {
+        responseListener();
+    }
+
+    private void responseListener() {
         mTopBack.setOnClickListener(this);
         mTopBack.setOnClickListener(this);
         mControlView.setOnClickListener(this);
         mLockView.setOnClickListener(this);
-
         player.setOnClickListener(this);
         playout.setOnClickListener(this);
         mAllRelat.setOnClickListener(this);
@@ -118,14 +114,12 @@ public class SMBPlayerActivity extends MyActivity {
         player.setOnLockStatueListener(new MyVlcVideoView.onLockStatueListener() {
             @Override
             public void onLockStatueChangeListener() {
-                if (mLockView.getVisibility() == View.VISIBLE) {
-                    lockScreenAll(true);
-                    Log.e("path=====01:=====", "mLockView");
-
-                } else {
-                    lockScreenAll(false);
-                    Log.e("path=====02:=====", "mLockView");
-
+                if (!isError) {  //url错误的时候不响应点击事件
+                    if (mLockView.getVisibility() == View.VISIBLE) {
+                        lockScreenAll(true);
+                    } else {
+                        lockScreenAll(false);
+                    }
                 }
             }
         });
@@ -141,7 +135,7 @@ public class SMBPlayerActivity extends MyActivity {
                 }
 
 
-                if (buffing>50){
+                if (buffing > 50) {
                     mControlView.setVisibility(View.INVISIBLE);
                 }
             }
@@ -155,7 +149,10 @@ public class SMBPlayerActivity extends MyActivity {
             public void eventError(int event, boolean show) {
                 Log.e("path=====Start:=====", "eventError");
                 mErrorView.setVisibility(View.VISIBLE);
-
+                isError = true;
+                mBottomLayout.setVisibility(View.INVISIBLE);
+                mControlView.setVisibility(View.INVISIBLE);
+                mLockView.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -178,12 +175,6 @@ public class SMBPlayerActivity extends MyActivity {
         });
     }
 
-    @Override
-    protected void initData() {
-
-    }
-
-
     /**
      * {@link View.OnClickListener}
      */
@@ -194,7 +185,6 @@ public class SMBPlayerActivity extends MyActivity {
                 finish();
                 break;
             case R.id.top_change:   //是否全屏
-                Log.e("path=====01:=====", "是否全屏");
                 isFullscreen = !isFullscreen;
                 if (isFullscreen) {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -204,7 +194,6 @@ public class SMBPlayerActivity extends MyActivity {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏动态转换
                 }
                 break;
-
             case R.id.iv_player_view_control:   //点击播放暂停
                 if (mControlView.getVisibility() == View.VISIBLE) {
                     if (vlcVideoView.isPlaying()) {
@@ -222,20 +211,14 @@ public class SMBPlayerActivity extends MyActivity {
                     mLockView.setBackgroundResource(R.drawable.video_lock_close_ic);
                     mLockView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                     lockScreen(true);
-
                 } else {
                     mLockView.setTag("unLock");
                     mLockView.setBackgroundResource(R.drawable.video_lock_open_ic);
                     mLockView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                     lockScreen(false);
-
                 }
-
         }
-
-
     }
-
 
     public void lockScreen(Boolean Lock) {
         if (Lock) {   //当前是显示，所以隐藏
@@ -256,26 +239,23 @@ public class SMBPlayerActivity extends MyActivity {
     }
 
     public void lockScreenAll(Boolean Lock) {
-        if (Lock) {   //当前是显示，所以隐藏
+        if (Lock) {   //当前是显示，马上要去隐藏
             mTopLayout.setVisibility(View.INVISIBLE);
             mBottomLayout.setVisibility(View.INVISIBLE);
             mControlView.setVisibility(View.INVISIBLE);
             mLockView.setVisibility(View.INVISIBLE);
-
         } else {      //显示
             mTopLayout.setVisibility(View.VISIBLE);
             mBottomLayout.setVisibility(View.VISIBLE);
-            if(mLockView.getTag().equals("unLock")){
-                mControlView.setVisibility(View.VISIBLE);
-            }else {
-                mControlView.setVisibility(View.INVISIBLE);
-
-            }
+            mControlView.setVisibility(View.VISIBLE);
             mLockView.setVisibility(View.VISIBLE);
+            if (mLockView.getTag().equals("Lock")) {
+                mTopLayout.setVisibility(View.INVISIBLE);
+                mBottomLayout.setVisibility(View.INVISIBLE);
+                mControlView.setVisibility(View.INVISIBLE);
+            }
 
         }
-
-
     }
 
     /**
@@ -298,17 +278,12 @@ public class SMBPlayerActivity extends MyActivity {
         }
     }
 
+
     /**
      * 开始直播
      *
-     * @param path
+     * @param
      */
-    private void startLive(String path) {
-        vlcVideoView.setPath(path);
-        vlcVideoView.startPlay();
-    }
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -318,8 +293,11 @@ public class SMBPlayerActivity extends MyActivity {
         mLoadingView.setVisibility(View.VISIBLE);
         mLoadingView.start();
         player.setVideoSource(path);
+        Log.e("========root=====", "播放的==url==" + "" + path);
+
         player.start();
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -327,30 +305,23 @@ public class SMBPlayerActivity extends MyActivity {
         mControlView.setVisibility(View.VISIBLE);
         mLoadingView.setVisibility(View.INVISIBLE);
         mLoadingView.release();
-//        vlcVideoView.pause();
-
     }
+
     public void onMyStart() {
         mControlView.setImageResource(R.drawable.video_play_pause_ic);
         player.start(currentPosition, currentProgress);
-//        mControlView.setVisibility(View.INVISIBLE);
-
     }
 
-    private boolean isFirstin = true;
 
     public void onMyPause() {
         if (isFirstin) {
             isFirstin = false;
             mControlView.setImageResource(R.drawable.video_play_pause_ic);
-
         } else {
             mControlView.setImageResource(R.drawable.video_play_start_ic);
-
         }
         player.pause();
     }
-
 
 
     @Override
@@ -361,5 +332,9 @@ public class SMBPlayerActivity extends MyActivity {
         vlcVideoView.onStop();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        vlcVideoView.onDestroy();
+    }
 }

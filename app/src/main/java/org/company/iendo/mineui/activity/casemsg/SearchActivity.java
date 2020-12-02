@@ -1,5 +1,6 @@
 package org.company.iendo.mineui.activity.casemsg;
 
+import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,8 +77,11 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
 
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-        toast(mAdapter.getItem(position).getName());
-        startActivity(CaseDetailMsgActivity.class);
+        toast("第" + position + "条目被点击了");
+        LogUtils.e("=TAG=hy=position==" + mAdapter.getItem(position).toString());
+        Intent intent = new Intent(SearchActivity.this, CaseDetailMsgActivity.class);
+        intent.putExtra("ID", mAdapter.getItem(position).getID());
+        startActivity(intent);
 
     }
 
@@ -105,8 +109,6 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
                         mAdapter.setData(mDataList);
                     }
                 }
-
-
                 break;
         }
     }

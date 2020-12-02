@@ -37,6 +37,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -62,13 +63,15 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     private String ip;
     public static final int REFRESH_04 = 110;
     public static final int EMPTY_04 = 120;
+    private ArrayList<String> mVideoList;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case REFRESH_04:
-                    mAdapter.setData(getLocalImagePathList());
+                    showComplete();
+                    mAdapter.setData(mVideoList);
                     break;
                 case EMPTY_04:
                     showEmpty();
@@ -121,7 +124,7 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     }
 
     private void responseListener() {
-
+        showLoading();
         new Thread() {
             @Override
             public void run() {
@@ -129,39 +132,29 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
                 try {
                     initSmb();
                     Log.e("========root===exists==", mRootFolder.exists() + "");
-
                     if (mRootFolder.exists()) {
-                        showComplete();
                         SmbFile[] smbFiles = mRootFolder.listFiles(); // smb://192.168.128.146
                         // /ImageData/Videos/4033/thumb/
                         for (int i = 0; i < smbFiles.length; i++) {
                             Log.e("========root=====", "第" + i + "条数据");
                             Log.e("========root=====", smbFiles[i].getName());
-
-                            String url = mRootFolder + smbFiles[i].getName();
+                            Log.e("===root=idddd==", CaseDetailMsgActivity.getCurrentID());
+                            Log.e("===root=cuet==idddd==", CaseDetailMsgActivity.getCurrentID());
+                            Log.e("===root=ip==", getCurrentIP());
+                            String url = "smb://cmeftproot:lzjdzh19861207@" + getCurrentIP() + "/ImageData/Videos/"
+                                    + CaseDetailMsgActivity.getCurrentID() + "/" + smbFiles[i].getName();
+//                            String url = mRootFolder + smbFiles[i].getName();
                             Log.e("========root=====", url);
-
-//                            File toFile = new File(Environment.getExternalStorageDirectory() + "/MyData/Videos/" + CaseDetailMsgActivity.getCurrentID());
-//                            if (!toFile.exists()) {   //不存在创建
-//                                toFile.mkdirs();
-//
-//                                Log.e("====root==localDir=不存在=", toFile.getAbsolutePath());
-//                                String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-//
-//
-//                                downloadFileToFolder(remoteUrl, "ImageData/Videos/" + CaseDetailMsgActivity.getCurrentID() ,
-//                                        smbFiles[i].getName(), toFile.getAbsolutePath());
-//                            }
+//                            smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3764/祝柳思20200827165247927.mp4
+                            mVideoList = new ArrayList<>();
+                            mVideoList.add(smbFiles[i].getName());
                             mHandler.sendEmptyMessage(REFRESH_04);
                         }
                     } else {
                         mHandler.sendEmptyMessage(EMPTY_04);
                     }
-
-
                 } catch (Exception e) {
                     Log.e("========root==Ex=", "");
-
                     e.printStackTrace();
                 }
 
@@ -189,39 +182,6 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
         mRootFolder = new SmbFile(rootPath, mAuthentication);
     }
 
-    /**
-     * 下载文件到指定文件夹
-     *
-     * @param remoteUrl
-     * @param shareFolderPath
-     * @param fileName
-     * @param localDir
-     */
-    public static void downloadFileToFolder(String remoteUrl, String shareFolderPath, String fileName, String localDir) {
-        try {
-            Log.e("========root=====", "down===remoteUrl===" + remoteUrl);
-            Log.e("========root=====", "down===shareFolderPath===" + shareFolderPath);
-            Log.e("========root=====", "down===src_path===" + remoteUrl + shareFolderPath + "/" + fileName);
-            Log.e("========root=====", "down===localDir===" + localDir);
-            Log.e("========root=====", "======================================================");
-            SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
-            File localFile = new File(localDir + File.separator + fileName);
-            InputStream in = new SmbFileInputStream(remoteFile);
-            OutputStream out = new FileOutputStream(localFile);
-            byte[] buffer = new byte[1024];
-            int len = 0;
-
-            while ((len = in.read(buffer)) > 0) {
-                out.write(buffer, 0, len);
-
-            }
-            in.close();
-            out.close();
-        } catch (Exception e) {
-            Log.e("========root=====", "down==Exception" + "");
-            e.printStackTrace();
-        }
-    }
 
     @SuppressLint("NewApi")
     public ArrayList<String> getLocalImagePathList() {
@@ -238,16 +198,8 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
         return images;
     }
 
-    /**
-     * 模拟数据
-     */
-    private List<String> analogData() {
-        List<String> data = new ArrayList<>();
-        for (int i = mAdapter.getItemCount(); i < mAdapter.getItemCount() + 20; i++) {
-            data.add("" + i + ".mp4");
-        }
-        return data;
-    }
+
+
 
     @Override
     public boolean isStatusBarEnabled() {
@@ -263,9 +215,13 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast(position);
-        String item = mAdapter.getItem(position);
+        String title = mAdapter.getItem(position);
         Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
-        intent.putExtra("url", item + "");
+        String url = "smb://cmeftproot:lzjdzh19861207@" + getCurrentIP() + "/ImageData/Videos/"
+                + CaseDetailMsgActivity.getCurrentID() + "/" +title;
+        intent.putExtra("url", url + "");
+        intent.putExtra("title", title + "");
+        toast(url);
         startActivity(intent);
     }
 

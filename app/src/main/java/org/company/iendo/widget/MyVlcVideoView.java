@@ -29,25 +29,18 @@ import java.util.Locale;
  */
 public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
     private Context mContext;
-    private RelativeLayout mRootLayout;
-    private LinearLayout mVideoGestureLayout;
-    private ImageView mVideoGestureImg;
-    private TextView mVideoGestureText;
     private ViewGroup mBottomLayout;
     private TextView mPlayTime;
     private TextView mTotalTime;
     private SeekBar mProgressView;
     private VlcVideoView mVideoView;
-    //    private ImageView mControlView;
-//    private ImageView mLockView;
-    //    private ViewGroup mTopLayout;
-//    private TextView mTitleView;
-//    private View mLeftView;
     private int currentPosition;
     private int currentProgress;
     private ImageView mLockView;
-
-
+    /**
+     * 当前播放进度
+     */
+    private int mCurrentProgress;
     public MyVlcVideoView(Context context) {
         super(context);
         initView(context);
@@ -61,7 +54,6 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     public MyVlcVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
-
     }
 
     /**
@@ -70,26 +62,15 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.top_back:   //后退
-                mGoBackListener.onClickGoBack();
-                break;
-//
             case R.id.vlc_video_view:   //后退
-                Log.e("path=====0000:=====", "eventBuffing");
                 mOnLockStatueListener.onLockStatueChangeListener();
                 break;
-
-
         }
-
-
     }
-
 
     private void initView(Context context) {
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.vlc_videoview_layout, this);
-//        mRootLayout = findViewById(R.id.root_layout_vlc);
         mVideoView = findViewById(R.id.vlc_video_view);
         FrameLayout ff_all = findViewById(R.id.ff_all);
         mBottomLayout = findViewById(R.id.ll_player_view_bottom);
@@ -97,20 +78,13 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
         mPlayTime = findViewById(R.id.tv_player_view_play_time);
         mTotalTime = findViewById(R.id.tv_player_view_total_time);
         mProgressView = findViewById(R.id.sb_player_view_progress);
-
-
         mProgressView.setOnSeekBarChangeListener(this);
         mVideoView.setOnClickListener(this);
         ff_all.setOnClickListener(this);
         this.setOnClickListener(this);
-
-
     }
 
-    /**
-     * 当前播放进度
-     */
-    private int mCurrentProgress;
+
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -135,10 +109,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
         removeCallbacks(mRefreshRunnable);
     }
 
-    /**
-     * 面板隐藏间隔
-     */
-    private static final int CONTROLLER_TIME = 3000;
+
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
@@ -160,11 +131,6 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
         }
     }
 
-    /**
-     * 显示面板
-     */
-    private boolean mControllerShow = true;
-
 
     /**
      * 刷新任务
@@ -181,7 +147,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
             mProgressView.setProgress(progress);
             mProgressView.setSecondaryProgress((int) (mVideoView.getBufferPercentage() / 100f * mVideoView.getDuration()));
             if (mVideoView.isPlaying()) {
-                if (!mLockMode && mBottomLayout.getVisibility() == GONE) {
+                if ( mBottomLayout.getVisibility() == GONE) {
                     mBottomLayout.setVisibility(VISIBLE);
                 }
             } else {
@@ -231,44 +197,21 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     }
 
 
-    /**
-     * 设置视频标题
-     */
-    public void setVideoTitle(CharSequence title) {
-//        mTitleView.setText(title);
-    }
-
-    /**
-     * 设置视频源
-     */
-    public void setVideoSource(File file) {
-//        mVideoView.setVideoPath(file.getPath());
-    }
-
-    private String url = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
+//    private String url = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
 
     public void setVideoSource(String url) {
-        this.url = url;
+//        this.url = url;
         mVideoView.setPath(url);
         mVideoView.startPlay();
-//        postDelayed(mRefreshRunnable, REFRESH_TIME);
 
-//        mVideoView.setVideoURI(Uri.parse(url));
     }
 
     /**
      * 开始播放 默认开始
      */
     public void start() {
-        Log.e("TAG===", "start");
-        Log.e("TAG===", "url===" + url);
-        Log.e("TAG===", "currentPosition===" + currentPosition);   //currentPosition===4651
-        Log.e("TAG===", "mCurrentProgress===" + mCurrentProgress);  //mCurrentProgress===5000
-//        mVideoView.setPath(url);
-//        String s = conversionTime(mVideoView.getCurrentPosition());
         mVideoView.start();
         mVideoView.seekTo(currentPosition);
-//        setProgress(currentProgress);
         mProgressView.setProgress(currentProgress);
         postDelayed(mRefreshRunnable, REFRESH_TIME);
 
@@ -278,15 +221,8 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
      * 开始播放 暂停之后
      */
     public void start(int currentPosition, int currentProgress) {
-        Log.e("TAG===", "start");
-        Log.e("TAG===", "url===" + url);
-        Log.e("TAG===", "currentPosition===" + currentPosition);   //currentPosition===4651
-        Log.e("TAG===", "mCurrentProgress===" + mCurrentProgress);  //mCurrentProgress===5000
-//        mVideoView.setPath(url);
-//        String s = conversionTime(mVideoView.getCurrentPosition());
         mVideoView.start();
         mVideoView.seekTo(currentPosition);
-//        setProgress(currentProgress);
         mProgressView.setProgress(currentProgress);
         postDelayed(mRefreshRunnable, REFRESH_TIME);
 
@@ -297,20 +233,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
      */
     public void pause() {
         mVideoView.pause();
-        // 延迟隐藏控制面板
-
     }
-
-    /**
-     * 锁定面板
-     */
-    private boolean mLockMode;
-
-
-    public int getViewStatue() {
-        return mBottomLayout.getVisibility();
-    }
-
 
     /**
      * 是否正在播放
@@ -318,7 +241,6 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     public boolean isPlaying() {
         return mVideoView.isPlaying();
     }
-
 
     private onLockStatueListener mOnLockStatueListener;
 
@@ -335,30 +257,6 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     public void setOnLockStatueListener(onLockStatueListener listener) {
         mOnLockStatueListener = listener;
 
-    }
-
-    /**
-     * 返回监听器
-     */
-    private onGoBackListener mGoBackListener;
-
-    /**
-     * 设置返回监听
-     */
-    public void setOnGoBackListener(onGoBackListener listener) {
-        mGoBackListener = listener;
-//        mLeftView.setVisibility(mGoBackListener != null ? VISIBLE : INVISIBLE);
-    }
-
-    /**
-     * 点击返回监听器
-     */
-    public interface onGoBackListener {
-
-        /**
-         * 点击了返回按钮
-         */
-        void onClickGoBack();
     }
 
 }

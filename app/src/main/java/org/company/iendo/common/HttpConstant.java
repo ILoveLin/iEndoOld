@@ -20,6 +20,8 @@ public class HttpConstant {
 
     public static final String CaseManager_List = "patients_list.aspx";
     public static final String CaseManager_Case_Detail = "patients.aspx";
+    public static final String CaseManager_Case_Edit = "listdicts.aspx";
+
 
 
 }

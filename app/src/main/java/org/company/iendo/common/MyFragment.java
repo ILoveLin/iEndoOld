@@ -98,7 +98,12 @@ public abstract class MyFragment<A extends MyActivity> extends BaseFragment<A>
         return Host;
 
     }
+    public String getCurrentIP() {
+        String Host = (String) SharePreferenceUtil.get(getAttachActivity(), SharePreferenceUtil.Current_IP, "");
 
+        return Host;
+
+    }
     /**
      * 是否在 Fragment 使用沉浸式
      */

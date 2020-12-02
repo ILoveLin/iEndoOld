@@ -73,6 +73,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
             super.handleMessage(msg);
             switch (msg.what) {
                 case REFRESH:
+                    showComplete();
                     mAdapter.setData(getLocalImagePathList());
                     break;
                 case EMPTY:
@@ -134,6 +135,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     }
 
     private void responseListener() {
+        showLoading();
         new Thread() {
             @Override
             public void run() {
@@ -141,9 +143,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                 try {
                     initSmb();
                     Log.e("========root===exists==", mRootFolder.exists() + "");
-
                     if (mRootFolder.exists()) {
-                        showComplete();
                         SmbFile[] smbFiles = mRootFolder.listFiles(); // smb://192.168.128.146/ImageData/Images/4033/thumb/
                         for (int i = 0; i < smbFiles.length; i++) {
                             Log.e("========root=====", "第" + i + "条数据");

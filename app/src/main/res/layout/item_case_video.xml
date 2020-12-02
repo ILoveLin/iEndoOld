@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/padding_50"
+    android:background="@drawable/selector_item_ffffff"
     android:orientation="vertical">
 
     <TextView
@@ -12,7 +13,7 @@
         android:adjustViewBounds="true"
         android:gravity="center_vertical"
         android:textSize="@dimen/padding_20"
-        android:paddingLeft="@dimen/padding_10"
+        android:paddingLeft="@dimen/padding_20"
         android:text="52613684566129.mp4" />
 
 </LinearLayout>

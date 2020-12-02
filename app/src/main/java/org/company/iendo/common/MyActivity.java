@@ -228,6 +228,16 @@ public abstract class MyActivity extends BaseActivity
 
     }
 
+    /**
+     * 获取登录模式
+     *
+     * @return
+     */
+    public String getCurrentSectionNum() {
+        String section = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_Case_Num, "");
+        return section;
+    }
+
     @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
         super.startActivityForResult(intent, requestCode, options);

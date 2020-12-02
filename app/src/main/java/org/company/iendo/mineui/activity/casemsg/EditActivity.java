@@ -6,15 +6,28 @@ import android.widget.TextView;
 
 import com.hjq.base.BaseDialog;
 import com.hjq.widget.view.ClearEditText;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
+import org.company.iendo.bean.EditDataBean;
+import org.company.iendo.bean.EditItemBean;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.ui.dialog.SelectDialog;
+import org.company.iendo.util.LogUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import okhttp3.Call;
 
 /**
  * LoveLin
@@ -102,12 +115,12 @@ public class EditActivity extends MyActivity {
         mIVCasePathology = findViewById(R.id.iv_case_pathology);
         mCaseAdvise = findViewById(R.id.case03_advise);
         mIVCaseAdvise = findViewById(R.id.iv_case_advise);
-        responseListener();
     }
 
 
     @Override
     protected void initData() {
+        responseListener();
 
     }
 
@@ -116,6 +129,47 @@ public class EditActivity extends MyActivity {
         setOnClickListener(R.id.case03_sex, R.id.case03_see_again, R.id.iv_case_device, R.id.iv_case_office, R.id.iv_case_say
                 , R.id.iv_case_bed, R.id.iv_case_mirror_see, R.id.iv_case_see_result, R.id.iv_case_live_see, R.id.iv_case_test
                 , R.id.iv_case_cytology, R.id.iv_case_pathology, R.id.iv_case_advise);
+        LogUtils.e("edit====" + getCurrentHost() + HttpConstant.CaseManager_Case_Edit);
+        LogUtils.e("edit==endotype==" + getCurrentSectionNum());
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Case_Edit)
+                .addParams("endotype", getCurrentSectionNum())
+                .addParams("dictname", "")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        LogUtils.e("edit====" + e);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtils.e("edit====" + response);
+                        String json = response.replaceAll("\\p{Cntrl}", "");
+
+                        EditDataBean mBean = new EditDataBean();
+                        LogUtils.e("edit==s==00===");
+
+                        mBean.getData(response);
+                        LogUtils.e("edit==s==01===");
+
+                        List<List<EditItemBean>> m00List = mBean.getM00List();
+                        LogUtils.e("edit==s==02===");
+                        LogUtils.e("edit==s==03===" + m00List.size());
+                        for (int i = 0; i < m00List.size(); i++) {
+                            LogUtils.e("edit==s============================第==" + i + "个List");
+                            for (int i1 = 0; i1 < m00List.get(i).size(); i1++) {
+                                String dictName = m00List.get(i).get(i1).getDictName();
+                                String dictItem = m00List.get(i).get(i1).getDictItem();
+                                LogUtils.e("edit==s==itemList==dictItem==" + dictItem);
+
+                            }
+                        }
+
+                    }
+                });
+
+
     }
 
     @Override

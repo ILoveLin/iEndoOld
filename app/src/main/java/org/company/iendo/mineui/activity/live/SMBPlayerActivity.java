@@ -63,6 +63,7 @@ public class SMBPlayerActivity extends MyActivity {
     private RelativeLayout mAllRelat;
     public boolean isFullscreen = true;
     private TextView mErrorView;
+    private boolean locked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +105,10 @@ public class SMBPlayerActivity extends MyActivity {
 
         mLockView.setTag("unLock");
 
-
         mTopBack.setOnClickListener(this);
         mTopBack.setOnClickListener(this);
         mControlView.setOnClickListener(this);
         mLockView.setOnClickListener(this);
-
 
         player.setOnClickListener(this);
         playout.setOnClickListener(this);
@@ -266,10 +265,17 @@ public class SMBPlayerActivity extends MyActivity {
         } else {      //显示
             mTopLayout.setVisibility(View.VISIBLE);
             mBottomLayout.setVisibility(View.VISIBLE);
-            mControlView.setVisibility(View.VISIBLE);
+            if(mLockView.getTag().equals("unLock")){
+                mControlView.setVisibility(View.VISIBLE);
+            }else {
+                mControlView.setVisibility(View.INVISIBLE);
+
+            }
             mLockView.setVisibility(View.VISIBLE);
 
         }
+
+
     }
 
     /**

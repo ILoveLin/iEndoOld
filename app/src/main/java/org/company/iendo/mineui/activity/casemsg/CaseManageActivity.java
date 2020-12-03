@@ -111,7 +111,7 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
      */
     private void sendRequest() {
         LogUtils.e("=TAG=hy=onError==" + endoType);
-        showDialog();
+        showLoading();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.CaseManager_List)
                 .addParams("endoType", endoType)
@@ -119,14 +119,14 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        hideDialog();
+                        showComplete();
                         LogUtils.e("=TAG=hy=onError==" + e.toString());
 
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        hideDialog();
+                        showComplete();
                         LogUtils.e("=TAG=hy=onSucceed==" + response.toString());
                         if ("0".equals(response)) {
                             toast("用户名不存在或者参数为空");

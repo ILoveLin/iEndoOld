@@ -1,5 +1,6 @@
 package org.company.iendo.mineui.activity.casemsg;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,18 +15,14 @@ import org.company.iendo.bean.EditDataBean;
 import org.company.iendo.bean.EditItemBean;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
+import org.company.iendo.ui.dialog.MenuDialog;
 import org.company.iendo.ui.dialog.SelectDialog;
 import org.company.iendo.util.LogUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import okhttp3.Call;
 
@@ -48,28 +45,29 @@ public class EditActivity extends MyActivity {
     private TextView mCaseSeeAgain;
     private ClearEditText mCaseSeeCharge;
     private ClearEditText mCaseDoctor;
-    private ClearEditText mCaseDevice;
+    private ClearEditText m01CaseDevice;
     private ImageView mIVCaseDevice;
-    private ClearEditText mCaseOffice;
+    private ClearEditText m02CaseOffice;
     private ImageView mIVCaseOffice;
-    private ClearEditText mCaseSay;
+    private ClearEditText m03CaseSay;
     private ImageView mIVCaseSay;
-    private ClearEditText mCaseBedSea;
+    private ClearEditText m04CaseBedSea;
     private ImageView mIVCaseBed;
-    private ClearEditText mCaseMirrorSee;
+    private ClearEditText m05CaseMirrorSee;
     private ImageView mIVCaseMirrorSee;
-    private ClearEditText mCaseMirrorSeeResult;
+    private ClearEditText m06CaseMirrorSeeResult;
     private ImageView mIVCaseSeeResult;
-    private ClearEditText mCaseLiveSee;
+    private ClearEditText m07CaseLiveSee;
     private ImageView mIVCaseLive_see;
-    private ClearEditText mCaseTest;
+    private ClearEditText m08CaseTest;
     private ImageView mIVCaseTest;
-    private ClearEditText mCaseCytology;
+    private ClearEditText m09CaseCytology;
     private ImageView mIVCaseCytology;
-    private ClearEditText mCasePathology;
+    private ClearEditText m10CasePathology;
     private ImageView mIVCasePathology;
-    private ClearEditText mCaseAdvise;
+    private ClearEditText m11CaseAdvise;
     private ImageView mIVCaseAdvise;
+    private List<List<EditItemBean>> mDialogList;
 
     @Override
     protected int getLayoutId() {
@@ -93,27 +91,27 @@ public class EditActivity extends MyActivity {
         mCaseSeeCharge = findViewById(R.id.case03_sea_charge);
         mCaseDoctor = findViewById(R.id.case03_doctor);
         //从这里开始 下拉选择框和edit一起使用
-        mCaseDevice = findViewById(R.id.case03_device);
+        m01CaseDevice = findViewById(R.id.case03_device);
         mIVCaseDevice = findViewById(R.id.iv_case_device);
-        mCaseOffice = findViewById(R.id.case03_office);
+        m02CaseOffice = findViewById(R.id.case03_office);
         mIVCaseOffice = findViewById(R.id.iv_case_office);
-        mCaseSay = findViewById(R.id.case03_say);
+        m03CaseSay = findViewById(R.id.case03_say);
         mIVCaseSay = findViewById(R.id.iv_case_say);
-        mCaseBedSea = findViewById(R.id.case03_bed_sea);
+        m04CaseBedSea = findViewById(R.id.case03_bed_sea);
         mIVCaseBed = findViewById(R.id.iv_case_bed);
-        mCaseMirrorSee = findViewById(R.id.case03_mirror_see);
+        m05CaseMirrorSee = findViewById(R.id.case03_mirror_see);
         mIVCaseMirrorSee = findViewById(R.id.iv_case_mirror_see);
-        mCaseMirrorSeeResult = findViewById(R.id.case03_mirror_see_result);
+        m06CaseMirrorSeeResult = findViewById(R.id.case03_mirror_see_result);
         mIVCaseSeeResult = findViewById(R.id.iv_case_see_result);
-        mCaseLiveSee = findViewById(R.id.case03_live_see);
+        m07CaseLiveSee = findViewById(R.id.case03_live_see);
         mIVCaseLive_see = findViewById(R.id.iv_case_live_see);
-        mCaseTest = findViewById(R.id.case03_test);
+        m08CaseTest = findViewById(R.id.case03_test);
         mIVCaseTest = findViewById(R.id.iv_case_test);
-        mCaseCytology = findViewById(R.id.case03_cytology);
+        m09CaseCytology = findViewById(R.id.case03_cytology);
         mIVCaseCytology = findViewById(R.id.iv_case_cytology);
-        mCasePathology = findViewById(R.id.case03_pathology);
+        m10CasePathology = findViewById(R.id.case03_pathology);
         mIVCasePathology = findViewById(R.id.iv_case_pathology);
-        mCaseAdvise = findViewById(R.id.case03_advise);
+        m11CaseAdvise = findViewById(R.id.case03_advise);
         mIVCaseAdvise = findViewById(R.id.iv_case_advise);
     }
 
@@ -121,9 +119,7 @@ public class EditActivity extends MyActivity {
     @Override
     protected void initData() {
         responseListener();
-
     }
-
 
     private void responseListener() {
         setOnClickListener(R.id.case03_sex, R.id.case03_see_again, R.id.iv_case_device, R.id.iv_case_office, R.id.iv_case_say
@@ -142,29 +138,28 @@ public class EditActivity extends MyActivity {
                         LogUtils.e("edit====" + e);
                     }
 
+                    @SuppressLint("NewApi")
                     @Override
                     public void onResponse(String response, int id) {
                         LogUtils.e("edit====" + response);
                         String json = response.replaceAll("\\p{Cntrl}", "");
-
                         EditDataBean mBean = new EditDataBean();
-                        LogUtils.e("edit==s==00===");
-
                         mBean.getData(response);
-                        LogUtils.e("edit==s==01===");
-
-                        List<List<EditItemBean>> m00List = mBean.getM00List();
+                        mDialogList = mBean.getM00List();
                         LogUtils.e("edit==s==02===");
-                        LogUtils.e("edit==s==03===" + m00List.size());
-                        for (int i = 0; i < m00List.size(); i++) {
+                        LogUtils.e("edit==s==03===" + mDialogList.size());
+
+                        for (int i = 0; i < mDialogList.size(); i++) {
+                            List<EditItemBean> itemList = mDialogList.get(i);
                             LogUtils.e("edit==s============================第==" + i + "个List");
-                            for (int i1 = 0; i1 < m00List.get(i).size(); i1++) {
-                                String dictName = m00List.get(i).get(i1).getDictName();
-                                String dictItem = m00List.get(i).get(i1).getDictItem();
-                                LogUtils.e("edit==s==itemList==dictItem==" + dictItem);
+
+                            List<EditItemBean> collect = itemList.stream().skip(1).collect(Collectors.toList());
+                            for (int i1 = 0; i1 < collect.size(); i1++) {
+                                LogUtils.e("edit==s==itemList==dictItem==" + collect.get(i1).getDictItem());
 
                             }
                         }
+
 
                     }
                 });
@@ -181,29 +176,133 @@ public class EditActivity extends MyActivity {
             case R.id.case03_see_again:         //复诊
                 selectedSeeAgain();
                 break;
-            case R.id.iv_case_device:           //设备
+            case R.id.iv_case_device:           //设备    1
+                showCurrentSelectedDialog(getPositionDataList(1), "1");
+
                 break;
-            case R.id.iv_case_office:           //科室
+            case R.id.iv_case_office:           //科室    2
+                showCurrentSelectedDialog(getPositionDataList(2), "2");
                 break;
-            case R.id.iv_case_say:              //主述
+            case R.id.iv_case_say:              //主述    3
+                showCurrentSelectedDialog(getPositionDataList(3), "3");
                 break;
-            case R.id.iv_case_bed:              //临床诊断
+            case R.id.iv_case_bed:              //临床诊断  4
+                showCurrentSelectedDialog(getPositionDataList(4), "4");
                 break;
-            case R.id.iv_case_mirror_see:       //镜检所见
+            case R.id.iv_case_mirror_see:       //镜检所见  5
+                showCurrentSelectedDialog(getPositionDataList(5), "5");
                 break;
-            case R.id.iv_case_see_result:       //镜检诊断
+            case R.id.iv_case_see_result:       //镜检诊断  6
+                showCurrentSelectedDialog(getPositionDataList(6), "6");
                 break;
-            case R.id.iv_case_live_see:         //活检
+            case R.id.iv_case_live_see:         //活检    7
+                showCurrentSelectedDialog(getPositionDataList(7), "7");
                 break;
-            case R.id.iv_case_test:             //试验
+            case R.id.iv_case_test:             //试验    8
+                showCurrentSelectedDialog(getPositionDataList(8), "8");
                 break;
-            case R.id.iv_case_cytology:         //细胞学
+            case R.id.iv_case_cytology:         //细胞学   9
+                showCurrentSelectedDialog(getPositionDataList(9), "9");
                 break;
-            case R.id.iv_case_pathology:        //病理学
+            case R.id.iv_case_pathology:        //病理学   10
+                showCurrentSelectedDialog(getPositionDataList(10), "10");
                 break;
             case R.id.iv_case_advise:            //建议
+                showCurrentSelectedDialog(getPositionDataList(11), "11");
                 break;
         }
+    }
+
+    private void showCurrentSelectedDialog(List<String> data, String type) {
+        if (data.size() == 0) {
+            data.add("暂无数据!");
+        }
+        // 底部选择框
+        new MenuDialog.Builder(this)
+                // 设置 null 表示不显示取消按钮
+                //.setCancel(getString(R.string.common_cancel))
+                // 设置点击按钮后不关闭对话框
+                //.setAutoDismiss(false)
+                .setList(data)
+                .setListener(new MenuDialog.OnListener<String>() {
+
+                    @Override
+                    public void onSelected(BaseDialog dialog, int position, String string) {
+                        toast(string);
+                        setCurrentEditText(string, type);
+
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                        toast("取消了");
+                    }
+                })
+                .show();
+
+    }
+
+    /**
+     * @param string
+     * @param type
+     */
+    private void setCurrentEditText(String string, String type) {
+        if ("暂无数据!".equals(string)) {
+            string = "";
+        }
+        switch (type) {
+            case "1":
+                m01CaseDevice.setText(m01CaseDevice.getText().toString().trim() + string);
+                break;
+            case "2":
+                m02CaseOffice.setText(m02CaseOffice.getText().toString().trim() + string);
+                break;
+            case "3":
+                m03CaseSay.setText(m03CaseSay.getText().toString().trim() + string);
+                break;
+            case "4":
+                m04CaseBedSea.setText(m04CaseBedSea.getText().toString().trim() + string);
+                break;
+            case "5":
+                m05CaseMirrorSee.setText(m05CaseMirrorSee.getText().toString().trim() + string);
+                break;
+            case "6":
+                m06CaseMirrorSeeResult.setText(m06CaseMirrorSeeResult.getText().toString().trim() + string);
+                break;
+            case "7":
+                m07CaseLiveSee.setText(m07CaseLiveSee.getText().toString().trim() + string);
+                break;
+            case "8":
+                m08CaseTest.setText(m08CaseTest.getText().toString().trim() + string);
+                break;
+            case "9":
+                m09CaseCytology.setText(m09CaseCytology.getText().toString().trim() + string);
+                break;
+            case "10":
+                m10CasePathology.setText(m10CasePathology.getText().toString().trim() + string);
+                break;
+            case "11":
+                m11CaseAdvise.setText(m11CaseAdvise.getText().toString().trim() + string);
+                break;
+        }
+
+    }
+
+
+    /**
+     * 对List数据处理获取自己要的List
+     *
+     * @param position
+     * @return
+     */
+    @SuppressLint("NewApi")
+    private List<String> getPositionDataList(int position) {
+        List<EditItemBean> mDataList = mDialogList.get(position).stream().skip(1).collect(Collectors.toList());
+        ArrayList<String> list = new ArrayList<>();
+        mDataList.stream().forEach((EditItemBean bean) -> {
+            list.add(bean.getDictItem());
+        });
+        return list;
     }
 
     private void selectedSeeAgain() {

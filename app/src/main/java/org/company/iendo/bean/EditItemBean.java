@@ -14,8 +14,6 @@ import org.json.JSONObject;
  */
 @SuppressLint("ParcelCreator")
 public class EditItemBean implements Parcelable {
-
-
     private String ID;
     private String ParentId;
     private String DictName;
@@ -105,5 +103,16 @@ public class EditItemBean implements Parcelable {
 
     public void setEndoType(String endoType) {
         EndoType = endoType;
+    }
+
+    @Override
+    public String toString() {
+        return "EditItemBean{" +
+                "ID='" + ID + '\'' +
+                ", ParentId='" + ParentId + '\'' +
+                ", DictName='" + DictName + '\'' +
+                ", DictItem='" + DictItem + '\'' +
+                ", EndoType='" + EndoType + '\'' +
+                '}';
     }
 }

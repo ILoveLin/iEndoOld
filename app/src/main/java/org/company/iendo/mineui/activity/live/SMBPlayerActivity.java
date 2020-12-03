@@ -35,9 +35,9 @@ public class SMBPlayerActivity extends MyActivity {
     //public static final String path = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
     //public static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
 //    public static final String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
-//    public String path = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
+    public String path = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
 //    public String path = "smb://192.168.128.96/ImageData/Videos/3764/祝柳思20200827165247927.mp4";
-    public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3771/祝期玲20200827172726951.mp4";
+//    public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3771/祝期玲20200827172726951.mp4";
     //    public String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
 //smb://cmeftproot:lzjdzh19861207@192.168.128.146/ImageData/Videos/4027/220201116141454985.mp4
     private MyVlcVideoView player;
@@ -93,6 +93,7 @@ public class SMBPlayerActivity extends MyActivity {
         ff_all = player.findViewById(R.id.ff_all);
         mLockView.setTag("unLock");
         path = getIntent().getStringExtra("url");
+//        path = getIntent().getStringExtra("url");
         mTopTitle.setText("" + getIntent().getStringExtra("title"));
     }
 
@@ -111,9 +112,30 @@ public class SMBPlayerActivity extends MyActivity {
         mAllRelat.setOnClickListener(this);
         mTopChange.setOnClickListener(this);
         ff_all.setOnClickListener(this);
+
+        player.setOnSeekBarChangeListener(new MyVlcVideoView.onSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch() {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch() {
+
+            }
+
+            @Override
+            public void onChangeTrackingTouch(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+        });
+
         player.setOnLockStatueListener(new MyVlcVideoView.onLockStatueListener() {
             @Override
             public void onLockStatueChangeListener() {
+                //mLoadingView
+                Log.e("path=====Start:=====", "mLoadingView.getTag()======" + mLoadingView.getTag());
+
                 if (!isError) {  //url错误的时候不响应点击事件
                     if (mLockView.getVisibility() == View.VISIBLE) {
                         lockScreenAll(true);
@@ -121,15 +143,18 @@ public class SMBPlayerActivity extends MyActivity {
                         lockScreenAll(false);
                     }
                 }
+
+
             }
         });
         vlcVideoView.setMediaListenerEvent(new MediaListenerEvent() {
             @Override
             public void eventBuffing(int event, float buffing) {
-                Log.e("path=====Start:=====", "我是当前播放的url======buffing======" + buffing);
+                Log.e("path=====Start:=====", "====buffing======" + buffing);
                 if (buffing > 3) {
 //                    isPlayering = true;
                     mLoadingView.release();
+                    mLoadingView.setTag("end");
                     mErrorView.setVisibility(View.INVISIBLE);
                     mLoadingView.setVisibility(View.INVISIBLE);
                 }
@@ -291,6 +316,7 @@ public class SMBPlayerActivity extends MyActivity {
         mErrorView.setVisibility(View.INVISIBLE);
         mControlView.setVisibility(View.INVISIBLE);
         mLoadingView.setVisibility(View.VISIBLE);
+        mLoadingView.setTag("start");
         mLoadingView.start();
         player.setVideoSource(path);
         Log.e("========root=====", "播放的==url==" + "" + path);
@@ -304,10 +330,14 @@ public class SMBPlayerActivity extends MyActivity {
         player.pause();
         mControlView.setVisibility(View.VISIBLE);
         mLoadingView.setVisibility(View.INVISIBLE);
+        mLoadingView.setTag("end");
         mLoadingView.release();
     }
 
     public void onMyStart() {
+        mLoadingView.setVisibility(View.VISIBLE);
+        mLoadingView.setTag("start");
+        mLoadingView.start();
         mControlView.setImageResource(R.drawable.video_play_pause_ic);
         player.start(currentPosition, currentProgress);
     }
@@ -320,6 +350,9 @@ public class SMBPlayerActivity extends MyActivity {
         } else {
             mControlView.setImageResource(R.drawable.video_play_start_ic);
         }
+        mControlView.setVisibility(View.VISIBLE);
+        mLoadingView.setVisibility(View.INVISIBLE);
+        mLoadingView.setTag("end");
         player.pause();
     }
 

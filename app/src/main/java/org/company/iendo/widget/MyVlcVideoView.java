@@ -41,6 +41,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
      * 当前播放进度
      */
     private int mCurrentProgress;
+
     public MyVlcVideoView(Context context) {
         super(context);
         initView(context);
@@ -85,9 +86,14 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     }
 
 
-
+    //当拖动条发生变化时调用该方法
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        Log.e("path=====Start:=====", "Changed=");
+        mOnSeekBarChangeListener.onChangeTrackingTouch(seekBar, progress, fromUser);
+
+        //播放的时候一直走001
+
         if (fromUser) {
             mPlayTime.setText(conversionTime(progress));
         } else {
@@ -104,15 +110,22 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
         }
     }
 
+    //当用户开始滑动滑块时调用该方法（即按下鼠调用一次）
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        Log.e("path=====Start:=====", "onStart=");
+        mOnSeekBarChangeListener.onStartTrackingTouch();
         removeCallbacks(mRefreshRunnable);
     }
 
 
-
+    //当用户结束对滑块滑动时,调用该方法（即松开鼠标）
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        Log.e("path=====Start:=====", "onStop=");
+        mOnSeekBarChangeListener.onStopTrackingTouch();
+
+        //拖动之后走003 在到001
         postDelayed(mRefreshRunnable, REFRESH_TIME);
         // 设置选择的播放进度
         setProgress(seekBar.getProgress());
@@ -147,7 +160,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
             mProgressView.setProgress(progress);
             mProgressView.setSecondaryProgress((int) (mVideoView.getBufferPercentage() / 100f * mVideoView.getDuration()));
             if (mVideoView.isPlaying()) {
-                if ( mBottomLayout.getVisibility() == GONE) {
+                if (mBottomLayout.getVisibility() == GONE) {
                     mBottomLayout.setVisibility(VISIBLE);
                 }
             } else {
@@ -258,5 +271,33 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
         mOnLockStatueListener = listener;
 
     }
+
+
+    /**
+     * progress 滑动的监听
+     */
+
+    private onSeekBarChangeListener mOnSeekBarChangeListener;
+
+    public interface onSeekBarChangeListener {
+        /**
+         * statue  true:unlock   flase:lock
+         *
+         * @param
+         */
+        void onStopTrackingTouch();
+
+        void onStartTrackingTouch();
+
+        void onChangeTrackingTouch(SeekBar seekBar, int progress, boolean fromUser);
+
+
+    }
+
+    public void setOnSeekBarChangeListener(onSeekBarChangeListener listener) {
+        mOnSeekBarChangeListener = listener;
+
+    }
+
 
 }

@@ -16,7 +16,6 @@ public class EditDataBean {
 
     private List<List<EditItemBean>> m00List = new ArrayList<>();
 
-
     public void getData(String str) {
         try {
             JSONObject obj = new JSONObject(str);

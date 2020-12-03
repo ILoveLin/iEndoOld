@@ -89,7 +89,6 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     //当拖动条发生变化时调用该方法
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Log.e("path=====Start:=====", "Changed=");
         mOnSeekBarChangeListener.onChangeTrackingTouch(seekBar, progress, fromUser);
 
         //播放的时候一直走001
@@ -113,7 +112,6 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     //当用户开始滑动滑块时调用该方法（即按下鼠调用一次）
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        Log.e("path=====Start:=====", "onStart=");
         mOnSeekBarChangeListener.onStartTrackingTouch();
         removeCallbacks(mRefreshRunnable);
     }
@@ -122,7 +120,6 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     //当用户结束对滑块滑动时,调用该方法（即松开鼠标）
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        Log.e("path=====Start:=====", "onStop=");
         mOnSeekBarChangeListener.onStopTrackingTouch();
 
         //拖动之后走003 在到001

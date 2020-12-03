@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_vlc_player"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ff_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <org.company.iendo.widget.MyConnectVlcVideoView
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+
+        <LinearLayout
+            android:id="@+id/layout_top"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/back_tiny"
+            android:layout_toRightOf="@+id/back_tiny"
+            android:background="@drawable/video_title_bg"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:paddingLeft="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/video_back" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/change"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minEms="5"
+                android:paddingLeft="10dp"
+                android:text="全屏"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/photos"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minEms="5"
+                android:paddingLeft="10dp"
+                android:text="相册"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/change_ice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:minEms="5"
+                android:paddingLeft="10dp"
+                android:text="高清"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/recordStart"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minEms="5"
+                android:paddingLeft="10dp"
+                android:text="录像"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/snapShot"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minEms="5"
+                android:paddingLeft="10dp"
+                android:text="截图"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/lock_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/padding_20"
+        android:layout_marginRight="50dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/video_lock_open_ic"
+        android:visibility="visible" />
+
+
+    <!--出错提示-->
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:background="@color/black"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:marqueeRepeatLimit="0"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:singleLine="true"
+        android:text="url错误"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_13"
+        android:visibility="gone" />
+
+
+    <moe.codeest.enviews.ENDownloadView
+        android:id="@+id/loading"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible" />
+
+    <moe.codeest.enviews.ENPlayView
+        android:id="@+id/start"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical" />
+
+
+</RelativeLayout>

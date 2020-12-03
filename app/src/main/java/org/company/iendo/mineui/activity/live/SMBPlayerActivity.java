@@ -61,7 +61,6 @@ public class SMBPlayerActivity extends MyActivity {
     private RelativeLayout playout;
     private boolean isFirstin = true;
     private boolean isError = false;
-    private String url;
     private TextView mTopTitle;
 
     @Override
@@ -91,7 +90,7 @@ public class SMBPlayerActivity extends MyActivity {
         playout = player.findViewById(R.id.activity_vlc_player_layout);
         ff_all = player.findViewById(R.id.ff_all);
         mLockView.setTag("unLock");
-//        path = getIntent().getStringExtra("url");
+        path = getIntent().getStringExtra("url");
 //        path = getIntent().getStringExtra("url");
         mTopTitle.setText("" + getIntent().getStringExtra("title"));
     }
@@ -155,21 +154,13 @@ public class SMBPlayerActivity extends MyActivity {
                     }
                 }
 
-//                if (!isError) {  //url错误的时候不响应点击事件
-//                    if (mLockView.getVisibility() == View.VISIBLE) {
-//                        lockScreenAll(true);
-//                    } else {
-//                        lockScreenAll(false);
-//                    }
-//                }
-
-
             }
         });
         vlcVideoView.setMediaListenerEvent(new MediaListenerEvent() {
             @Override
             public void eventBuffing(int event, float buffing) {
-                Log.e("path=====Start:=====", "====buffing======" + buffing);
+                Log.e("path=====Start:=====", "mLoadingView==buffing====" + buffing);
+
                 if (buffing > 50) {
                     hindLoadingView();
                     mErrorView.setVisibility(View.INVISIBLE);
@@ -179,12 +170,10 @@ public class SMBPlayerActivity extends MyActivity {
 
             @Override
             public void eventStop(boolean isPlayError) {
-                Log.e("path=====Start:=====", "eventStop");
             }
 
             @Override
             public void eventError(int event, boolean show) {
-                Log.e("path=====Start:=====", "eventError");
                 mErrorView.setVisibility(View.VISIBLE);
                 isError = true;
                 mBottomLayout.setVisibility(View.INVISIBLE);
@@ -194,7 +183,6 @@ public class SMBPlayerActivity extends MyActivity {
 
             @Override
             public void eventPlay(boolean isPlaying) {
-                Log.e("path=====Start:=====", "eventPlay");
                 String CurrentPosition = conversionTime(vlcVideoView.getCurrentPosition());
                 String Duration = conversionTime(vlcVideoView.getDuration());
                 mPlayTime.setText(conversionTime(vlcVideoView.getCurrentPosition()));
@@ -205,7 +193,6 @@ public class SMBPlayerActivity extends MyActivity {
 
             @Override
             public void eventPlayInit(boolean openClose) {
-                Log.e("path=====Start:=====", "openClose");
 
             }
 
@@ -336,7 +323,6 @@ public class SMBPlayerActivity extends MyActivity {
     @Override
     public void onResume() {
         super.onResume();
-//        startLive(path);
         mErrorView.setVisibility(View.INVISIBLE);
         mControlView.setVisibility(View.INVISIBLE);
         getLoadingView();

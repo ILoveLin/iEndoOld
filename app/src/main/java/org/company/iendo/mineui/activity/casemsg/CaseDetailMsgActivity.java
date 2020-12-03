@@ -24,6 +24,7 @@ import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
+import org.company.iendo.mineui.activity.live.LiveConnectDeviceActivity;
 import org.company.iendo.mineui.activity.user.UserSearchActivity;
 import org.company.iendo.mineui.fragment.Fragment01;
 import org.company.iendo.mineui.fragment.Fragment02;
@@ -101,6 +102,7 @@ public class CaseDetailMsgActivity extends MyActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.titile_live:
+                startActivity(LiveConnectDeviceActivity.class);
                 if (mAction != null) {
                     mAction.onLive();
                 }

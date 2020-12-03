@@ -63,7 +63,7 @@ public class MyVlcVideoView extends RelativeLayout implements SeekBar.OnSeekBarC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.vlc_video_view:   //后退
+            case R.id.vlc_video_view:   //点击全屏显示隐藏相对于布局
                 mOnLockStatueListener.onLockStatueChangeListener();
                 break;
         }

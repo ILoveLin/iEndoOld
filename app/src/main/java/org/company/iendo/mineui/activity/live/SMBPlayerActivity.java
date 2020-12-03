@@ -36,7 +36,6 @@ public class SMBPlayerActivity extends MyActivity {
     //public static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
 //    public static final String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
     public String path = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
-//    public String path = "smb://192.168.128.96/ImageData/Videos/3764/祝柳思20200827165247927.mp4";
 //    public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3771/祝期玲20200827172726951.mp4";
     //    public String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
 //smb://cmeftproot:lzjdzh19861207@192.168.128.146/ImageData/Videos/4027/220201116141454985.mp4
@@ -92,7 +91,7 @@ public class SMBPlayerActivity extends MyActivity {
         playout = player.findViewById(R.id.activity_vlc_player_layout);
         ff_all = player.findViewById(R.id.ff_all);
         mLockView.setTag("unLock");
-        path = getIntent().getStringExtra("url");
+//        path = getIntent().getStringExtra("url");
 //        path = getIntent().getStringExtra("url");
         mTopTitle.setText("" + getIntent().getStringExtra("title"));
     }
@@ -116,6 +115,7 @@ public class SMBPlayerActivity extends MyActivity {
         player.setOnSeekBarChangeListener(new MyVlcVideoView.onSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch() {
+                getLoadingView();
 
             }
 
@@ -126,6 +126,12 @@ public class SMBPlayerActivity extends MyActivity {
 
             @Override
             public void onChangeTrackingTouch(SeekBar seekBar, int progress, boolean fromUser) {
+                //fromUser 用户滑动或者拖动就是true 其他时候false
+                if (fromUser) {
+                    currentPosition = vlcVideoView.getCurrentPosition();
+                    currentProgress = mProgressView.getProgress();
+                    onMyStart();
+                }
 
             }
         });
@@ -133,16 +139,29 @@ public class SMBPlayerActivity extends MyActivity {
         player.setOnLockStatueListener(new MyVlcVideoView.onLockStatueListener() {
             @Override
             public void onLockStatueChangeListener() {
-                //mLoadingView
-                Log.e("path=====Start:=====", "mLoadingView.getTag()======" + mLoadingView.getTag());
+                //mLoadingView   4隐藏  0显示
+                //一开始是隐藏的
+                Log.e("path=====Start:=====", "mLoadingView==type====" + mLoadingView.getVisibility());
+                if(mLoadingView.getVisibility()==View.VISIBLE){ //显示
+                    mControlView.setVisibility(View.INVISIBLE);
+                }else{
 
-                if (!isError) {  //url错误的时候不响应点击事件
-                    if (mLockView.getVisibility() == View.VISIBLE) {
-                        lockScreenAll(true);
-                    } else {
-                        lockScreenAll(false);
+                    if (!isError) {  //url错误的时候不响应点击事件
+                        if (mLockView.getVisibility() == View.VISIBLE) {
+                            lockScreenAll(true);
+                        } else {
+                            lockScreenAll(false);
+                        }
                     }
                 }
+
+//                if (!isError) {  //url错误的时候不响应点击事件
+//                    if (mLockView.getVisibility() == View.VISIBLE) {
+//                        lockScreenAll(true);
+//                    } else {
+//                        lockScreenAll(false);
+//                    }
+//                }
 
 
             }
@@ -151,16 +170,9 @@ public class SMBPlayerActivity extends MyActivity {
             @Override
             public void eventBuffing(int event, float buffing) {
                 Log.e("path=====Start:=====", "====buffing======" + buffing);
-                if (buffing > 3) {
-//                    isPlayering = true;
-                    mLoadingView.release();
-                    mLoadingView.setTag("end");
-                    mErrorView.setVisibility(View.INVISIBLE);
-                    mLoadingView.setVisibility(View.INVISIBLE);
-                }
-
-
                 if (buffing > 50) {
+                    hindLoadingView();
+                    mErrorView.setVisibility(View.INVISIBLE);
                     mControlView.setVisibility(View.INVISIBLE);
                 }
             }
@@ -304,6 +316,18 @@ public class SMBPlayerActivity extends MyActivity {
     }
 
 
+    private void getLoadingView() {
+        mLoadingView.setVisibility(View.VISIBLE);
+        mControlView.setVisibility(View.INVISIBLE);
+        mLoadingView.start();
+    }
+
+    private void hindLoadingView() {
+        mLoadingView.setVisibility(View.INVISIBLE);
+        mLoadingView.release();
+
+    }
+
     /**
      * 开始直播
      *
@@ -315,29 +339,22 @@ public class SMBPlayerActivity extends MyActivity {
 //        startLive(path);
         mErrorView.setVisibility(View.INVISIBLE);
         mControlView.setVisibility(View.INVISIBLE);
-        mLoadingView.setVisibility(View.VISIBLE);
-        mLoadingView.setTag("start");
-        mLoadingView.start();
+        getLoadingView();
         player.setVideoSource(path);
         Log.e("========root=====", "播放的==url==" + "" + path);
-
         player.start();
     }
+
 
     @Override
     public void onPause() {
         super.onPause();
         player.pause();
         mControlView.setVisibility(View.VISIBLE);
-        mLoadingView.setVisibility(View.INVISIBLE);
-        mLoadingView.setTag("end");
-        mLoadingView.release();
     }
 
     public void onMyStart() {
-        mLoadingView.setVisibility(View.VISIBLE);
-        mLoadingView.setTag("start");
-        mLoadingView.start();
+        getLoadingView();
         mControlView.setImageResource(R.drawable.video_play_pause_ic);
         player.start(currentPosition, currentProgress);
     }
@@ -352,7 +369,6 @@ public class SMBPlayerActivity extends MyActivity {
         }
         mControlView.setVisibility(View.VISIBLE);
         mLoadingView.setVisibility(View.INVISIBLE);
-        mLoadingView.setTag("end");
         player.pause();
     }
 

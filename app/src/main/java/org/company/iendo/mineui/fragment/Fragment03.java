@@ -149,10 +149,15 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                         for (int i = 0; i < smbFiles.length; i++) {
                             Log.e("========root=====", "第" + i + "条数据");
                             Log.e("========root=====", smbFiles[i].getName());
-                            File toFile = new File(Environment.getExternalStorageDirectory() + "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
+                            File toFile = new File(Environment.getExternalStorageDirectory() +
+                                    "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
                             if (!toFile.exists()) {   //不存在创建
                                 toFile.mkdirs();
                                 Log.e("====root==localDir=不存在=", toFile.getAbsolutePath());
+                                String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
+                                downloadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
+                                        smbFiles[i].getName(), toFile.getAbsolutePath());
+                            }else{
                                 String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
                                 downloadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
                                         smbFiles[i].getName(), toFile.getAbsolutePath());

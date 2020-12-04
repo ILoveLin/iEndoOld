@@ -32,6 +32,8 @@ import org.company.iendo.util.anim.EasyTransition;
 import org.company.iendo.util.anim.EasyTransitionOptions;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -98,11 +100,11 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
         sendRequest();
-
     }
 
     @Override

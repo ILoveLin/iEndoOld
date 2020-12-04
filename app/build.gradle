@@ -211,4 +211,7 @@ dependencies {
     implementation 'com.shuyu:GSYVideoPlayer-exo2:7.0.1'
     //更多ijk的编码支持
     implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.0.1'
+
+
+    implementation 'org.greenrobot:eventbus:3.0.0'
 }

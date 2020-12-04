@@ -11,24 +11,31 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.reflect.TypeToken;
 import com.hjq.base.BaseAdapter;
 import com.hjq.widget.layout.WrapRecyclerView;
 import com.hjq.widget.view.ClearEditText;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.casemsg.adapter.SearchAdapter;
 import org.company.iendo.util.LogUtils;
+import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.anim.EasyTransition;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import okhttp3.Call;
 
 /**
  * LoveLin
@@ -43,6 +50,9 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     private ClearEditText mCetSearch;
     private SearchAdapter mAdapter;
     private WrapRecyclerView mRecyclerView;
+    public List<CaseManagerListBean.DsDTO> mList;
+    private String endoType;
+    private String tag;
 
     @Override
     protected int getLayoutId() {
@@ -56,7 +66,6 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
         mBack = findViewById(R.id.tv_back);
         mHintLayout = findViewById(R.id.hl_status_hint);
         mRecyclerView = findViewById(R.id.rv_status_caselist);
-
         int statusBarHeight = getStatusBarHeight();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = statusBarHeight + 23;
@@ -68,11 +77,13 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setAnimation(null);
         mRecyclerView.addItemDecoration(new RecycleViewDivider(this, 1, R.drawable.shape_divideritem_decoration));
+        endoType = (String) SharePreferenceUtil.get(SearchActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
+
     }
 
     @Override
     protected void initData() {
-
+        tag = mCetSearch.getText().toString().trim();
     }
 
     @Override
@@ -85,32 +96,79 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sendRequest();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_back:
-//                finish();
                 EasyTransition.exit(SearchActivity.this);
-
                 break;
             case R.id.iv_user_search:   //本地搜索数据
-                String tag = mCetSearch.getText().toString().trim();
+                tag = mCetSearch.getText().toString().trim();
                 if ("".startsWith(tag)) {
                     toast("请输入搜索关键字");
                 } else {
-                    Stream<CaseManagerListBean.DsDTO> stream = CaseManageActivity.mList.stream();
-                    List<CaseManagerListBean.DsDTO> mDataList = stream
-                            .filter(bean -> bean.getName().startsWith(tag)).collect(Collectors.toList());
-                    if (mDataList.size() == 0) {
-                        showEmpty();
-                    } else {
-                        showComplete();
-                        mAdapter.setData(mDataList);
-                    }
+                    sendRequest();
                 }
                 break;
         }
+    }
+
+    /**
+     * 发送请求
+     *
+     * @param
+     */
+    private void sendRequest() {
+        tag = mCetSearch.getText().toString().trim();
+        LogUtils.e("=TAG=hy=onError==" + endoType);
+        showLoading();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_List)
+                .addParams("endoType", endoType)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        showComplete();
+
+                    }
+
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(String response, int id) {
+                        showComplete();
+                        LogUtils.e("=TAG=hy=onSucceed==" + response.toString());
+                        if ("0".equals(response)) {
+                            toast("用户名不存在或者参数为空");
+                        } else if ("".equals(tag)) {
+
+                        } else {
+                            Type type = new TypeToken<CaseManagerListBean>() {
+                            }.getType();
+                            CaseManagerListBean mBean = mGson.fromJson(response, type);
+                            mList = mBean.getDs();
+                            Stream<CaseManagerListBean.DsDTO> stream = mList.stream();
+                            List<CaseManagerListBean.DsDTO> mDataList = stream
+                                    .filter(bean -> bean.getName().startsWith(tag)).collect(Collectors.toList());
+
+                            if (mDataList.size() == 0) {
+                                showEmpty();
+                            } else {
+                                showComplete();
+                                mAdapter.setData(mDataList);
+                            }
+//                            mSmartRefreshLayout.finishRefresh();
+                        }
+                    }
+                });
+
     }
 
     public int getStatusBarHeight() {

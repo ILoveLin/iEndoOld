@@ -142,18 +142,24 @@ public class EditActivity extends MyActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         LogUtils.e("edit====" + response);
-                        String json = response.replaceAll("\\p{Cntrl}", "");
+//                        String json = response.replaceAll("\\p{Cntrl}", "");
                         EditDataBean mBean = new EditDataBean();
                         mBean.getData(response);
                         mDialogList = mBean.getM00List();
                         LogUtils.e("edit==s==02===");
                         LogUtils.e("edit==s==03===" + mDialogList.size());
-
+                        List<EditItemBean> collect = null;
                         for (int i = 0; i < mDialogList.size(); i++) {
                             List<EditItemBean> itemList = mDialogList.get(i);
-                            LogUtils.e("edit==s============================第==" + i + "个List");
+                            if (7 == i) {
+                                collect = itemList.stream().collect(Collectors.toList());
 
-                            List<EditItemBean> collect = itemList.stream().skip(1).collect(Collectors.toList());
+                            } else {
+                                collect = itemList.stream().skip(1).collect(Collectors.toList());
+
+                            }
+                            LogUtils.e("edit==s============================第==" + i + "个List");
+//                            List<EditItemBean> collect = itemList.stream().skip(1).collect(Collectors.toList());
                             for (int i1 = 0; i1 < collect.size(); i1++) {
                                 LogUtils.e("edit==s==itemList==dictItem==" + collect.get(i1).getDictItem());
 
@@ -296,7 +302,12 @@ public class EditActivity extends MyActivity {
      */
     @SuppressLint("NewApi")
     private List<String> getPositionDataList(int position) {
-        List<EditItemBean> mDataList = mDialogList.get(position).stream().skip(1).collect(Collectors.toList());
+        List<EditItemBean> mDataList = null;
+        if (position == 7) {
+            mDataList = mDialogList.get(position).stream().collect(Collectors.toList());
+        } else {
+            mDataList = mDialogList.get(position).stream().skip(1).collect(Collectors.toList());
+        }
         ArrayList<String> list = new ArrayList<>();
         mDataList.stream().forEach((EditItemBean bean) -> {
             list.add(bean.getDictItem());

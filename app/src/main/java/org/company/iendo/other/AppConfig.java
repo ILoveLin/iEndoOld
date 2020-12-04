@@ -14,6 +14,7 @@ public final class AppConfig {
      * 当前是否为 Debug 模式
      */
     public static boolean isDebug() {
+//        return false;
         return BuildConfig.DEBUG;
     }
 

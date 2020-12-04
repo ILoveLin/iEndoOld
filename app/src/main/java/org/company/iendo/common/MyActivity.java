@@ -186,7 +186,14 @@ public abstract class MyActivity extends BaseActivity
     public void onLeftClick(View v) {
         onBackPressed();
     }
-
+    /**
+     * 获取当前用户权限
+     *
+     * @return
+     */
+    public String getCurrentUserCan() {
+        return (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_Can_Delete, "");
+    }
     /**
      * 获取userId
      *

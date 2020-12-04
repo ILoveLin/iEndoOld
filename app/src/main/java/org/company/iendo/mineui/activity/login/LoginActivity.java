@@ -213,12 +213,15 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                                                     String lastLoginAt = mBean.getDs().get(i).getLastLoginAt();
                                                     String loginTimes = mBean.getDs().get(i).getLoginTimes();
                                                     String userid = mBean.getDs().get(i).getUserID();
-
+                                                    String canUSE = mBean.getDs().get(i).getCanUSE();
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LoginOnlineTime, loginTimes + "");
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_CreateTime, createdAt + "");
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LastOnlineTime, lastLoginAt + "");
 
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Case_Num, endoType);
+                                                    SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Can_Delete, canUSE);
+                                                    SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.UserId, userid);
+
                                                     //存入当前科室
 
                                                     setCurrentOnlineType(true);
@@ -260,6 +263,7 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
             String dbusertype = mList.get(0).getUserType().toString().trim();
             Long id = mList.get(0).getId();
             LogUtils.e("TAG==登录--dbusername===" + dbusername + "====dbpassword==" + dbpassword + "====dbusertype==" + dbusertype + "====id==" + id);
+            LogUtils.e("TAG==登录--dbusername===" + dbusername + "====dbpassword==" + dbpassword + "====dbusertype==" + dbusertype + "====id==" + id);
             if (password.equals(dbpassword)) {  //判断数据库密码和输入密码是否一致,之后更新SP的当前用户信息
                 //登录 就要存入当前用户名,密码,用户权限类型,是否记住密码,
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Username, dbusername + "");
@@ -267,7 +271,7 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, dbusertype + "");
 //                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.isOnline, ifOnline);
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.is_Remember_Password, mSwithRemeber.isChecked());  //是否记住密码
-                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_ID, id);
+                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.UserId, id);
                 //登陆模式,登录的科室 --->动态你监听添加了
 
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.is_First_in, false);   //false 表示不是第一次登入了  因为默认是第一次登入(true)

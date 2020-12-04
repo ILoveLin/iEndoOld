@@ -24,7 +24,7 @@ public class SharePreferenceUtil {
      */
     public static final String FILE_NAME = "share_data";
     public static final String UID = "uid";
-    public static final String UserId = "userid";
+    public static final String UserId = "userid";       //当前用户id
 
 
     /**
@@ -43,7 +43,7 @@ public class SharePreferenceUtil {
     public static final String Current_Username = "Admin";                     // 虽然是不同字段表示，但是"admin" 如果同时存储username和password  后者会覆盖前者
     public static final String Current_Password = "";
     public static final String Current_UserType = "11";                        //0普通  1超级管理员
-    public static final String Current_ID = "1";
+    public static final String Current_Can_Delete = "4";                             //当前用户是否具有删除的权限
     public static final String Current_Case_Num = "3";                             //3耳鼻喉科,4妇科,6泌尿科,存的是数字
 
 

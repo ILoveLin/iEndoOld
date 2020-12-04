@@ -1,13 +1,10 @@
 package org.company.iendo.mineui.activity.casemsg;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.reflect.TypeToken;
@@ -16,8 +13,9 @@ import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
 import com.hjq.widget.layout.WrapRecyclerView;
-import com.hjq.widget.view.ClearEditText;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -36,7 +34,6 @@ import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -46,7 +43,7 @@ import okhttp3.Call;
  * <p>
  * Describe 病例管理
  */
-public class CaseManageActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener {
+public class CaseManageActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
 
     private SmartRefreshLayout mSmartRefreshLayout;
     private WrapRecyclerView mRecyclerView;
@@ -68,7 +65,8 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         mSmartRefreshLayout = findViewById(R.id.rl_status_refresh);
         mRecyclerView = findViewById(R.id.rv_status_caselist);
         mTitleBar = findViewById(R.id.titlebar);
-
+        mSmartRefreshLayout.setOnRefreshLoadMoreListener(this);
+        mSmartRefreshLayout.setEnableLoadMore(false);    //是否启用上拉加载功能
         mAdapter = new CaseManageAdapter(this);
 //        mAdapter.setData(analogData());
         responseListener();
@@ -97,17 +95,25 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
             EasyTransition.startActivity(intent, options);
         });
 
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sendRequest();
+
+    }
 
     @Override
     protected void initData() {
         endoType = (String) SharePreferenceUtil.get(CaseManageActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
-        sendRequest();
     }
 
     /**
      * 发送请求
+     *
+     * @param
      */
     private void sendRequest() {
         LogUtils.e("=TAG=hy=onError==" + endoType);
@@ -136,6 +142,7 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
                             CaseManagerListBean mBean = mGson.fromJson(response, type);
                             mList = mBean.getDs();
                             mAdapter.setData(mList);
+                            mSmartRefreshLayout.finishRefresh();
                         }
                     }
                 });
@@ -220,4 +227,18 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         return mHintLayout;
     }
 
+    @Override
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+//        postDelayed(() -> {
+//            mSmartRefreshLayout.
+//            mRefreshLayout.finishLoadMore();
+//            toast("加载完成");
+//        }, 1000);
+        mSmartRefreshLayout.finishLoadMoreWithNoMoreData();
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        sendRequest();
+    }
 }

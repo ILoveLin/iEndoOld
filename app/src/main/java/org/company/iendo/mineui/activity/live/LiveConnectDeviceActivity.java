@@ -1,28 +1,26 @@
 package org.company.iendo.mineui.activity.live;
 
 import android.content.pm.ActivityInfo;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
+import com.google.gson.reflect.TypeToken;
 import com.vlc.lib.VlcVideoView;
 import com.vlc.lib.listener.MediaListenerEvent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
+import org.company.iendo.bean.LiveConnectIDBean;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.widget.MyConnectVlcVideoView;
 
-import java.util.Set;
+import java.lang.reflect.Type;
 
 import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
@@ -61,7 +59,8 @@ public class LiveConnectDeviceActivity extends MyActivity {
     public static final int EVENT_Stop = 22;
     public static final int EVENT_Init = 33;
     public static final int EVENT_Error = 44;
-//    private Handler mHandler = new Handler() {
+    private String currentDeviceID;
+    //    private Handler mHandler = new Handler() {
 //        @Override
 //        public void handleMessage(@NonNull Message msg) {
 //            super.handleMessage(msg);
@@ -104,14 +103,14 @@ public class LiveConnectDeviceActivity extends MyActivity {
         back = findViewById(R.id.back);
         lock_screen.setTag("unLock");
         id = getIntent().getStringExtra("ID");
-
         path = getLiveConnectUrl();
         LogUtils.e("path====" + path);
         setBGErrorUrl(false);
+
     }
 
     private void responseListener() {
-        setOnClickListener( R.id.player, R.id.lock_screen, R.id.change, R.id.back, R.id.change_ice, R.id.recordStart,
+        setOnClickListener(R.id.player, R.id.lock_screen, R.id.change, R.id.back, R.id.change_ice, R.id.recordStart,
                 R.id.snapShot);
         VlcVideoView vlc_video_view = vlcVideoView.findViewById(R.id.vlc_video_view);
         vlc_video_view.setOnClickListener(new View.OnClickListener() {
@@ -130,31 +129,25 @@ public class LiveConnectDeviceActivity extends MyActivity {
             @Override
             public void eventBuffing(int event, float buffing) {
                 LogUtils.e("我是当前播放的url====" + path);
-
-                LogUtils.e("TAG====00==buffing==="+buffing);
-                if (isLock){
-                    LogUtils.e("TAG===01===buffing==="+buffing);
-
-                    if (buffing > 3 ) {
-                        LogUtils.e("TAG===02===buffing==="+buffing);
-
+                LogUtils.e("TAG====00==buffing===" + buffing);
+                if (isLock) {
+                    LogUtils.e("TAG===01===buffing===" + buffing);
+                    if (buffing > 3) {
+                        LogUtils.e("TAG===02===buffing===" + buffing);
                         isPlayering = true;
                         loading.release();
                         loading.setVisibility(View.INVISIBLE);
-                        isLock=false;
-//                        start.setVisibility(View.INVISIBLE);
+                        isLock = false;
 
                     }
                 }
 
-//                mHandler.sendEmptyMessage(EVENT_Buffing);
 
             }
 
             @Override
             public void eventStop(boolean isPlayError) {
-                LogUtils.e("event======Stop==="+isPlayError);
-
+                LogUtils.e("event======Stop===" + isPlayError);
                 if (isPlayError) {
                     isPlayering = false;
                     loading.setVisibility(View.INVISIBLE);
@@ -168,35 +161,36 @@ public class LiveConnectDeviceActivity extends MyActivity {
 
             @Override
             public void eventError(int event, boolean show) {
-                LogUtils.e("event======error==="+show);
+                LogUtils.e("event======error===" + show);
 
                 isPlayering = false;
             }
 
             @Override
             public void eventPlay(boolean isPlaying) {
-                LogUtils.e("event======play==="+isPlaying);
+                LogUtils.e("event======play===" + isPlaying);
 
             }
+
             //openClose true加载视频中  false回到初始化  比如显示封面图
             @Override
             public void eventPlayInit(boolean openClose) {
-                LogUtils.e("event======init==="+openClose);
-                if(openClose){
-                    isLock =true;
+                LogUtils.e("event======init===" + openClose);
+                if (openClose) {
+                    isLock = true;
 
-                }else{
+                } else {
 //                    start.setVisibility(View.INVISIBLE);
                 }
-
-
 
 
             }
 
         });
-
+        //获取当前机器操作对象的id
+        sendGetDeviceUserIdRequest();
     }
+
 
     private void setBGErrorUrl(boolean b) {
         if (b) {
@@ -256,7 +250,6 @@ public class LiveConnectDeviceActivity extends MyActivity {
                 break;
             case R.id.change:       //全屏
                 LogUtils.e("path====" + path);
-                toast(path);
                 isFullscreen = !isFullscreen;
                 if (isFullscreen) {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -272,28 +265,38 @@ public class LiveConnectDeviceActivity extends MyActivity {
                 finish();
                 break;
             case R.id.change_ice:   //冻结
-                toast("冻结");
-                if (isStarting && vlcVideoView.isPrepare()) {
-                    sendRequest("frozenImage");
-                    setIceTextColor(getResources().getColor(R.color.colorAccent), "冻结中！", false);
+                if (id.equals(currentDeviceID+"")) {
+                    if (isStarting && vlcVideoView.isPrepare()) {
+                        sendRequest("frozenImage");
+                        setIceTextColor(getResources().getColor(R.color.colorAccent), "冻结中！", false);
+                    } else {
+                        sendRequest("endfrozenImage");
+                        setIceTextColor(getResources().getColor(R.color.white), "冻结", true);
+                    }
                 } else {
-                    sendRequest("endfrozenImage");
-                    setIceTextColor(getResources().getColor(R.color.white), "冻结", true);
+                    toast("当前病人与一体机选中病人不一致");
                 }
                 break;
             case R.id.recordStart:  //录像
-                toast("录像");
-                if (isStarting && vlcVideoView.isPrepare()) {
-                    sendRequest("startCapture");
-                    setTextColor(getResources().getColor(R.color.colorAccent), "录像中...", false);
+                if (id.equals(currentDeviceID+"")) {
+                    if (isStarting && vlcVideoView.isPrepare()) {
+                        sendRequest("startCapture");
+                        setTextColor(getResources().getColor(R.color.colorAccent), "录像中...", false);
+                    } else {
+                        sendRequest("endCapture");
+                        setTextColor(getResources().getColor(R.color.white), "录像", true);
+                    }
                 } else {
-                    sendRequest("endCapture");
-                    setTextColor(getResources().getColor(R.color.white), "录像", true);
+                    toast("当前病人与一体机选中病人不一致");
                 }
+
                 break;
             case R.id.snapShot:  //截图
-                toast("path===" + path);
-                sendRequest("captureImage");
+                if (id.equals(currentDeviceID+"")) {
+                    sendRequest("captureImage");
+                } else {
+                    toast("当前病人与一体机选中病人不一致");
+                }
 
                 break;
         }
@@ -309,6 +312,36 @@ public class LiveConnectDeviceActivity extends MyActivity {
 //
 //    Param: 病例ID
 
+    private void sendGetDeviceUserIdRequest() {
+        showDialog();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect_GetID)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        LogUtils.e("path==get==onError===" + e);
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("path==get==response===" + response);
+                        Type type = new TypeToken<LiveConnectIDBean>() {
+                        }.getType();
+                        LiveConnectIDBean mBean = mGson.fromJson(response, type);
+                        if (mBean.getDs().size() == 0) {
+                            currentDeviceID = mBean.getDs().get(0).getParam();
+                            LogUtils.e("path==get==response==currentDeviceID=" + currentDeviceID);
+
+                        }
+
+                    }
+                });
+    }
+
     /**
      * 录像请求
      *
@@ -321,15 +354,15 @@ public class LiveConnectDeviceActivity extends MyActivity {
      */
     private void sendRequest(String type) {
 
-        LogUtils.e("path===path===" + getCurrentHost() + HttpConstant.CaseManager_Live_connect + "===name===" + type + "===Param===" + id);
-        LogUtils.e("path===url===" + getCurrentHost() + HttpConstant.CaseManager_Live_connect);
+        LogUtils.e("path===path===" + getCurrentHost() + HttpConstant.CaseManager_Live_Connect + "===name===" + type + "===Param===" + id);
+        LogUtils.e("path===url===" + getCurrentHost() + HttpConstant.CaseManager_Live_Connect);
         LogUtils.e("path===Name===" + type);
         LogUtils.e("path===Param===" + id);
-        LogUtils.e("" + getCurrentHost() + HttpConstant.CaseManager_Live_connect);
+        LogUtils.e("" + getCurrentHost() + HttpConstant.CaseManager_Live_Connect);
 
         showDialog();
         OkHttpUtils.post()
-                .url(getCurrentHost() + HttpConstant.CaseManager_Live_connect)
+                .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect)
                 .addParams("Name", type)
                 .addParams("Param", id)
                 .build()
@@ -338,7 +371,6 @@ public class LiveConnectDeviceActivity extends MyActivity {
                     public void onError(Call call, Exception e, int id) {
                         hideDialog();
                         LogUtils.e("path===onError===" + e);
-                        toast("Exception==请求---失败=" + type);
 
                     }
 
@@ -346,7 +378,6 @@ public class LiveConnectDeviceActivity extends MyActivity {
                     public void onResponse(String response, int id) {
                         hideDialog();
                         LogUtils.e("path===onResponse===" + response);
-                        toast("onResponse==请求---成功=" + type);
 
 
                     }

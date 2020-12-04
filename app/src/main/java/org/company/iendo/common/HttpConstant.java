@@ -21,7 +21,10 @@ public class HttpConstant {
     public static final String CaseManager_List = "patients_list.aspx";
     public static final String CaseManager_Case_Detail = "patients.aspx";
     public static final String CaseManager_Case_Edit = "listdicts.aspx";
-    public static final String CaseManager_Live_connect = "add_command.aspx";
+    public static final String CaseManager_Live_Connect = "add_command.aspx";     //post
+    public static final String CaseManager_Live_Connect_GetID = "get_command_id.aspx";     //get
+    public static final String CaseManager_Live_Connect_Delete = "delete_patients.aspx";     //get
+
 
 
 }

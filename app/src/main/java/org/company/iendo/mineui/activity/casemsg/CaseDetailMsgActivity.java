@@ -101,26 +101,94 @@ public class CaseDetailMsgActivity extends MyActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.titile_live:
+            case R.id.titile_live:      //直播
                 Intent intent = new Intent(CaseDetailMsgActivity.this, LiveConnectDeviceActivity.class);
-                intent.putExtra("ID",id );
+                intent.putExtra("ID", id);
                 startActivity(intent);
                 if (mAction != null) {
                     mAction.onLive();
                 }
                 break;
-            case R.id.titile_print:
+            case R.id.titile_print:       //打印
+                sendRequest("printReport");
                 break;
-            case R.id.titile_delete:
+            case R.id.titile_delete:      //删除
                 showDeleteDialog();
                 break;
-            case R.id.titile_download:
+            case R.id.titile_download:     //下载
                 break;
             case R.id.titile_edit:
                 startActivity(EditActivity.class);
                 break;
 
         }
+    }
+
+
+    private void sendDeleteRequest() {
+        if ("True".equals(getCurrentUserCan())) {  //可以删除
+            showDialog();
+            LogUtils.e("path===onError==url=" + getCurrentHost() + HttpConstant.CaseManager_Live_Connect_Delete);
+            LogUtils.e("path===onError==patientsId=" + id);
+            LogUtils.e("path===onError==UserID=" + getUserId());
+
+            OkHttpUtils.get()
+                    .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect_Delete)
+                    .addParams("patientsId", id)   //要删除的病例id
+                    .addParams("UserID", getUserId())        //当前用户id
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            hideDialog();
+                            toast("链接服务器失败");
+
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            hideDialog();
+                            //返回值 1成功   0传入参数为空 -1传入病人id不存在
+                            if ("1".equals(response)) {
+                                toast("删除成功");
+                            } else if ("-1".equals(response)) {
+                                toast("传入病人id不存在");
+                            }
+
+
+                        }
+                    });
+        } else {
+
+        }
+
+    }
+
+    private void sendRequest(String type) {
+        showDialog();
+        OkHttpUtils.post()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect)
+                .addParams("Name", type)
+                .addParams("Param", id)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        LogUtils.e("path===onError===" + e);
+                        toast("链接服务器失败");
+                        //todo 联调有问题 和ios一样
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("path===onResponse===" + response);
+
+
+                    }
+                });
     }
 
     private void showDeleteDialog() {
@@ -140,6 +208,7 @@ public class CaseDetailMsgActivity extends MyActivity {
                     @Override
                     public void onConfirm(BaseDialog dialog) {
                         toast("确定");
+                        sendDeleteRequest();
                     }
 
                     @Override
@@ -178,7 +247,6 @@ public class CaseDetailMsgActivity extends MyActivity {
             }
         });
     }
-
 
 
     public static String getCurrentID() {

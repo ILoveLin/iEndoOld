@@ -66,7 +66,7 @@ public class GuideActivity extends MyActivity
         SharePreferenceUtil.put(GuideActivity.this, SharePreferenceUtil.Current_Username, "Admin");
         SharePreferenceUtil.put(GuideActivity.this, SharePreferenceUtil.Current_Password, "");
         SharePreferenceUtil.put(GuideActivity.this, SharePreferenceUtil.Current_UserType, "1"+"");
-        SharePreferenceUtil.put(GuideActivity.this, SharePreferenceUtil.Current_ID, "1");
+        SharePreferenceUtil.put(GuideActivity.this, SharePreferenceUtil.UserId, "1");
         //存入数据库
         long ID = 1;
         UserDBBean userDBBean = new UserDBBean();

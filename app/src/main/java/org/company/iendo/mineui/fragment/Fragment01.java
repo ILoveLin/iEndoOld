@@ -78,8 +78,8 @@ public class Fragment01 extends MyFragment<MainActivity> implements
     @Override
     protected void initData() {
         sendRequest();
-
     }
+
 
     private void sendRequest() {
         showDialog();
@@ -108,6 +108,10 @@ public class Fragment01 extends MyFragment<MainActivity> implements
                                 mBean = bean.getDs().get(0);
                                 mName.setText("" + mBean.getName());
                                 mAge.setText("" + mBean.getPatientAge());
+                                mSex.setText("" + mBean.getSex());
+                                mProfession.setText("" + mBean.getOccupatior());
+                                mPhone.setText("" + mBean.getTel());
+                                mHistory.setText("" + mBean.getMedHistory());
                             }
                         }
 

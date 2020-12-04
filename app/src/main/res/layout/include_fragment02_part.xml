@@ -218,17 +218,17 @@
         <!--主诉-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
-                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/padding_20"
                 android:text="主诉:"
@@ -238,7 +238,7 @@
             <TextView
                 android:id="@+id/case02_say"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
@@ -253,7 +253,7 @@
         <!--临床诊断-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -261,7 +261,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -287,8 +287,10 @@
 
         <!--镜检所见-->
         <LinearLayout
+            android:background="@color/white"
+
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -296,9 +298,8 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
-                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/padding_20"
                 android:text="镜检所见:"
@@ -308,9 +309,8 @@
             <TextView
                 android:id="@+id/case02_mirror_see"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:background="@color/white"
                 android:gravity="center_vertical|center"
                 android:paddingLeft="@dimen/padding_10"
                 android:paddingRight="@dimen/padding_10"
@@ -322,17 +322,17 @@
         <!--镜检诊断-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
-                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/padding_20"
                 android:text="镜检诊断:"
@@ -342,7 +342,7 @@
             <TextView
                 android:id="@+id/case02_mirror_see_result"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
@@ -357,17 +357,17 @@
         <!--活检-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
-                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/padding_20"
                 android:text="活检:"
@@ -377,7 +377,7 @@
             <TextView
                 android:id="@+id/case02_live_see"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
@@ -392,15 +392,16 @@
         <!--试验-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -412,7 +413,7 @@
             <TextView
                 android:id="@+id/case02_test"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
@@ -427,7 +428,8 @@
         <!--细胞学-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -435,7 +437,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -447,7 +449,7 @@
             <TextView
                 android:id="@+id/case02_cytology"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
@@ -463,7 +465,8 @@
         <!--病理学-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -471,7 +474,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -483,7 +486,7 @@
             <TextView
                 android:id="@+id/case02_pathology"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
@@ -498,15 +501,16 @@
         <!--建议-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -518,7 +522,7 @@
             <TextView
                 android:id="@+id/case02_advise"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
@@ -533,15 +537,16 @@
         <!--检查医生-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_10"
             android:gravity="center_vertical"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/padding_50"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -553,13 +558,12 @@
             <TextView
                 android:id="@+id/case02_check_doctor"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@color/white"
                 android:gravity="center_vertical|center"
                 android:paddingLeft="@dimen/padding_10"
                 android:paddingRight="@dimen/padding_10"
-
                 android:textColor="@color/color_333333"
                 android:textSize="15sp" />
 

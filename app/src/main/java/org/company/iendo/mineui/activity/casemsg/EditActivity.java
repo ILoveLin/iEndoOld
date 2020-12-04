@@ -177,14 +177,13 @@ public class EditActivity extends MyActivity {
                 selectedSeeAgain();
                 break;
             case R.id.iv_case_device:           //设备    1
-                showCurrentSelectedDialog(getPositionDataList(1), "1");
-
+                showCurrentSelectedDialog(getPositionDataList(3), "3");
                 break;
             case R.id.iv_case_office:           //科室    2
                 showCurrentSelectedDialog(getPositionDataList(2), "2");
                 break;
             case R.id.iv_case_say:              //主述    3
-                showCurrentSelectedDialog(getPositionDataList(3), "3");
+                showCurrentSelectedDialog(getPositionDataList(1), "1");
                 break;
             case R.id.iv_case_bed:              //临床诊断  4
                 showCurrentSelectedDialog(getPositionDataList(4), "4");
@@ -199,10 +198,10 @@ public class EditActivity extends MyActivity {
                 showCurrentSelectedDialog(getPositionDataList(7), "7");
                 break;
             case R.id.iv_case_test:             //试验    8
-                showCurrentSelectedDialog(getPositionDataList(8), "8");
+                showCurrentSelectedDialog(getPositionDataList(9), "9");
                 break;
             case R.id.iv_case_cytology:         //细胞学   9
-                showCurrentSelectedDialog(getPositionDataList(9), "9");
+                showCurrentSelectedDialog(getPositionDataList(8), "8");
                 break;
             case R.id.iv_case_pathology:        //病理学   10
                 showCurrentSelectedDialog(getPositionDataList(10), "10");

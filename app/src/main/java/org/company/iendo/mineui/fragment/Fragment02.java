@@ -110,13 +110,31 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
                             CaseDetailMsgBean bean = mGson.fromJson(response, type);
                             if (bean.getDs().size() >= 0) {
                                 mBean = bean.getDs().get(0);
-                                case02_check_number.setText(mBean.getCaseNo() + "");
-
                                 if (mBean.getReturnVisit().equals("False")) {
                                     case02_again_see.setText("否");
                                 } else {
                                     case02_again_see.setText("是");
                                 }
+                                case02_check_number.setText(mBean.getCaseNo() + "");
+                                case02_charge.setText(mBean.getFee() + "");
+                                case02_doctor.setText(mBean.getSubmitDoctor() + "");
+                                case02_device.setText("");  //设备
+                                case02_case.setText(mBean.getDepartment() + "");
+                                case02_say.setText(mBean.getChiefComplaint() + "");
+                                case02_bed_see.setText(mBean.getClinicalDiagnosis() + "");
+                                case02_mirror_see.setText(mBean.getCheckContent() + "");
+                                case02_mirror_see_result.setText(mBean.getCheckDiagnosis() + "");
+                                case02_live_see.setText(mBean.getBiopsy() + "");
+                                case02_test.setText(mBean.getTest() + "");
+                                case02_cytology.setText(mBean.getCtology() + "");
+                                case02_pathology.setText(mBean.getPathology() + "");
+                                case02_advise.setText(mBean.getAdvice() + "");
+                                case02_check_doctor.setText(mBean.getExaminingPhysician() + "");
+
+
+//                                private TextView ;
+//                                private TextView ;
+
                             }
                         }
 

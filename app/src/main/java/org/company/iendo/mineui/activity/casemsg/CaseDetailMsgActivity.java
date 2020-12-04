@@ -1,5 +1,6 @@
 package org.company.iendo.mineui.activity.casemsg;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,6 @@ public class CaseDetailMsgActivity extends MyActivity {
     private TextView mDownload;
     private TextView mEdit;
     private static String id;
-    private static CaseDetailMsgBean.DsDTO mCurrentBean;
 
     @Override
     protected int getLayoutId() {
@@ -102,7 +102,9 @@ public class CaseDetailMsgActivity extends MyActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.titile_live:
-                startActivity(LiveConnectDeviceActivity.class);
+                Intent intent = new Intent(CaseDetailMsgActivity.this, LiveConnectDeviceActivity.class);
+                intent.putExtra("ID",id );
+                startActivity(intent);
                 if (mAction != null) {
                     mAction.onLive();
                 }

@@ -137,9 +137,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mineui.activity.live.LiveConnectDeviceActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:hardwareAccelerated="true"
+            android:screenOrientation="landscape" />
         <!--mineUI-->
 
 

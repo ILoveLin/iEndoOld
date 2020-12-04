@@ -92,7 +92,7 @@ public final class MyApplication extends Application implements LifecycleOwner {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
                 .cookieJar(new CookieJarImpl(new MemoryCookieStore()))                  //内存存储cookie
-                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(60000L, TimeUnit.MILLISECONDS)
                 .addInterceptor(new MyInterceptor(this))                      //拦截器,可以添加header 一些信息
                 .readTimeout(10000L, TimeUnit.MILLISECONDS)
                 .hostnameVerifier(new HostnameVerifier() {//允许访问https网站,并忽略证书
@@ -149,13 +149,13 @@ public final class MyApplication extends Application implements LifecycleOwner {
         });
 
         // 本地异常捕捉
-        CrashHandler.register(application);
+//        CrashHandler.register(application);
 
         // 友盟统计、登录、分享 SDK
         UmengClient.init(application);
 
         // Bugly 异常捕捉
-        CrashReport.initCrashReport(application, AppConfig.getBuglyId(), AppConfig.isDebug());
+//        CrashReport.initCrashReport(application, AppConfig.getBuglyId(), AppConfig.isDebug());
 
         // 设置全局的 Header 构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator((context, layout) -> new ClassicsHeader(context).setEnableLastTime(false));

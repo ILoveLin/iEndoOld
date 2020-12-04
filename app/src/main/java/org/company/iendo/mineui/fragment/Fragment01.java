@@ -1,5 +1,6 @@
 package org.company.iendo.mineui.fragment;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
+import org.company.iendo.mineui.activity.live.LiveConnectDeviceActivity;
 import org.company.iendo.ui.adapter.StatusAdapter;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.widget.HintLayout;
@@ -135,7 +137,8 @@ public class Fragment01 extends MyFragment<MainActivity> implements
 
     @Override
     public void onLive() {
-        Log.e("TAG", "fragment01=====onLive");
+
+//        startActivity(LiveConnectDeviceActivity.class);
 
     }
 

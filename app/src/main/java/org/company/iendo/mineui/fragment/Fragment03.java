@@ -4,6 +4,7 @@ package org.company.iendo.mineui.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -283,7 +284,14 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
         return images;
     }
 
-    ;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler = null;
+    }
 
     @Override
     public void onLive() {

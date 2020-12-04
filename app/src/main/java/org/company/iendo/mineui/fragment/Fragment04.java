@@ -198,8 +198,12 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
         return images;
     }
 
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler =null;
+    }
 
     @Override
     public boolean isStatusBarEnabled() {

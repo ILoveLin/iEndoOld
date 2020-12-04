@@ -54,7 +54,7 @@ public class SharePreferenceUtil {
     public static final String Current_DeviceType = "一体机";
     public static final String Current_IP = "ip";
     public static final String Current_Port = "port";
-    public static final String Current_Host = "host";
+    public static final String Current_Host = "host";  // 加了---/---的
 
     //用户登入次数
     public static final String Current_LoginOnlineTime = "times";

@@ -1,28 +1,32 @@
 package org.company.iendo.mineui.activity.live;
 
 import android.content.pm.ActivityInfo;
-import android.provider.MediaStore;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.vlc.lib.VlcVideoView;
 import com.vlc.lib.listener.MediaListenerEvent;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
+import org.company.iendo.util.LogUtils;
 import org.company.iendo.widget.MyConnectVlcVideoView;
-import org.company.iendo.widget.MyVlcVideoView;
-import org.videolan.libvlc.Media;
 
-import java.io.File;
+import java.util.Set;
 
 import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
+import okhttp3.Call;
 
 /**
  * LoveLin
@@ -49,8 +53,34 @@ public class LiveConnectDeviceActivity extends MyActivity {
     private ImageView back;
     private String url01;
     private String url02;
-    private TextView photos;
     private boolean isPlayering = false;   //视频是否播放的标识符
+    private String id;
+
+    private boolean isLock = false;    // buffing 里面只走一次的开关
+    public static final int EVENT_Buffing = 11;
+    public static final int EVENT_Stop = 22;
+    public static final int EVENT_Init = 33;
+    public static final int EVENT_Error = 44;
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(@NonNull Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case EVENT_Buffing:
+//                    isPlayering = true;
+//                    loading.release();
+//                    loading.setVisibility(View.INVISIBLE);
+//                    break;
+//                case EVENT_Stop:
+//                    break;
+//                case EVENT_Init:
+//                    isLock = true;
+//                    break;
+//                case EVENT_Error:
+//                    break;
+//            }
+//        }
+//    };
 
 
     @Override
@@ -64,20 +94,24 @@ public class LiveConnectDeviceActivity extends MyActivity {
         vlcVideoView = findViewById(R.id.vlc_video_view);
         change = findViewById(R.id.change);
         lock_screen = findViewById(R.id.lock_screen);
-        photos = findViewById(R.id.photos);
         recordStart = findViewById(R.id.recordStart);
         change_ice = findViewById(R.id.change_ice);
         layout_top = findViewById(R.id.layout_top);
         error_text = findViewById(R.id.error_text);
         snapShot = findViewById(R.id.snapShot);
-        start = findViewById(R.id.start);
+//        start = findViewById(R.id.start);
         loading = findViewById(R.id.loading);
         back = findViewById(R.id.back);
         lock_screen.setTag("unLock");
+        id = getIntent().getStringExtra("ID");
+
+        path = getLiveConnectUrl();
+        LogUtils.e("path====" + path);
+        setBGErrorUrl(false);
     }
 
     private void responseListener() {
-        setOnClickListener(R.id.start, R.id.player, R.id.lock_screen, R.id.change, R.id.back, R.id.change_ice, R.id.recordStart,
+        setOnClickListener( R.id.player, R.id.lock_screen, R.id.change, R.id.back, R.id.change_ice, R.id.recordStart,
                 R.id.snapShot);
         VlcVideoView vlc_video_view = vlcVideoView.findViewById(R.id.vlc_video_view);
         vlc_video_view.setOnClickListener(new View.OnClickListener() {
@@ -95,40 +129,85 @@ public class LiveConnectDeviceActivity extends MyActivity {
         vlcVideoView.setMediaListenerEvent(new MediaListenerEvent() {
             @Override
             public void eventBuffing(int event, float buffing) {
-//                Log.e("path=====Start:=====", "我是当前播放的url======buffing======" + buffing);
-                if (buffing > 50) {
-                    isPlayering = true;
-                    loading.release();
-                    loading.setVisibility(View.INVISIBLE);
+                LogUtils.e("我是当前播放的url====" + path);
+
+                LogUtils.e("TAG====00==buffing==="+buffing);
+                if (isLock){
+                    LogUtils.e("TAG===01===buffing==="+buffing);
+
+                    if (buffing > 3 ) {
+                        LogUtils.e("TAG===02===buffing==="+buffing);
+
+                        isPlayering = true;
+                        loading.release();
+                        loading.setVisibility(View.INVISIBLE);
+                        isLock=false;
+//                        start.setVisibility(View.INVISIBLE);
+
+                    }
                 }
+
+//                mHandler.sendEmptyMessage(EVENT_Buffing);
 
             }
 
             @Override
             public void eventStop(boolean isPlayError) {
+                LogUtils.e("event======Stop==="+isPlayError);
+
                 if (isPlayError) {
                     isPlayering = false;
                     loading.setVisibility(View.INVISIBLE);
                     error_text.setVisibility(View.VISIBLE);
+//                    start.setVisibility(View.VISIBLE);
+                    //冻结，录像，截图 隐藏
+                    setBGErrorUrl(true);
+
                 }
             }
 
             @Override
             public void eventError(int event, boolean show) {
+                LogUtils.e("event======error==="+show);
+
                 isPlayering = false;
             }
 
             @Override
             public void eventPlay(boolean isPlaying) {
+                LogUtils.e("event======play==="+isPlaying);
 
             }
-
+            //openClose true加载视频中  false回到初始化  比如显示封面图
             @Override
             public void eventPlayInit(boolean openClose) {
-                start.setVisibility(View.INVISIBLE);
+                LogUtils.e("event======init==="+openClose);
+                if(openClose){
+                    isLock =true;
+
+                }else{
+//                    start.setVisibility(View.INVISIBLE);
+                }
+
+
+
+
             }
 
         });
+
+    }
+
+    private void setBGErrorUrl(boolean b) {
+        if (b) {
+            change_ice.setVisibility(View.INVISIBLE);
+            recordStart.setVisibility(View.INVISIBLE);
+            snapShot.setVisibility(View.INVISIBLE);
+        } else {
+            change_ice.setVisibility(View.VISIBLE);
+            recordStart.setVisibility(View.VISIBLE);
+            snapShot.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -137,6 +216,7 @@ public class LiveConnectDeviceActivity extends MyActivity {
         responseListener();
 
     }
+
     public void lockScreen(Boolean Lock) {
         if (Lock) {   //当前是显示，所以隐藏
             layout_top.setVisibility(View.INVISIBLE);
@@ -146,12 +226,13 @@ public class LiveConnectDeviceActivity extends MyActivity {
             lock_screen.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.start:  //锁屏控制
-                startLive(path);
-                break;
+//            case R.id.start:  //开始播放
+//                startLive(path);
+//                break;
             case R.id.player:  //锁屏控制
                 if (lock_screen.getVisibility() == View.VISIBLE) {
                     lockScreen(false);
@@ -174,6 +255,8 @@ public class LiveConnectDeviceActivity extends MyActivity {
                 }
                 break;
             case R.id.change:       //全屏
+                LogUtils.e("path====" + path);
+                toast(path);
                 isFullscreen = !isFullscreen;
                 if (isFullscreen) {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -190,17 +273,85 @@ public class LiveConnectDeviceActivity extends MyActivity {
                 break;
             case R.id.change_ice:   //冻结
                 toast("冻结");
+                if (isStarting && vlcVideoView.isPrepare()) {
+                    sendRequest("frozenImage");
+                    setIceTextColor(getResources().getColor(R.color.colorAccent), "冻结中！", false);
+                } else {
+                    sendRequest("endfrozenImage");
+                    setIceTextColor(getResources().getColor(R.color.white), "冻结", true);
+                }
                 break;
             case R.id.recordStart:  //录像
                 toast("录像");
+                if (isStarting && vlcVideoView.isPrepare()) {
+                    sendRequest("startCapture");
+                    setTextColor(getResources().getColor(R.color.colorAccent), "录像中...", false);
+                } else {
+                    sendRequest("endCapture");
+                    setTextColor(getResources().getColor(R.color.white), "录像", true);
+                }
                 break;
             case R.id.snapShot:  //截图
-                toast("截图");
+                toast("path===" + path);
+                sendRequest("captureImage");
+
                 break;
         }
     }
+//    http://ip:port/add_command.aspx?Name=&Param=
+//    Name:
+//    录像
+//    startCapture、endCapture
+//            采图
+//    captureImage
+//            冻结
+//    frozenImage、endfrozenImage
+//
+//    Param: 病例ID
+
+    /**
+     * 录像请求
+     *
+     * @param type 录像
+     *             startCapture、endCapture
+     *             采图
+     *             captureImage
+     *             冻结
+     *             frozenImage、endfrozenImage
+     */
+    private void sendRequest(String type) {
+
+        LogUtils.e("path===path===" + getCurrentHost() + HttpConstant.CaseManager_Live_connect + "===name===" + type + "===Param===" + id);
+        LogUtils.e("path===url===" + getCurrentHost() + HttpConstant.CaseManager_Live_connect);
+        LogUtils.e("path===Name===" + type);
+        LogUtils.e("path===Param===" + id);
+        LogUtils.e("" + getCurrentHost() + HttpConstant.CaseManager_Live_connect);
+
+        showDialog();
+        OkHttpUtils.post()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Live_connect)
+                .addParams("Name", type)
+                .addParams("Param", id)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        LogUtils.e("path===onError===" + e);
+                        toast("Exception==请求---失败=" + type);
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("path===onResponse===" + response);
+                        toast("onResponse==请求---成功=" + type);
 
 
+                    }
+                });
+    }
 
 
     /**
@@ -248,6 +399,10 @@ public class LiveConnectDeviceActivity extends MyActivity {
         this.isStarting = isStarting;
     }
 
-
+    public void setIceTextColor(int color, String message, boolean isStarting) {
+        change_ice.setText(message);
+        change_ice.setTextColor(color);
+        this.isStarting = isStarting;
+    }
 
 }

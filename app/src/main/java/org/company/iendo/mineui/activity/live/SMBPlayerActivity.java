@@ -367,9 +367,12 @@ public class SMBPlayerActivity extends MyActivity {
         vlcVideoView.onStop();
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         vlcVideoView.onDestroy();
+//        mHandler.removeCallbacksAndMessages(null);
+//        mHandler = null;
     }
 }

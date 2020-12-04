@@ -210,6 +210,19 @@ public abstract class MyActivity extends BaseActivity
      *
      * @return
      */
+    public String getLiveConnectUrl() {
+//        rtsp://root:root@ip:port/session1.mpg
+
+        String ip = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_IP, "");
+        return "rtsp://root:root@" + ip + ":7788" + "/session1.mpg";
+
+    }
+
+    /**
+     * 获取登录模式
+     *
+     * @return
+     */
     public Boolean getCurrentOnlineType() {
         Boolean isOnline = (Boolean) SharePreferenceUtil.get(this, SharePreferenceUtil.isOnline, true);
         return isOnline;

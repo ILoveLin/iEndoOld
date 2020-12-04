@@ -209,7 +209,12 @@ public class AddServersActivity extends MyActivity implements StatusAction {
         }
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler = null;
+    }
     @Override
     public HintLayout getHintLayout() {
         return mHintLayout;

@@ -21,7 +21,7 @@
         <LinearLayout
             android:id="@+id/layout_top"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="55dp"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/back_tiny"
             android:layout_toRightOf="@+id/back_tiny"
@@ -46,27 +46,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/change"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:minEms="5"
-                android:paddingLeft="10dp"
-                android:text="全屏"
-                android:textColor="@android:color/white"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/photos"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:minEms="5"
-                android:paddingLeft="10dp"
-                android:text="相册"
-                android:textColor="@android:color/white"
-                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/change_ice"
@@ -76,7 +55,7 @@
                 android:gravity="center"
                 android:minEms="5"
                 android:paddingLeft="10dp"
-                android:text="高清"
+                android:text="冻结"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
 
@@ -101,6 +80,18 @@
                 android:text="截图"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/change"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minEms="5"
+                android:paddingLeft="10dp"
+                android:text="全屏"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
 
         </LinearLayout>
 
@@ -150,6 +141,7 @@
 
     <moe.codeest.enviews.ENPlayView
         android:id="@+id/start"
+        android:visibility="gone"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"

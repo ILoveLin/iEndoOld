@@ -118,7 +118,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
      * @param
      */
     private void sendRequest() {
-        LogUtils.e("=TAG=hy=onError==" + endoType);
         showLoading();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.CaseManager_List)
@@ -189,8 +188,9 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
             @Override
             public void onRightClick(View v) {
                 if (getCurrentOnlineType()) {
-
                     toast("添加");
+                    Intent intent = new Intent(CaseManageActivity.this, AddEditActivity.class);
+                    startActivity(intent);
 
 
                 } else {

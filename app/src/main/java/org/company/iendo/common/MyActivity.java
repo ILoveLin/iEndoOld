@@ -213,7 +213,7 @@ public abstract class MyActivity extends BaseActivity
     }
 
     /**
-     * 获取登录模式
+     * 获取当前url
      *
      * @return
      */
@@ -237,17 +237,25 @@ public abstract class MyActivity extends BaseActivity
     }
 
     /**
-     * 获取登录模式
+     * 获取登录ip和port
      *
      * @return
      */
     public String getCurrentHost() {
         String Host = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_Host, "");
-
         return Host;
 
     }
 
+    /**
+     * 获取当前登入的用户名
+     * @return
+     */
+    public String getCurrentUserName() {
+        String Host = (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_Username, "");
+        return Host;
+
+    }
     /**
      * 获取登录模式
      *

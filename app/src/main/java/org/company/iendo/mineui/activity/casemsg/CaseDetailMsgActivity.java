@@ -118,6 +118,8 @@ public class CaseDetailMsgActivity extends MyActivity {
             case R.id.titile_download:     //下载
                 break;
             case R.id.titile_edit:
+                Intent intent1 = new Intent(CaseDetailMsgActivity.this, EditActivity.class);
+                intent1.putExtra("id",id);
                 startActivity(EditActivity.class);
                 break;
 

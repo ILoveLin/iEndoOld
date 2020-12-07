@@ -24,6 +24,8 @@ import org.company.iendo.util.LogUtils;
 import org.company.iendo.widget.HintLayout;
 
 import java.lang.reflect.Type;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 
@@ -100,10 +102,22 @@ public class Fragment01 extends MyFragment<MainActivity> implements
                             toast("请求参数有误");
                         } else {
                             LogUtils.e("TAG--01" + response);
+//                            @"\n", @"\r\n", @"\t", @"\\"
 
+                            String regEx="[\n  \\r\\n \\t  \\\\]";
+//                            String regEx="[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。， 、？]";
+                            String aa = " ";//这里是将特殊字符换为aa字符串," "代表直接去掉
+                            Pattern p = Pattern.compile(regEx);
+                            Matcher m = p.matcher(response);//这里把想要替换的字符串传进来
+                            String newString = m.replaceAll(aa).trim();
+
+                            LogUtils.e("TAG--01" + newString);
+
+
+//                            String myJson=   mGson.toJson(response);//将gson转化为json
                             Type type = new TypeToken<CaseDetailMsgBean>() {
                             }.getType();
-                            CaseDetailMsgBean bean = mGson.fromJson(response, type);
+                            CaseDetailMsgBean bean = mGson.fromJson(newString, type);
                             if (bean.getDs().size() >= 0) {
                                 mBean = bean.getDs().get(0);
                                 mName.setText("" + mBean.getName());

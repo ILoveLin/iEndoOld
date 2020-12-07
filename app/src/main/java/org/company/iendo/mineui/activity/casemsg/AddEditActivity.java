@@ -33,7 +33,7 @@ import okhttp3.Call;
  * <p>
  * Describe  编辑界面
  */
-public class EditActivity extends MyActivity {
+public class AddEditActivity extends MyActivity {
 
     private ClearEditText mCaseNumber;
     private ClearEditText mCaseName;
@@ -72,16 +72,14 @@ public class EditActivity extends MyActivity {
     private List<List<EditItemBean>> mDialogList;
     private TitleBar mTitleBar;
     private String currentNum;
-    private String id;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_edit;
+        return R.layout.activity_add_edit;
     }
 
     @Override
     protected void initView() {
-        id = getIntent().getStringExtra("id");
         mCaseNumber = findViewById(R.id.case03_case_number);
         mTitleBar = findViewById(R.id.titlebar);
         mCaseName = findViewById(R.id.case03_name);
@@ -179,14 +177,14 @@ public class EditActivity extends MyActivity {
                 .addParams("CheckContent", m05MirrorSee).addParams("CheckDiagnosis", m06MirrorSeeResult)
                 .addParams("Biopsy", m07LiveSee).addParams("Test", m08Test)
                 .addParams("Ctology", m09Cytology).addParams("Pathology", m10Pathology)
-                .addParams("Advice", m11Advise).addParams("AgeUnit", "\\U5c81")
+                .addParams("Advice", m11Advise).addParams("AgeUnit", "")
                 .addParams("BedID", "").addParams("CardID", "")
                 .addParams("DOB", "").addParams("EndoType", getCurrentSectionNum())
                 .addParams("FamilyHistory", "").addParams("InsuranceID", "")
                 .addParams("IsInHospital", "").addParams("Married", "")
                 .addParams("NativePlace", "").addParams("PatientNo", "")
                 .addParams("Race", "").addParams("RecordType", "endoscopy_check")
-                .addParams("UserName", getCurrentUserName()).addParams("PatientID", id)
+                .addParams("UserName", getCurrentUserName()).addParams("PatientID", "0")
                 .addParams("WardID", "").addParams("SubmitDoctor", "")
                 .build()
                 .execute(new StringCallback() {

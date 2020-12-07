@@ -333,7 +333,7 @@
                     android:textColor="@color/color_333333" />
 
 
-                <com.hjq.widget.view.ClearEditText
+                <TextView
                     android:id="@+id/case03_check_num"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -445,7 +445,6 @@
                     android:layout_weight="4"
                     android:background="@color/white"
                     android:hint="请输入送检医生姓名"
-
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10"

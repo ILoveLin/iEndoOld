@@ -30,17 +30,24 @@ import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.mineui.fragment.adapter.PictureAdapter;
 import org.company.iendo.other.IntentKey;
 import org.company.iendo.ui.activity.ImagePreviewActivity;
+import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.widget.HintLayout;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,9 +72,11 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     private PictureAdapter mAdapter;
     private SmbFile mRootFolder;
     private String ip;
-
+    public HashMap<String, String> mPicMap = new HashMap<>();
+    public ArrayList<String> mDataList = new ArrayList<>();
     public static final int REFRESH = 110;
     public static final int EMPTY = 120;
+    private File toLocalFile;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -76,6 +85,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                 case REFRESH:
                     showComplete();
                     mAdapter.setData(getLocalImagePathList());
+                    startGetReallyPic();
                     break;
                 case EMPTY:
                     showEmpty();
@@ -97,6 +107,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
 
     @Override
     protected void initView() {
+        ip = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_IP, "");
         mHintLayout = findViewById(R.id.hl_status_hint);
         mRecyclerView = findViewById(R.id.recycleview_case03);
         mAdapter = new PictureAdapter(getActivity());
@@ -142,36 +153,38 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
             public void run() {
                 super.run();
                 try {
-                    initSmb();
-                    Log.e("========root===exists==", mRootFolder.exists() + "");
+                    ip = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_IP, "");
+                    String path = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
+                    initSmb(path);
                     if (mRootFolder.exists()) {
                         SmbFile[] smbFiles = mRootFolder.listFiles(); // smb://192.168.128.146/ImageData/Images/4033/thumb/
                         for (int i = 0; i < smbFiles.length; i++) {
-                            Log.e("========root=====", "第" + i + "条数据");
-                            Log.e("========root=====", smbFiles[i].getName());
-                            File toFile = new File(Environment.getExternalStorageDirectory() +
+                            //添加每个图片名字的前缀
+                            mDataList.add(smbFiles[i].getName().split("\\.")[0]);
+                            toLocalFile = new File(Environment.getExternalStorageDirectory() +
                                     "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
+                            File toFile = new File(Environment.getExternalStorageDirectory() +
+                                    "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/");
                             if (!toFile.exists()) {   //不存在创建
                                 toFile.mkdirs();
-                                Log.e("====root==localDir=不存在=", toFile.getAbsolutePath());
                                 String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-                                downloadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
+                                downloadFileToFolder(remoteUrl, "ImageData/Images/"
+                                                + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
                                         smbFiles[i].getName(), toFile.getAbsolutePath());
-                            }else{
+
+                            } else {
                                 String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-                                downloadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
+                                downloadFileToFolder(remoteUrl, "ImageData/Images/"
+                                                + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
                                         smbFiles[i].getName(), toFile.getAbsolutePath());
                             }
-                            mHandler.sendEmptyMessage(REFRESH);
                         }
+                        mHandler.sendEmptyMessage(REFRESH);
                     } else {
                         mHandler.sendEmptyMessage(EMPTY);
                     }
 
-
                 } catch (Exception e) {
-                    Log.e("========root==Ex=", "");
-
                     e.printStackTrace();
                 }
 
@@ -180,16 +193,55 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
 
     }
 
-    private void initSmb() throws UnknownHostException, SmbException, MalformedURLException {
+    private void startGetReallyPic() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    ip = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_IP, "");
+                    String picRootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + File.separator;
+                    LogUtils.e("====picture======length=" + picRootPath);
+                    initSmb(picRootPath);
+                    SmbFile[] smbFiles = mRootFolder.listFiles();
+                    for (int i = 0; i < smbFiles.length; i++) {
+                        if (!smbFiles[i].isDirectory()) {
+                            String PicName = smbFiles[i].getName();
+                            File toFile = new File(Environment.getExternalStorageDirectory() +
+                                    "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
+                            String mPicKeyName = PicName.split("\\.")[0];
+                            String mPicValuePath = toFile + "/" + PicName;
+                            mPicMap.put(mPicKeyName, mPicValuePath);
+                            String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
+                            downloadReallyFileToFolder(remoteUrl, "ImageData/Images/"
+                                            + CaseDetailMsgActivity.getCurrentID() + "/",
+                                    PicName, toFile.getAbsolutePath());
+
+
+                        }
+
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+
+    }
+
+    private void initSmb(String rootPath) throws UnknownHostException, SmbException, MalformedURLException {
+        ip = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_IP, "");
         System.setProperty("jcifs.smb.client.dfs.disabled", "true"); //true false
         System.setProperty("jcifs.smb.client.soTimeout", "1000000");
         System.setProperty("jcifs.smb.client.responseTimeout", "30000");
         String username = "cmeftproot";
         String password = "lzjdzh19861207";
-        ip = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_IP, "");
-        Log.e("========root==ip=", ip);
 
-        String rootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
+//        String rootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
+//        String rootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
         Log.e("========root==rootPath=", rootPath);
 
         UniAddress mDomain = UniAddress.getByName(ip);
@@ -197,6 +249,33 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
         SmbSession.logon(mDomain, mAuthentication);
         mRootFolder = new SmbFile(rootPath, mAuthentication);
     }
+
+
+    /**
+     * 下载文件到指定文件夹
+     *
+     * @param remoteUrl
+     * @param fileName
+     * @param localDir
+     */
+    public static void downloadReallyFileToFolder(String remoteUrl, String shareFolderPath, String fileName, String localDir) {
+        try {
+            SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
+            File localFile = new File(localDir + "/" + fileName);
+            BufferedInputStream in = new BufferedInputStream(new SmbFileInputStream(remoteFile));
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
+            byte[] buffer = new byte[10 * 1024];
+            int len = 0;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+            in.close();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 下载文件到指定文件夹
@@ -206,20 +285,15 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
      * @param fileName
      * @param localDir
      */
-    public static void downloadFileToFolder(String remoteUrl, String shareFolderPath, String fileName, String localDir) {
+    public static void downloadFileToFolder(String remoteUrl, String shareFolderPath, String fileName,
+                                            String localDir) {
         try {
-            Log.e("========root=====", "down===remoteUrl===" + remoteUrl);
-            Log.e("========root=====", "down===shareFolderPath===" + shareFolderPath);
-            Log.e("========root=====", "down===src_path===" + remoteUrl + shareFolderPath + fileName);
-            Log.e("========root=====", "down===localDir===" + localDir);
-            Log.e("========root=====", "======================================================");
             SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
-            File localFile = new File(localDir + File.separator + fileName);
-            InputStream in = new SmbFileInputStream(remoteFile);
-            OutputStream out = new FileOutputStream(localFile);
-            byte[] buffer = new byte[1024];
+            File localFile = new File(localDir + "/" + fileName);
+            BufferedInputStream in = new BufferedInputStream(new SmbFileInputStream(remoteFile));
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
+            byte[] buffer = new byte[8 * 1024];
             int len = 0;
-
             while ((len = in.read(buffer)) > 0) {
                 out.write(buffer, 0, len);
 
@@ -227,21 +301,10 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
             in.close();
             out.close();
         } catch (Exception e) {
-            Log.e("========root=====", "down==Exception" + "");
             e.printStackTrace();
         }
     }
 
-    /**
-     * 模拟数据
-     */
-    private List<String> analogData() {
-        List<String> data = new ArrayList<>();
-        for (int i = mAdapter.getItemCount(); i < mAdapter.getItemCount() + 20; i++) {
-            data.add("我是第" + i + "条目");
-        }
-        return data;
-    }
 
     @Override
     public boolean isStatusBarEnabled() {
@@ -270,21 +333,51 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast(position);
-        ArrayList<String> localImagePathList = getLocalImagePathList();
-        ImagePreviewActivity.start(getAttachActivity(), localImagePathList, localImagePathList.size() - 1);
+
+        ArrayList viewPagerDataList = getViewPagerPicturePath();
+        if (viewPagerDataList.size() != 0) {
+            ImagePreviewActivity.start(getAttachActivity(), viewPagerDataList, viewPagerDataList.size() - 1);
+        } else {
+            toast("暂无数据!");
+        }
+
+
     }
+
+
+    @SuppressLint("NewApi")
+    public ArrayList getViewPagerPicturePath() {
+        ArrayList<String> pathList = new ArrayList<>();
+
+        if (mPicMap != null && mPicMap.size() != 0 || mDataList != null && mDataList.size() != 0) {
+            Set<Map.Entry<String, String>> entriesList = mPicMap.entrySet();
+            entriesList.stream().forEach((entry) -> {
+                for (int i = 0; i < mDataList.size(); i++) {
+                    if (mDataList.get(i).equals(entry.getKey())) {
+                        pathList.add(entry.getValue());
+                        Log.e("========root=====", "local==entry.getValue()==" + "" + entry.getValue());
+                    }
+                }
+            });
+
+            return pathList;
+        }
+        return pathList;
+
+    }
+
 
     @SuppressLint("NewApi")
     public ArrayList<String> getLocalImagePathList() {
         ArrayList<String> images = new ArrayList<>();
-        File localFile = new File(Environment.getExternalStorageDirectory() + "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
+        File localFile = new File(Environment.getExternalStorageDirectory() +
+                "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb");
         if (!localFile.exists()) {
             localFile.mkdirs();
         }
         File[] files = localFile.listFiles();
         Stream.of(files).forEach(f -> images.add(f.getAbsolutePath()));
         for (int i = 0; i < images.size(); i++) {
-            Log.e("========root=====", "local==collect==" + "" + images.get(i));
         }
         return images;
     }
@@ -293,7 +386,6 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         mHandler.removeCallbacksAndMessages(null);
         mHandler = null;
     }

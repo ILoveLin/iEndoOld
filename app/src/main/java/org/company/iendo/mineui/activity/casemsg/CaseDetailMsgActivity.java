@@ -29,8 +29,11 @@ import org.company.iendo.mineui.fragment.Fragment02;
 import org.company.iendo.mineui.fragment.Fragment03;
 import org.company.iendo.mineui.fragment.Fragment04;
 import org.company.iendo.ui.dialog.MessageDialog;
+import org.company.iendo.ui.dialog.SelectDialog;
 import org.company.iendo.util.LogUtils;
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
 
 import okhttp3.Call;
 
@@ -114,16 +117,38 @@ public class CaseDetailMsgActivity extends MyActivity {
                 showDeleteDialog();
                 break;
             case R.id.titile_download:     //下载
+                showDownDialog();
                 break;
             case R.id.titile_edit:
                 mAction.onEdit();
-//                Intent intent1 = new Intent(CaseDetailMsgActivity.this, EditActivity.class);
-//                intent1.putExtra("id",id);
-////                intent1.putExtra("bean",bean);
-//                startActivity(EditActivity.class);
                 break;
 
         }
+    }
+
+    private void showDownDialog() {
+
+        new SelectDialog.Builder(this)
+                .setTitle("提示!")
+                .setList("病例信息", "图片信息")
+                // 设置最大选择数
+                .setMaxSelect(2)
+                // 设置默认选中
+                .setSelect(0)
+                .setListener(new SelectDialog.OnListener<String>() {
+
+                    @Override
+                    public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
+                        toast("确定了：" + data.toString());
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                        toast("取消了");
+                    }
+                })
+                .show();
+
     }
 
 
@@ -148,7 +173,7 @@ public class CaseDetailMsgActivity extends MyActivity {
                             //返回值 1成功   0传入参数为空 -1传入病人id不存在
                             if ("1".equals(response)) {
                                 toast("删除成功");
-                                EventBus.getDefault().post(new AddDeleteEvent(bean,"delete",deletePosition));
+                                EventBus.getDefault().post(new AddDeleteEvent(bean, "delete", deletePosition));
 //                                LogUtils.e("last==Request==AddDeleteEvent==bean===" + bean.toString());
 //                                LogUtils.e("last==Request==AddDeleteEvent==deletePosition===" +deletePosition);
                             } else if ("-1".equals(response)) {

@@ -40,7 +40,7 @@ public final class SelectDialog {
         public Builder(Context context) {
             super(context);
 
-            setCustomView(R.layout.select_dialog);
+            setCustomView(R.layout.dialog_my_select);
             RecyclerView recyclerView = findViewById(R.id.rv_select_list);
             recyclerView.setItemAnimator(null);
 

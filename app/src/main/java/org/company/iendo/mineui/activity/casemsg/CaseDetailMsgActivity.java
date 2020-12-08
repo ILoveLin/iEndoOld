@@ -6,37 +6,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.reflect.TypeToken;
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.base.BaseDialog;
 import com.hjq.base.BaseFragmentAdapter;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
-import org.company.iendo.bean.CaseDetailMsgBean;
+import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.mineui.activity.live.LiveConnectDeviceActivity;
-import org.company.iendo.mineui.activity.user.UserSearchActivity;
 import org.company.iendo.mineui.fragment.Fragment01;
 import org.company.iendo.mineui.fragment.Fragment02;
 import org.company.iendo.mineui.fragment.Fragment03;
 import org.company.iendo.mineui.fragment.Fragment04;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.LogUtils;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.Call;
 
@@ -57,6 +51,8 @@ public class CaseDetailMsgActivity extends MyActivity {
     private TextView mDownload;
     private TextView mEdit;
     private static String id;
+    private CaseManagerListBean.DsDTO bean;
+    private int deletePosition;
 
     @Override
     protected int getLayoutId() {
@@ -82,6 +78,9 @@ public class CaseDetailMsgActivity extends MyActivity {
         mTitleBar.setLayoutParams(params);
 
         id = getIntent().getStringExtra("ID");
+        deletePosition = Integer.parseInt(getIntent().getStringExtra("position"));
+        bean = (CaseManagerListBean.DsDTO) getIntent().getSerializableExtra("bean");
+        bean = (CaseManagerListBean.DsDTO) getIntent().getSerializableExtra("bean");
         mPagerAdapter = new BaseFragmentAdapter<>(this);
         Fragment01 fragment01 = new Fragment01(this);
         Fragment02 fragment02 = new Fragment02(this);
@@ -130,10 +129,6 @@ public class CaseDetailMsgActivity extends MyActivity {
     private void sendDeleteRequest() {
         if ("True".equals(getCurrentUserCan())) {  //可以删除
             showDialog();
-            LogUtils.e("path===onError==url=" + getCurrentHost() + HttpConstant.CaseManager_Live_Connect_Delete);
-            LogUtils.e("path===onError==patientsId=" + id);
-            LogUtils.e("path===onError==UserID=" + getUserId());
-
             OkHttpUtils.get()
                     .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect_Delete)
                     .addParams("patientsId", id)   //要删除的病例id
@@ -144,7 +139,6 @@ public class CaseDetailMsgActivity extends MyActivity {
                         public void onError(Call call, Exception e, int id) {
                             hideDialog();
                             toast("链接服务器失败");
-
                         }
 
                         @Override
@@ -153,11 +147,12 @@ public class CaseDetailMsgActivity extends MyActivity {
                             //返回值 1成功   0传入参数为空 -1传入病人id不存在
                             if ("1".equals(response)) {
                                 toast("删除成功");
+                                EventBus.getDefault().post(new AddDeleteEvent(bean,"delete",deletePosition));
+                                LogUtils.e("last==Request==AddDeleteEvent==bean===" + bean.toString());
+                                LogUtils.e("last==Request==AddDeleteEvent==deletePosition===" +deletePosition);
                             } else if ("-1".equals(response)) {
                                 toast("传入病人id不存在");
                             }
-
-
                         }
                     });
         } else {

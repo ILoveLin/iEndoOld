@@ -1,5 +1,6 @@
 package org.company.iendo.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * <p>
  * Describe 病例管理
  */
-public class CaseManagerListBean {
+public class CaseManagerListBean implements Serializable {
 
 
     private List<DsDTO> ds;
@@ -20,7 +21,7 @@ public class CaseManagerListBean {
         this.ds = ds;
     }
 
-    public static class DsDTO {
+    public static class DsDTO implements Serializable {
         /**
          * ID : 4037
          * Name : qq

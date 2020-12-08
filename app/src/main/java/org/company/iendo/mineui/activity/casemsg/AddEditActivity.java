@@ -2,9 +2,12 @@ package org.company.iendo.mineui.activity.casemsg;
 
 import android.annotation.SuppressLint;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import androidx.core.widget.NestedScrollView;
+
+import com.google.gson.reflect.TypeToken;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.hjq.base.BaseDialog;
@@ -13,17 +16,24 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
+import org.company.iendo.bean.CaseDetailMsgBean;
+import org.company.iendo.bean.CaseManagerListBean;
 import org.company.iendo.bean.EditDataBean;
 import org.company.iendo.bean.EditItemBean;
+import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.ui.dialog.MenuDialog;
 import org.company.iendo.ui.dialog.SelectDialog;
 import org.company.iendo.util.LogUtils;
+import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import okhttp3.Call;
@@ -31,45 +41,15 @@ import okhttp3.Call;
 /**
  * LoveLin
  * <p>
- * Describe  编辑界面
+ * Describe  添加界面
  */
 public class AddEditActivity extends MyActivity {
-
-    private ClearEditText mCaseNumber;
-    private ClearEditText mCaseName;
-    private TextView mCaseSex;
-    private ClearEditText mCaseAge;
-    private ClearEditText mCaseProfession;
-    private ClearEditText mCasePhone;
-    private ClearEditText mCaseAddress;
-    private ClearEditText mCaseHistory;
-    private TextView mCaseCheckNum;
-    private TextView mCaseSeeAgain;
-    private ClearEditText mCaseSeeCharge;
-    private ClearEditText mCaseDoctor;
-    private ClearEditText m01CaseDevice;
-    private ImageView mIVCaseDevice;
-    private ClearEditText m02CaseOffice;
-    private ImageView mIVCaseOffice;
-    private ClearEditText m03CaseSay;
-    private ImageView mIVCaseSay;
-    private ClearEditText m04CaseBedSea;
-    private ImageView mIVCaseBed;
-    private ClearEditText m05CaseMirrorSee;
-    private ImageView mIVCaseMirrorSee;
-    private ClearEditText m06CaseMirrorSeeResult;
-    private ImageView mIVCaseSeeResult;
-    private ClearEditText m07CaseLiveSee;
-    private ImageView mIVCaseLive_see;
-    private ClearEditText m08CaseTest;
-    private ImageView mIVCaseTest;
-    private ClearEditText m09CaseCytology;
-    private ImageView mIVCaseCytology;
-    private ClearEditText m10CasePathology;
-    private ImageView mIVCasePathology;
-    private ClearEditText m11CaseAdvise;
-    private ImageView mIVCaseAdvise;
+    private ClearEditText mCaseNumber, mCaseName, mCaseAge, mCaseProfession, mCasePhone, mCaseAddress, mCaseHistory,
+            mCaseSeeCharge, mCaseDoctor, m01CaseDevice, m02CaseOffice, m03CaseSay, m04CaseBedSea, m05CaseMirrorSee,
+            m06CaseMirrorSeeResult, m07CaseLiveSee, m08CaseTest, m09CaseCytology, m10CasePathology, m11CaseAdvise;
+    private TextView mAgeType, mCaseSex, mCaseCheckNum, mCaseSeeAgain;
     private List<List<EditItemBean>> mDialogList;
+    private NestedScrollView mScrollView;
     private TitleBar mTitleBar;
     private String currentNum;
 
@@ -81,11 +61,13 @@ public class AddEditActivity extends MyActivity {
     @Override
     protected void initView() {
         mCaseNumber = findViewById(R.id.case03_case_number);
+        mScrollView = findViewById(R.id.nestedScrollView);
         mTitleBar = findViewById(R.id.titlebar);
         mCaseName = findViewById(R.id.case03_name);
         //弹出单选框
         mCaseSex = findViewById(R.id.case03_sex);
         mCaseAge = findViewById(R.id.case03_age);
+        mAgeType = findViewById(R.id.tv_age_type);
         mCaseProfession = findViewById(R.id.case03_profession);
         mCasePhone = findViewById(R.id.case03_phone);
         mCaseAddress = findViewById(R.id.case03_address);
@@ -97,28 +79,58 @@ public class AddEditActivity extends MyActivity {
         mCaseDoctor = findViewById(R.id.case03_doctor);
         //从这里开始 下拉选择框和edit一起使用
         m01CaseDevice = findViewById(R.id.case03_device);
-        mIVCaseDevice = findViewById(R.id.iv_case_device);
         m02CaseOffice = findViewById(R.id.case03_office);
-        mIVCaseOffice = findViewById(R.id.iv_case_office);
         m03CaseSay = findViewById(R.id.case03_say);
-        mIVCaseSay = findViewById(R.id.iv_case_say);
         m04CaseBedSea = findViewById(R.id.case03_bed_sea);
-        mIVCaseBed = findViewById(R.id.iv_case_bed);
         m05CaseMirrorSee = findViewById(R.id.case03_mirror_see);
-        mIVCaseMirrorSee = findViewById(R.id.iv_case_mirror_see);
         m06CaseMirrorSeeResult = findViewById(R.id.case03_mirror_see_result);
-        mIVCaseSeeResult = findViewById(R.id.iv_case_see_result);
         m07CaseLiveSee = findViewById(R.id.case03_live_see);
-        mIVCaseLive_see = findViewById(R.id.iv_case_live_see);
         m08CaseTest = findViewById(R.id.case03_test);
-        mIVCaseTest = findViewById(R.id.iv_case_test);
         m09CaseCytology = findViewById(R.id.case03_cytology);
-        mIVCaseCytology = findViewById(R.id.iv_case_cytology);
         m10CasePathology = findViewById(R.id.case03_pathology);
-        mIVCasePathology = findViewById(R.id.iv_case_pathology);
         m11CaseAdvise = findViewById(R.id.case03_advise);
-        mIVCaseAdvise = findViewById(R.id.iv_case_advise);
+    }
 
+    @Override
+    protected void initData() {
+        responseListener();
+    }
+
+    private void responseListener() {
+        mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY > oldScrollY) {
+                    hideInput();
+                }
+                if (scrollY < oldScrollY) {
+                    hideInput();
+                }
+            }
+        });
+
+        setOnClickListener(R.id.case03_sex, R.id.tv_age_type, R.id.case03_see_again, R.id.iv_case_device, R.id.iv_case_office, R.id.iv_case_say
+                , R.id.iv_case_bed, R.id.iv_case_mirror_see, R.id.iv_case_see_result, R.id.iv_case_live_see, R.id.iv_case_test
+                , R.id.iv_case_cytology, R.id.iv_case_pathology, R.id.iv_case_advise);
+
+        mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(View v) {
+                finish();
+            }
+
+            @Override
+            public void onTitleClick(View v) {
+            }
+
+            @Override
+            public void onRightClick(View v) {
+                sendAddCaseRequest();
+
+            }
+        });
+
+        //获取数据库检查号
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.CaseManager_Add_GetCaseID)
                 .addParams("EndoType", getCurrentSectionNum())
@@ -127,7 +139,6 @@ public class AddEditActivity extends MyActivity {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         LogUtils.e("request01==onResponse==onResponse==" + e);
-
                     }
 
                     @Override
@@ -138,14 +149,48 @@ public class AddEditActivity extends MyActivity {
                     }
                 });
 
+        //获取Dialog item的数据
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Case_Edit)
+                .addParams("endotype", getCurrentSectionNum())
+                .addParams("dictname", "")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        LogUtils.e("edit====" + e);
+                    }
+
+                    @SuppressLint("NewApi")
+                    @Override
+                    public void onResponse(String response, int id) {
+                        EditDataBean mBean = new EditDataBean();
+                        mBean.getData(response);
+                        mDialogList = mBean.getM00List();
+                        List<EditItemBean> collect = null;
+                        for (int i = 0; i < mDialogList.size(); i++) {
+                            List<EditItemBean> itemList = mDialogList.get(i);
+                            if (7 == i) {
+                                collect = itemList.stream().collect(Collectors.toList());
+                            } else {
+                                collect = itemList.stream().skip(1).collect(Collectors.toList());
+                            }
+                            for (int i1 = 0; i1 < collect.size(); i1++) {
+
+                            }
+                        }
+                    }
+                });
     }
 
-    private void sendAddRequest() {
+    //添加病例
+    private void sendAddCaseRequest() {
         showDialog();
         String mCaseNo = mCaseNumber.getText().toString();
         String mName = mCaseName.getText().toString();
         String mSex = mCaseSex.getText().toString();
         String mAge = mCaseAge.getText().toString();
+        String mAgeTypeData = mAgeType.getText().toString();
         String mProfession = mCaseProfession.getText().toString();
         String mPhone = mCasePhone.getText().toString();
         String mAddress = mCaseAddress.getText().toString();
@@ -164,6 +209,7 @@ public class AddEditActivity extends MyActivity {
         String m09Cytology = m09CaseCytology.getText().toString();
         String m10Pathology = m10CasePathology.getText().toString();
         String m11Advise = m11CaseAdvise.getText().toString();
+        //添加天月岁  AgeUnit
         OkHttpUtils.post()
                 .url(getCurrentHost() + HttpConstant.CaseManager_Add_Patients)
                 .addParams("CaseID", mCaseNo).addParams("Name", mName)    //UserName  当前系统用户  Name字段是当前病人用户
@@ -177,7 +223,7 @@ public class AddEditActivity extends MyActivity {
                 .addParams("CheckContent", m05MirrorSee).addParams("CheckDiagnosis", m06MirrorSeeResult)
                 .addParams("Biopsy", m07LiveSee).addParams("Test", m08Test)
                 .addParams("Ctology", m09Cytology).addParams("Pathology", m10Pathology)
-                .addParams("Advice", m11Advise).addParams("AgeUnit", "")
+                .addParams("Advice", m11Advise).addParams("AgeUnit", mAgeTypeData)
                 .addParams("BedID", "").addParams("CardID", "")
                 .addParams("DOB", "").addParams("EndoType", getCurrentSectionNum())
                 .addParams("FamilyHistory", "").addParams("InsuranceID", "")
@@ -193,11 +239,12 @@ public class AddEditActivity extends MyActivity {
                         hideDialog();
                         toast("请求失败");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
-                        hideDialog();
                         if ("1".equals(response)) {
                             toast("添加成功");
+                            sendGetLastCaseNORequest();
                         } else if ("-1".equals(response)) {
                             toast("检查号失效，请重新进入该页面进行添加操作");
                         } else {
@@ -205,80 +252,78 @@ public class AddEditActivity extends MyActivity {
                         }
                     }
                 });
-
-
     }
 
-    @Override
-    protected void initData() {
-        responseListener();
-    }
-
-    private void responseListener() {
-        setOnClickListener(R.id.case03_sex, R.id.case03_see_again, R.id.iv_case_device, R.id.iv_case_office, R.id.iv_case_say
-                , R.id.iv_case_bed, R.id.iv_case_mirror_see, R.id.iv_case_see_result, R.id.iv_case_live_see, R.id.iv_case_test
-                , R.id.iv_case_cytology, R.id.iv_case_pathology, R.id.iv_case_advise);
-        LogUtils.e("edit====" + getCurrentHost() + HttpConstant.CaseManager_Case_Edit);
-        LogUtils.e("edit==endotype==" + getCurrentSectionNum());
-
-        mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
-            @Override
-            public void onLeftClick(View v) {
-                finish();
-            }
-
-            @Override
-            public void onTitleClick(View v) {
-
-            }
-
-            @Override
-            public void onRightClick(View v) {
-                sendAddRequest();
-
-
-            }
-        });
-
-
+    /**
+     * 获取最后一个病例的ID号,然后添加到recycleview中 避免重复请求
+     */
+    private void sendGetLastCaseNORequest() {
+        LogUtils.e("last==Request==endotype==02=" + getCurrentSectionNum());
         OkHttpUtils.get()
-                .url(getCurrentHost() + HttpConstant.CaseManager_Case_Edit)
+                .url(getCurrentHost() + HttpConstant.CaseManager_Get_LastNo)
                 .addParams("endotype", getCurrentSectionNum())
-                .addParams("dictname", "")
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        LogUtils.e("edit====" + e);
+                        LogUtils.e("last==Request==onError===" + e);
+                        hideDialog();
                     }
 
-                    @SuppressLint("NewApi")
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.e("edit====" + response);
-//                        String json = response.replaceAll("\\p{Cntrl}", "");
-                        EditDataBean mBean = new EditDataBean();
-                        mBean.getData(response);
-                        mDialogList = mBean.getM00List();
-                        LogUtils.e("edit==s==02===");
-                        LogUtils.e("edit==s==03===" + mDialogList.size());
-                        List<EditItemBean> collect = null;
-                        for (int i = 0; i < mDialogList.size(); i++) {
-                            List<EditItemBean> itemList = mDialogList.get(i);
-                            if (7 == i) {
-                                collect = itemList.stream().collect(Collectors.toList());
-                            } else {
-                                collect = itemList.stream().skip(1).collect(Collectors.toList());
-                            }
-                            LogUtils.e("edit==s============================第==" + i + "个List");
-//                            List<EditItemBean> collect = itemList.stream().skip(1).collect(Collectors.toList());
-                            for (int i1 = 0; i1 < collect.size(); i1++) {
-                                LogUtils.e("edit==s==itemList==dictItem==" + collect.get(i1).getDictItem());
+                        LogUtils.e("last==Request==onResponse===" + response);
+                        // patients.aspx
+                        sendGetLastBeanDataRequest(response);
+                    }
+                });
+    }
 
+    //获取Bean刷新上一个Activity数据列表
+    private void sendGetLastBeanDataRequest(String id) {
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Case_Detail)
+                .addParams("patientsid", id)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        if ("0".equals(response)) {
+                            toast("请求参数有误");
+                        } else {
+                            LogUtils.e("TAG--01" + response);
+                            String regEx = "[\n  \\r\\n \\t  \\\\]";
+                            String aa = " ";//这里是将特殊字符换为aa字符串," "代表直接去掉
+                            Pattern p = Pattern.compile(regEx);
+                            Matcher m = p.matcher(response);//这里把想要替换的字符串传进来
+                            String newString = m.replaceAll(aa).trim();
+                            LogUtils.e("TAG--01" + newString);
+                            Type type = new TypeToken<CaseDetailMsgBean>() {
+                            }.getType();
+                            CaseDetailMsgBean bean = mGson.fromJson(newString, type);
+                            if (bean.getDs().size() >= 0) {
+                                CaseDetailMsgBean.DsDTO mBean = bean.getDs().get(0);
+                                CaseManagerListBean.DsDTO dataBean = new CaseManagerListBean.DsDTO();
+                                String id1 = mBean.getID();
+                                String name = mBean.getName();
+                                String pathology = mBean.getPathology();
+                                String recorddate = mBean.getRecordDate();
+                                String endotype = mBean.getEndoType();
+                                dataBean.setID(id1 + "");
+                                dataBean.setName(name + "");
+                                dataBean.setPathology(pathology + "");
+                                dataBean.setRecordDate(recorddate + "");
+                                dataBean.setEndoType(endotype + "");
+                                EventBus.getDefault().post(new AddDeleteEvent(dataBean, "add", 0));
+                                finish();
                             }
                         }
-
-
                     }
                 });
     }
@@ -289,6 +334,9 @@ public class AddEditActivity extends MyActivity {
         switch (v.getId()) {
             case R.id.case03_sex:               //性别
                 selectedSex();
+                break;
+            case R.id.tv_age_type:               //年龄表示方式==     //添加天,月,岁  AgeUnit
+                selectedAgeType();
                 break;
             case R.id.case03_see_again:         //复诊
                 selectedSeeAgain();
@@ -328,6 +376,7 @@ public class AddEditActivity extends MyActivity {
                 break;
         }
     }
+
 
     private void showCurrentSelectedDialog(List<String> data, String type) {
         if (data.size() == 0) {
@@ -439,8 +488,9 @@ public class AddEditActivity extends MyActivity {
 
                     @Override
                     public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
-                        toast("确定了：" + data.toString());
-                        mCaseSeeAgain.setText("" + data.get(0));
+                        String str = data.toString();
+                        String substring = str.substring(str.length() - 2, str.length() - 1);
+                        mCaseSeeAgain.setText("" + substring);
                     }
 
                     @Override
@@ -464,8 +514,9 @@ public class AddEditActivity extends MyActivity {
 
                     @Override
                     public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
-                        toast("确定了：" + data.toString());
-                        mCaseSex.setText("" + data.get(0));
+                        String str = data.toString();
+                        String substring = str.substring(str.length() - 2, str.length() - 1);
+                        mCaseSex.setText("" + substring);
                     }
 
                     @Override
@@ -475,4 +526,42 @@ public class AddEditActivity extends MyActivity {
                 })
                 .show();
     }
+
+    /**
+     * 获取不同类型的时间显示方式
+     * //添加天,月,岁
+     */
+    private void selectedAgeType() {
+        new SelectDialog.Builder(this)
+                .setTitle("请选择你的性别")
+                .setList("天", "月", "岁")
+                // 设置单选模式
+                .setSingleSelect()
+                // 设置默认选中
+                .setSelect(0)
+                .setListener(new SelectDialog.OnListener<String>() {
+                    @Override
+                    public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
+                        String str = data.toString();
+                        String substring = str.substring(str.length() - 2, str.length() - 1);
+                        //{1=月}
+                        mAgeType.setText("" + substring);
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                        toast("取消了");
+                    }
+                })
+                .show();
+    }
+
+    protected void hideInput() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        View v = getWindow().peekDecorView();
+        if (null != v) {
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
+    }
+
 }

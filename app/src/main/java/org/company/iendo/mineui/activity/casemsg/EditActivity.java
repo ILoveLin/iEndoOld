@@ -179,7 +179,7 @@ public class EditActivity extends MyActivity {
                 .addParams("CheckContent", m05MirrorSee).addParams("CheckDiagnosis", m06MirrorSeeResult)
                 .addParams("Biopsy", m07LiveSee).addParams("Test", m08Test)
                 .addParams("Ctology", m09Cytology).addParams("Pathology", m10Pathology)
-                .addParams("Advice", m11Advise).addParams("AgeUnit", "\\U5c81")
+                .addParams("Advice", m11Advise).addParams("AgeUnit", "")
                 .addParams("BedID", "").addParams("CardID", "")
                 .addParams("DOB", "").addParams("EndoType", getCurrentSectionNum())
                 .addParams("FamilyHistory", "").addParams("InsuranceID", "")
@@ -195,11 +195,14 @@ public class EditActivity extends MyActivity {
                         hideDialog();
                         toast("请求失败");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                         hideDialog();
+
                         if ("1".equals(response)) {
                             toast("添加成功");
+
                         } else if ("-1".equals(response)) {
                             toast("检查号失效，请重新进入该页面进行添加操作");
                         } else {
@@ -211,6 +214,7 @@ public class EditActivity extends MyActivity {
 
     }
 
+
     @Override
     protected void initData() {
         responseListener();
@@ -220,8 +224,6 @@ public class EditActivity extends MyActivity {
         setOnClickListener(R.id.case03_sex, R.id.case03_see_again, R.id.iv_case_device, R.id.iv_case_office, R.id.iv_case_say
                 , R.id.iv_case_bed, R.id.iv_case_mirror_see, R.id.iv_case_see_result, R.id.iv_case_live_see, R.id.iv_case_test
                 , R.id.iv_case_cytology, R.id.iv_case_pathology, R.id.iv_case_advise);
-        LogUtils.e("edit====" + getCurrentHost() + HttpConstant.CaseManager_Case_Edit);
-        LogUtils.e("edit==endotype==" + getCurrentSectionNum());
 
         mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
             @Override
@@ -262,8 +264,8 @@ public class EditActivity extends MyActivity {
                         EditDataBean mBean = new EditDataBean();
                         mBean.getData(response);
                         mDialogList = mBean.getM00List();
-                        LogUtils.e("edit==s==02===");
-                        LogUtils.e("edit==s==03===" + mDialogList.size());
+//                        LogUtils.e("edit==s==02===");
+//                        LogUtils.e("edit==s==03===" + mDialogList.size());
                         List<EditItemBean> collect = null;
                         for (int i = 0; i < mDialogList.size(); i++) {
                             List<EditItemBean> itemList = mDialogList.get(i);
@@ -272,10 +274,10 @@ public class EditActivity extends MyActivity {
                             } else {
                                 collect = itemList.stream().skip(1).collect(Collectors.toList());
                             }
-                            LogUtils.e("edit==s============================第==" + i + "个List");
+//                            LogUtils.e("edit==s============================第==" + i + "个List");
 //                            List<EditItemBean> collect = itemList.stream().skip(1).collect(Collectors.toList());
                             for (int i1 = 0; i1 < collect.size(); i1++) {
-                                LogUtils.e("edit==s==itemList==dictItem==" + collect.get(i1).getDictItem());
+//                                LogUtils.e("edit==s==itemList==dictItem==" + collect.get(i1).getDictItem());
 
                             }
                         }

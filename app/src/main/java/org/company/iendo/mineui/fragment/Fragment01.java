@@ -121,7 +121,7 @@ public class Fragment01 extends MyFragment<MainActivity> implements
                             if (bean.getDs().size() >= 0) {
                                 mBean = bean.getDs().get(0);
                                 mName.setText("" + mBean.getName());
-                                mAge.setText("" + mBean.getPatientAge());
+                                mAge.setText("" + mBean.getPatientAge()+mBean.getAgeUnit());
                                 mSex.setText("" + mBean.getSex());
                                 mProfession.setText("" + mBean.getOccupatior());
                                 mPhone.setText("" + mBean.getTel());

@@ -84,6 +84,7 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     @Override
     protected void initData() {
         tag = mCetSearch.getText().toString().trim();
+        sendRequest();
     }
 
     @Override
@@ -99,7 +100,6 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     @Override
     protected void onResume() {
         super.onResume();
-        sendRequest();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

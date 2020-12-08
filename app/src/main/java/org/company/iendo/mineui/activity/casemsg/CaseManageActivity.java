@@ -22,6 +22,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.casemsg.adapter.CaseManageAdapter;
@@ -32,6 +33,7 @@ import org.company.iendo.util.anim.EasyTransition;
 import org.company.iendo.util.anim.EasyTransitionOptions;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -43,7 +45,7 @@ import okhttp3.Call;
 /**
  * LoveLin
  * <p>
- * Describe 病例管理
+ * Describe 病例管理--列表
  */
 public class CaseManageActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
 
@@ -63,6 +65,8 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
         mHintLayout = findViewById(R.id.hl_status_hint);
         mSmartRefreshLayout = findViewById(R.id.rl_status_refresh);
         mRecyclerView = findViewById(R.id.rv_status_caselist);
@@ -100,16 +104,41 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAddDeleteEvent(AddDeleteEvent event) {
+
+        if (mAdapter != null) {
+            LogUtils.e("=TAG=onAddDeleteEvent==" + event.getType());
+            CaseManagerListBean.DsDTO bean = event.getBean();
+            if (event.getType().equals("delete")) {
+                mAdapter.removeItem(event.getPosition());
+            } else {
+//                mAdapter.addItem(event.getBean());
+                mAdapter.addItem(0,event.getBean());
+            }
+            mAdapter.notifyDataSetChanged();
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        sendRequest();
+//        mAdapter.notifyDataSetChanged();
+
     }
 
     @Override
     protected void initData() {
         endoType = (String) SharePreferenceUtil.get(CaseManageActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
+        sendRequest();
+
     }
 
     /**
@@ -134,7 +163,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
                     @Override
                     public void onResponse(String response, int id) {
                         showComplete();
-                        LogUtils.e("=TAG=hy=onSucceed==" + response.toString());
                         if ("0".equals(response)) {
                             toast("用户名不存在或者参数为空");
                         } else {
@@ -169,6 +197,8 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         LogUtils.e("=TAG=hy=position==" + mAdapter.getItem(position).toString());
         Intent intent = new Intent(CaseManageActivity.this, CaseDetailMsgActivity.class);
         intent.putExtra("ID", mAdapter.getItem(position).getID());
+        intent.putExtra("bean", mAdapter.getItem(position));
+        intent.putExtra("position", position+"");
         startActivity(intent);
     }
 

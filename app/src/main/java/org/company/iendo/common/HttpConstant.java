@@ -25,7 +25,7 @@ public class HttpConstant {
     public static final String CaseManager_Live_Connect_Delete = "delete_patients.aspx";     //get
     public static final String CaseManager_Add_GetCaseID = "caseno.aspx";     //post
     public static final String CaseManager_Add_Patients = "add_patients.aspx";     //post     //add_patients.aspx
-//    caseno.aspx？EndoType= 获取最后一条病例的，检查号    get
+    public static final String CaseManager_Get_LastNo = "last_patients.aspx";     //获取最后一条病例的，检查号
 
 
 

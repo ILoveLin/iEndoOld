@@ -23,6 +23,7 @@
         app:titleColor="@color/color_333333" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -130,12 +131,13 @@
                     android:layout_weight="4"
                     android:background="@color/white"
                     android:gravity="center_vertical"
-                    android:hint="请选择性别"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10"
                     android:singleLine="true"
+                    android:text="男"
                     android:textColor="@color/color_333333"
                     android:textSize="15sp" />
+
 
             </LinearLayout>
             <!--年龄-->
@@ -166,11 +168,21 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:hint="请输入年龄"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
+                    app:regexType="mobile"
+                    android:paddingLeft="@dimen/padding_20"
                     android:singleLine="true"
                     android:textColor="@color/color_333333"
                     android:textSize="15sp" />
+
+                <TextView
+                    android:textColor="@color/blue"
+                    android:id="@+id/tv_age_type"
+                    android:layout_width="38dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="月" />
 
             </LinearLayout>
             <!--职业-->
@@ -303,8 +315,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:hint="请输入"
                     android:background="@color/white"
+                    android:hint="请输入"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingTop="@dimen/padding_6"
                     android:paddingRight="@dimen/padding_10"
@@ -375,10 +387,10 @@
                     android:layout_weight="4"
                     android:background="@color/white"
                     android:gravity="center_vertical"
-                    android:hint="请选择"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10"
                     android:singleLine="true"
+                    android:text="否"
                     android:textColor="@color/color_333333"
                     android:textSize="15sp" />
 
@@ -444,8 +456,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:background="@color/white"
-                    android:hint="请输入送检医生姓名"
                     android:gravity="center_vertical"
+                    android:hint="请输入送检医生姓名"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10"
                     android:singleLine="true"
@@ -499,8 +511,8 @@
                         android:id="@+id/iv_case_device"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -546,12 +558,13 @@
                         android:singleLine="true"
                         android:textColor="@color/color_333333"
                         android:textSize="15sp" />
+
                     <ImageView
                         android:id="@+id/iv_case_office"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
                 </LinearLayout>
 
@@ -601,9 +614,9 @@
                         android:id="@+id/iv_case_say"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -615,8 +628,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_marginBottom="@dimen/padding_10"
                 android:layout_marginTop="@dimen/padding_10"
+                android:layout_marginBottom="@dimen/padding_10"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="5">
@@ -656,9 +669,9 @@
                         android:id="@+id/iv_case_bed"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -710,9 +723,9 @@
                         android:id="@+id/iv_case_mirror_see"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
                 </LinearLayout>
 
@@ -762,9 +775,9 @@
                         android:id="@+id/iv_case_see_result"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -815,9 +828,9 @@
                         android:id="@+id/iv_case_live_see"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -869,9 +882,9 @@
                         android:id="@+id/iv_case_test"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -922,9 +935,9 @@
                         android:id="@+id/iv_case_cytology"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
                 </LinearLayout>
 
@@ -974,9 +987,9 @@
                         android:id="@+id/iv_case_pathology"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -1027,9 +1040,9 @@
                         android:id="@+id/iv_case_advise"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginRight="@dimen/padding_10"
-
                         android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="@dimen/padding_10"
                         android:src="@mipmap/icon_add" />
 
                 </LinearLayout>
@@ -1039,10 +1052,10 @@
 
             <!--检查医生-->
             <LinearLayout
-                android:layout_marginBottom="@dimen/padding_10"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="@dimen/padding_10"
+                android:layout_marginBottom="@dimen/padding_10"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="5">

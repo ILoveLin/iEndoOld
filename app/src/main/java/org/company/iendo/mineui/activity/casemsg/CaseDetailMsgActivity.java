@@ -34,6 +34,7 @@ import org.company.iendo.util.LogUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 
@@ -101,26 +102,43 @@ public class CaseDetailMsgActivity extends MyActivity {
 
     @Override
     public void onClick(View v) {
+        Boolean currentOnlineType = getCurrentOnlineType();
         switch (v.getId()) {
             case R.id.titile_live:      //直播
-                Intent intent = new Intent(CaseDetailMsgActivity.this, LiveConnectDeviceActivity.class);
-                intent.putExtra("ID", id);
-                startActivity(intent);
-                if (mAction != null) {
-                    mAction.onLive();
+                if (currentOnlineType) {
+                    Intent intent = new Intent(CaseDetailMsgActivity.this, LiveConnectDeviceActivity.class);
+                    intent.putExtra("ID", id);
+                    startActivity(intent);
+                    if (mAction != null) {
+                        mAction.onLive();
+                    }
+                } else {
+                    toast("离线登录无法查看直播");
                 }
                 break;
             case R.id.titile_print:       //打印
-                sendRequest("printReport");
+                if (currentOnlineType) {
+                    sendRequest("printReport");
+                } else {
+                    toast("离线登录无法打印病例");
+                }
                 break;
             case R.id.titile_delete:      //删除
                 showDeleteDialog();
                 break;
             case R.id.titile_download:     //下载
-                showDownDialog();
+                if (currentOnlineType) {
+                    showDownDialog();
+                } else {
+                    toast("病例已存在！");
+                }
                 break;
             case R.id.titile_edit:
-                mAction.onEdit();
+                if (currentOnlineType) {
+                    mAction.onEdit();
+                } else {
+                    toast("离线病例无法编辑");
+                }
                 break;
 
         }
@@ -136,10 +154,12 @@ public class CaseDetailMsgActivity extends MyActivity {
                 // 设置默认选中
                 .setSelect(0)
                 .setListener(new SelectDialog.OnListener<String>() {
-
                     @Override
                     public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
-                        toast("确定了：" + data.toString());
+                        for (Map.Entry<Integer, String> entry : data.entrySet()) {
+                            LogUtils.e("选择的数据======" + "key = " + entry.getKey() +
+                                    ", value = " + entry.getValue());
+                        }
                     }
 
                     @Override

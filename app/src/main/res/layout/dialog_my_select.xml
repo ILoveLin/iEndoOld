@@ -22,5 +22,5 @@
         android:paddingRight="@dimen/padding_30"
         android:gravity="center"
         android:text="下载图片,可能需要5分钟左右的耗时操作,请您耐心等待..."
-        android:textSize="@dimen/padding_16" />
+        android:textSize="@dimen/padding_14" />
 </LinearLayout>

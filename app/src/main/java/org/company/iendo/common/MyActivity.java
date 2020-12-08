@@ -227,7 +227,7 @@ public abstract class MyActivity extends BaseActivity
 
     /**
      * 获取登录模式
-     *
+     *默认在线登录
      * @return
      */
     public Boolean getCurrentOnlineType() {

@@ -46,7 +46,7 @@ import okhttp3.Call;
 public class AddEditActivity extends MyActivity {
     private ClearEditText mCaseNumber, mCaseName, mCaseAge, mCaseProfession, mCasePhone, mCaseAddress, mCaseHistory,
             mCaseSeeCharge, mCaseDoctor, m01CaseDevice, m02CaseOffice, m03CaseSay, m04CaseBedSea, m05CaseMirrorSee,
-            m06CaseMirrorSeeResult, m07CaseLiveSee, m08CaseTest, m09CaseCytology, m10CasePathology, m11CaseAdvise;
+            m06CaseMirrorSeeResult, m07CaseLiveSee, m08CaseTest, m09CaseCytology, m10CasePathology, m11CaseAdvise,m12CheckDoctor;
     private TextView mAgeType, mCaseSex, mCaseCheckNum, mCaseSeeAgain;
     private List<List<EditItemBean>> mDialogList;
     private NestedScrollView mScrollView;
@@ -89,6 +89,7 @@ public class AddEditActivity extends MyActivity {
         m09CaseCytology = findViewById(R.id.case03_cytology);
         m10CasePathology = findViewById(R.id.case03_pathology);
         m11CaseAdvise = findViewById(R.id.case03_advise);
+        m12CheckDoctor = findViewById(R.id.case03_check_doctor);
     }
 
     @Override
@@ -186,7 +187,7 @@ public class AddEditActivity extends MyActivity {
     //添加病例
     private void sendAddCaseRequest() {
         showDialog();
-        String mCaseNo = mCaseNumber.getText().toString();
+        String mCaseMyNo = mCaseNumber.getText().toString();
         String mName = mCaseName.getText().toString();
         String mSex = mCaseSex.getText().toString();
         String mAge = mCaseAge.getText().toString();
@@ -197,7 +198,7 @@ public class AddEditActivity extends MyActivity {
         String mHistory = mCaseHistory.getText().toString();
         String mSeeAgain = mCaseSeeAgain.getText().toString();
         String mSeeCharge = mCaseSeeCharge.getText().toString();
-        String mDoctor = mCaseDoctor.getText().toString();
+        String mDoctor = m12CheckDoctor.getText().toString();      //送检医生
         String m01Device = m01CaseDevice.getText().toString();
         String m02Office = m02CaseOffice.getText().toString();
         String m03Say = m03CaseSay.getText().toString();
@@ -212,7 +213,7 @@ public class AddEditActivity extends MyActivity {
         //添加天月岁  AgeUnit
         OkHttpUtils.post()
                 .url(getCurrentHost() + HttpConstant.CaseManager_Add_Patients)
-                .addParams("CaseID", mCaseNo).addParams("Name", mName)    //UserName  当前系统用户  Name字段是当前病人用户
+                .addParams("CaseID", mCaseMyNo).addParams("Name", mName)    //UserName  当前系统用户  Name字段是当前病人用户
                 .addParams("Sex", mSex).addParams("PatientAge", mAge)
                 .addParams("Occupatior", mProfession).addParams("Tel", mPhone)
                 .addParams("Address", mAddress).addParams("MedHistory", mHistory)  //医疗病史   FamilyHistory ---家族病史

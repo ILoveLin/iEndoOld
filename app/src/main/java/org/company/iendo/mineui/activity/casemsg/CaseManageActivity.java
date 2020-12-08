@@ -112,9 +112,11 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
             CaseManagerListBean.DsDTO bean = event.getBean();
             if (event.getType().equals("delete")) {
                 mAdapter.removeItem(event.getPosition());
+            } else if (event.getType().equals("edit")) {
+                mAdapter.notifyDataSetChanged();
             } else {
-//                mAdapter.addItem(event.getBean());
-                mAdapter.addItem(0,event.getBean());
+                mAdapter.addItem(0, event.getBean());
+
             }
             mAdapter.notifyDataSetChanged();
 
@@ -198,7 +200,7 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         Intent intent = new Intent(CaseManageActivity.this, CaseDetailMsgActivity.class);
         intent.putExtra("ID", mAdapter.getItem(position).getID());
         intent.putExtra("bean", mAdapter.getItem(position));
-        intent.putExtra("position", position+"");
+        intent.putExtra("position", position + "");
         startActivity(intent);
     }
 

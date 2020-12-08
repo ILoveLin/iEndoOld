@@ -24,7 +24,8 @@ public class HttpConstant {
     public static final String CaseManager_Live_Connect_GetID = "get_command_id.aspx";     //get
     public static final String CaseManager_Live_Connect_Delete = "delete_patients.aspx";     //get
     public static final String CaseManager_Add_GetCaseID = "caseno.aspx";     //post
-    public static final String CaseManager_Add_Patients = "add_patients.aspx";     //post     //add_patients.aspx
+    public static final String CaseManager_Add_Patients = "add_patients.aspx";     //post     //add_patients.aspx    添加病例信息
+    public static final String CaseManager_Update_Patients = "update_patients.aspx";     //post      update_patients.aspx  更新指定的病例信息
     public static final String CaseManager_Get_LastNo = "last_patients.aspx";     //获取最后一条病例的，检查号
 
 

@@ -10,6 +10,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseDetailMsgBean;
+import org.company.iendo.bean.event.RefreshFragmentEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
@@ -17,6 +18,9 @@ import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.widget.HintLayout;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
 
@@ -61,6 +65,8 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
         mHintLayout = findViewById(R.id.hl_status_hint);
         case02_check_number = findViewById(R.id.case02_check_number);
         case02_again_see = findViewById(R.id.case02_again_see);
@@ -84,6 +90,16 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
     @Override
     protected void initData() {
         sendRequest();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshFragmentEvent(RefreshFragmentEvent event){
+        LogUtils.e("TAG--onRefreshFragmentEvent" + "event===="+event.getType());
+
+        if (event.getType().equals("refresh")) {
+            LogUtils.e("TAG--onRefreshFragmentEvent" + "onRefreshFragmentEvent");
+            sendRequest();
+        }
     }
 
     private void sendRequest() {
@@ -158,6 +174,12 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
     public void onResume() {
         super.onResume();
         Log.e("TAG", "fragment02");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

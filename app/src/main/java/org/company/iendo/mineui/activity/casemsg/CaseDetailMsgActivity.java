@@ -80,7 +80,6 @@ public class CaseDetailMsgActivity extends MyActivity {
         id = getIntent().getStringExtra("ID");
         deletePosition = Integer.parseInt(getIntent().getStringExtra("position"));
         bean = (CaseManagerListBean.DsDTO) getIntent().getSerializableExtra("bean");
-        bean = (CaseManagerListBean.DsDTO) getIntent().getSerializableExtra("bean");
         mPagerAdapter = new BaseFragmentAdapter<>(this);
         Fragment01 fragment01 = new Fragment01(this);
         Fragment02 fragment02 = new Fragment02(this);
@@ -117,9 +116,11 @@ public class CaseDetailMsgActivity extends MyActivity {
             case R.id.titile_download:     //下载
                 break;
             case R.id.titile_edit:
-                Intent intent1 = new Intent(CaseDetailMsgActivity.this, EditActivity.class);
-                intent1.putExtra("id",id);
-                startActivity(EditActivity.class);
+                mAction.onEdit();
+//                Intent intent1 = new Intent(CaseDetailMsgActivity.this, EditActivity.class);
+//                intent1.putExtra("id",id);
+////                intent1.putExtra("bean",bean);
+//                startActivity(EditActivity.class);
                 break;
 
         }
@@ -148,8 +149,8 @@ public class CaseDetailMsgActivity extends MyActivity {
                             if ("1".equals(response)) {
                                 toast("删除成功");
                                 EventBus.getDefault().post(new AddDeleteEvent(bean,"delete",deletePosition));
-                                LogUtils.e("last==Request==AddDeleteEvent==bean===" + bean.toString());
-                                LogUtils.e("last==Request==AddDeleteEvent==deletePosition===" +deletePosition);
+//                                LogUtils.e("last==Request==AddDeleteEvent==bean===" + bean.toString());
+//                                LogUtils.e("last==Request==AddDeleteEvent==deletePosition===" +deletePosition);
                             } else if ("-1".equals(response)) {
                                 toast("传入病人id不存在");
                             }

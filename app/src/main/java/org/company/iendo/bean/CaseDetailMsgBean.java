@@ -1,5 +1,6 @@
 package org.company.iendo.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * <p>
  * Describe
  */
-public class CaseDetailMsgBean {
+public class CaseDetailMsgBean implements Serializable {
 
     private List<DsDTO> ds;
 
@@ -19,9 +20,10 @@ public class CaseDetailMsgBean {
         this.ds = ds;
     }
 
-    public static class DsDTO {
+    public static class DsDTO implements Serializable{
         /**
          * ID : 4037
+         *          * CaseNo : jch2975             //检查号
          * RecordType : endoscopy_check
          * PatientID : 0
          * Married :
@@ -42,7 +44,7 @@ public class CaseDetailMsgBean {
          * DOB :
          * PatientAge : 20
          * AgeUnit :
-         * CaseNo : jch2975
+         * CaseNo : jch2975             //检查号
          * ReturnVisit : False
          * BedID :
          * WardID :

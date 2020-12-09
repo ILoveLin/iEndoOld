@@ -90,8 +90,8 @@ public class Fragment01 extends MyFragment<MainActivity> implements
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRefreshFragmentEvent(RefreshFragmentEvent event){
-        LogUtils.e("TAG--onRefreshFragmentEvent" + "event===="+event.getType());
+    public void onRefreshFragmentEvent(RefreshFragmentEvent event) {
+        LogUtils.e("TAG--onRefreshFragmentEvent" + "event====" + event.getType());
 
         if (event.getType().equals("refresh")) {
             LogUtils.e("TAG--onRefreshFragmentEvent" + "onRefreshFragmentEvent");
@@ -133,7 +133,7 @@ public class Fragment01 extends MyFragment<MainActivity> implements
                             CaseDetailMsgBean bean = mGson.fromJson(newString, type);
                             if (bean.getDs().size() >= 0) {
                                 mBean = bean.getDs().get(0);
-                                mNumber.setText(""+mBean.getCaseID());
+                                mNumber.setText("" + mBean.getCaseID());
                                 mName.setText("" + mBean.getName());
                                 mAge.setText("" + mBean.getPatientAge() + mBean.getAgeUnit());
                                 mSex.setText("" + mBean.getSex());
@@ -161,6 +161,7 @@ public class Fragment01 extends MyFragment<MainActivity> implements
         super.onResume();
         Log.e("TAG", "fragment01");
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -191,14 +192,18 @@ public class Fragment01 extends MyFragment<MainActivity> implements
 
     @Override
     public void onDownload() {
+        //下载数据存入DB
+
+
+
 
     }
 
     @Override
     public void onEdit() {
         Intent intent1 = new Intent(getAttachActivity(), EditActivity.class);
-        intent1.putExtra("bean",mBean);
-        LogUtils.e("EditActivity发送前=====bean======="+mBean.toString());
+        intent1.putExtra("bean", mBean);
+        LogUtils.e("EditActivity发送前=====bean=======" + mBean.toString());
         startActivity(intent1);
     }
 }

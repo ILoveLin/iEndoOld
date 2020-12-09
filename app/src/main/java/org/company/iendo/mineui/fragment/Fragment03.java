@@ -4,15 +4,12 @@ package org.company.iendo.mineui.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.GridLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -23,24 +20,24 @@ import com.hjq.widget.layout.WrapRecyclerView;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
+import org.company.iendo.bean.beandb.image.DimImageBean;
+import org.company.iendo.bean.beandb.image.ImageListDownDBBean;
+import org.company.iendo.bean.beandb.image.ReallyImageBean;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.mineui.fragment.adapter.PictureAdapter;
-import org.company.iendo.other.IntentKey;
 import org.company.iendo.ui.activity.ImagePreviewActivity;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
+import org.company.iendo.util.db.ImageDBUtils;
 import org.company.iendo.widget.HintLayout;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -48,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jcifs.UniAddress;
@@ -76,7 +72,9 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     public ArrayList<String> mDataList = new ArrayList<>();
     public static final int REFRESH = 110;
     public static final int EMPTY = 120;
+    public static final int REALLYOK = 130;
     private File toLocalFile;
+    private ArrayList<String> dimImageList;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -87,12 +85,85 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                     mAdapter.setData(getLocalImagePathList());
                     startGetReallyPic();
                     break;
+                case REALLYOK://读取SMB原图成功,此时我们再开启线程取写入数据库
+//                    insertFilePathToDB();
+                    break;
                 case EMPTY:
                     showEmpty();
                     break;
             }
         }
     };
+    private ArrayList<String> reallyPathList;
+
+    /**
+     * 把文件路径写入数据库
+     */
+    private void insertFilePathToDB() {
+
+        //开启线程，把模糊图存入数据库，并且绑定ID
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //创建Bean对象
+                mImageListBean = new ImageListDownDBBean();
+                //设置存入图片对象的 用户ID
+                LogUtils.e("====DP==DimPath==开启DB数据库线程=====");
+                LogUtils.e("====DP==DimPath==模糊===之前=用户ID=" + CaseDetailMsgActivity.getCurrentID());
+                mImageListBean.setItemID(CaseDetailMsgActivity.getCurrentID());
+                mImageListBean.setTag(CaseDetailMsgActivity.getCurrentID());
+                mImageListBean.setDownTag("0");  //只要进入03，我就全部下载存入数据库，downTag为0，如果是用户手动下载则为1
+                ArrayList<DimImageBean> list00 = new ArrayList<>();
+                for (int i = 0; i < dimImageList.size(); i++) {
+                    DimImageBean dimBean = new DimImageBean();
+                    dimBean.setDimFilePath(dimImageList.get(i));
+                    LogUtils.e("====DP==DimPath==模糊===之前==" + dimImageList.get(i));
+                    list00.add(dimBean);
+                }
+                //存入模糊图片路径的list
+                mImageListBean.setMDimImageList(list00);
+                //然后开始存原图
+                ArrayList ReallyPathList = getViewPagerPicturePath();
+                ArrayList<ReallyImageBean> list01 = new ArrayList<>();
+                LogUtils.e("====DP==ReallyPath=====ReallyPathList==" + ReallyPathList.size());
+                for (int i = 0; i < ReallyPathList.size(); i++) {
+                    ReallyImageBean reallyImageBean = new ReallyImageBean();
+                    reallyImageBean.setReallyFilePath((String) ReallyPathList.get(i));
+                    LogUtils.e("====DP==ReallyPath==原图===之前==" + (String) ReallyPathList.get(i));
+                    list01.add(reallyImageBean);
+                }
+                //存入原图片路径的list
+                mImageListBean.setMReallyImageList(list01);
+                //存入数据库
+                ImageDBUtils.insertOrReplaceData(mImageListBean);
+                boolean isExist = ImageDBUtils.queryListIsExist(CaseDetailMsgActivity.getCurrentID());
+                LogUtils.e("====DP==ReallyPath==DB===是否存在==" + isExist);
+
+                List<ImageListDownDBBean> ImageListDownDBBeans = ImageDBUtils.queryListByTag(CaseDetailMsgActivity.getCurrentID());
+                for (int i = 0; i < ImageListDownDBBeans.size(); i++) {
+                    List<DimImageBean> mDimImageList = ImageListDownDBBeans.get(i).getMDimImageList();
+                    List<ReallyImageBean> mReallyImageList = ImageListDownDBBeans.get(i).getMReallyImageList();
+                    LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getItemID());
+                    LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMDimImageList().size());
+                    LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMReallyImageList().size());
+
+
+                    for (int x = 0; x < ImageListDownDBBeans.get(i).getMDimImageList().size(); x++) {
+                        LogUtils.e("====DP==ReallyPath=====DB之后===模糊图====" +
+                                ImageListDownDBBeans.get(i).getMDimImageList().get(x).getDimFilePath());
+                    }
+                    for (int y = 0; y < ImageListDownDBBeans.get(i).getMReallyImageList().size(); y++) {
+                        LogUtils.e("====DP==ReallyPath=====DB之后===原图====" +
+                                ImageListDownDBBeans.get(i).getMReallyImageList().get(y).getReallyFilePath());
+                    }
+                }
+            }
+        }).start();
+
+
+    }
+
+    private ImageListDownDBBean mImageListBean;
 
 
     public Fragment03(CaseDetailMsgActivity Activity) {
@@ -204,25 +275,27 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                     LogUtils.e("====picture======length=" + picRootPath);
                     initSmb(picRootPath);
                     SmbFile[] smbFiles = mRootFolder.listFiles();
+                    LogUtils.e("====DP==DimPath==开始下载=====");
+
                     for (int i = 0; i < smbFiles.length; i++) {
-                        if (!smbFiles[i].isDirectory()) {
+                        if (!smbFiles[i].isDirectory()) {   //不是文件夹,是原图,才读取
                             String PicName = smbFiles[i].getName();
                             File toFile = new File(Environment.getExternalStorageDirectory() +
                                     "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
-                            String mPicKeyName = PicName.split("\\.")[0];
+                            String mPicKeyName = PicName.split("\\.")[0];  //截取20000236.bmp   的20000236部分,到时候需要对比模糊图相同的名字才显示
                             String mPicValuePath = toFile + "/" + PicName;
                             mPicMap.put(mPicKeyName, mPicValuePath);
                             String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
                             downloadReallyFileToFolder(remoteUrl, "ImageData/Images/"
                                             + CaseDetailMsgActivity.getCurrentID() + "/",
                                     PicName, toFile.getAbsolutePath());
-
+                            LogUtils.e("====DP==DimPath==下载一条===PicName=="+PicName);
 
                         }
-
-
                     }
+                    LogUtils.e("====DP==DimPath==全部===下载完毕=====");
 
+                    mHandler.sendEmptyMessage(REALLYOK);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -347,39 +420,40 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
 
     @SuppressLint("NewApi")
     public ArrayList getViewPagerPicturePath() {
-        ArrayList<String> pathList = new ArrayList<>();
+        reallyPathList = new ArrayList<String>();
 
         if (mPicMap != null && mPicMap.size() != 0 || mDataList != null && mDataList.size() != 0) {
             Set<Map.Entry<String, String>> entriesList = mPicMap.entrySet();
             entriesList.stream().forEach((entry) -> {
                 for (int i = 0; i < mDataList.size(); i++) {
                     if (mDataList.get(i).equals(entry.getKey())) {
-                        pathList.add(entry.getValue());
+                        reallyPathList.add(entry.getValue() + "");
                         Log.e("========root=====", "local==entry.getValue()==" + "" + entry.getValue());
                     }
                 }
             });
 
-            return pathList;
+            return reallyPathList;
         }
-        return pathList;
+        return reallyPathList;
 
     }
 
 
     @SuppressLint("NewApi")
     public ArrayList<String> getLocalImagePathList() {
-        ArrayList<String> images = new ArrayList<>();
+        dimImageList = new ArrayList<>();
         File localFile = new File(Environment.getExternalStorageDirectory() +
                 "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb");
         if (!localFile.exists()) {
             localFile.mkdirs();
         }
         File[] files = localFile.listFiles();
-        Stream.of(files).forEach(f -> images.add(f.getAbsolutePath()));
-        for (int i = 0; i < images.size(); i++) {
+        Stream.of(files).forEach(f -> dimImageList.add(f.getAbsolutePath()));
+        for (int i = 0; i < dimImageList.size(); i++) {
         }
-        return images;
+
+        return dimImageList;
     }
 
 

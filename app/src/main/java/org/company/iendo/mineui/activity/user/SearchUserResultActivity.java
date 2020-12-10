@@ -23,11 +23,11 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.UserListBean;
 import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
-import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
-import org.company.iendo.mineui.activity.casemsg.adapter.SearchAdapter;
+import org.company.iendo.mineui.activity.user.adapter.SearchUserResultAdapter;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.anim.EasyTransition;
@@ -50,15 +50,15 @@ import okhttp3.Call;
  * Describe 搜索用户结果界面
  */
 public class SearchUserResultActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener {
-    private List<CaseManagerListBean.DsDTO> mDataList;
-    public List<CaseManagerListBean.DsDTO> mList;
+    private List<UserListBean.DsDTO> mDataList;
+    public List<UserListBean.DsDTO> mList;
     private WrapRecyclerView mRecyclerView;
     private ClearEditText mEditSearch;
     private ClearEditText mCetSearch;
     private LinearLayout linear_all;
     private LinearLayout mTitleBar;
     private HintLayout mHintLayout;
-    private SearchAdapter mAdapter;
+    private SearchUserResultAdapter mAdapter;
     private String endoType;
     private TextView mBack;
     private String tag;
@@ -82,7 +82,7 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
         mTitleBar.setLayoutParams(params);
         setOnClickListener(R.id.tv_back, R.id.iv_user_search);
         EasyTransition.enter(SearchUserResultActivity.this);
-        mAdapter = new SearchAdapter(this);
+        mAdapter = new SearchUserResultAdapter(this);
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setAnimation(null);
@@ -128,33 +128,34 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
      */
     private void sendRequest() {
         tag = mCetSearch.getText().toString().trim();
-        LogUtils.e("=TAG=hy=onError==" + endoType);
         showLoading();
         OkHttpUtils.get()
-                .url(getCurrentHost() + HttpConstant.CaseManager_List)
-                .addParams("endoType", endoType)
+                .url(getCurrentHost() + HttpConstant.User_List)
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        showComplete();
+                        showEmpty();
+                        LogUtils.e("=Search=onSucceed==" + e);
+
                     }
 
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.e("=Search=onSucceed==" + response.toString());
                         showComplete();
-                        LogUtils.e("=TAG=hy=onSucceed==" + response.toString());
                         if ("0".equals(response)) {
                             toast("用户名不存在或者参数为空");
                         } else if ("".equals(tag)) {
+                            toast("关键字不能为空");
                         } else {
-                            Type type = new TypeToken<CaseManagerListBean>() {
+                            Type type = new TypeToken<UserListBean>() {
                             }.getType();
-                            CaseManagerListBean mBean = mGson.fromJson(response, type);
-                            mList = mBean.getDs();
-                            Stream<CaseManagerListBean.DsDTO> stream = mList.stream();
-                            mDataList = stream.filter(bean -> bean.getName().startsWith(tag)).collect(Collectors.toList());
+                            UserListBean mBean = mGson.fromJson(response, type);
+                            mList =  mBean.getDs();
+                            Stream<UserListBean.DsDTO> stream = mList.stream();
+                            mDataList = stream.filter(bean -> bean.getUserName().startsWith(tag)).collect(Collectors.toList());
                             if (mDataList.size() == 0) {
                                 showEmpty();
                             } else {

@@ -155,6 +155,7 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
                             CaseManagerListBean mBean = mGson.fromJson(response, type);
                             mList = mBean.getDs();
                             Stream<CaseManagerListBean.DsDTO> stream = mList.stream();
+
                             mDataList = stream.filter(bean -> bean.getName().startsWith(tag)).collect(Collectors.toList());
                             if (mDataList.size() == 0) {
                                 showEmpty();

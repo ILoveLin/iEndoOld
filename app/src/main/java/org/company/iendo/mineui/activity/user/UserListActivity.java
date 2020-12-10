@@ -88,14 +88,14 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(v -> {
             toast("点击搜索");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(UserListActivity.this, mHeaderView);
-            Intent intent = new Intent(UserListActivity.this, SearchActivity.class);
+            Intent intent = new Intent(UserListActivity.this, SearchUserResultActivity.class);
             EasyTransition.startActivity(intent, options);
 
         });
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(v -> {
             toast("开始搜索啦~");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(UserListActivity.this, mHeaderView);
-            Intent intent = new Intent(UserListActivity.this, SearchActivity.class);
+            Intent intent = new Intent(UserListActivity.this, SearchUserResultActivity.class);
             EasyTransition.startActivity(intent, options);
         });
     }
@@ -106,7 +106,7 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
 
         mSmartRefreshLayout.setOnRefreshLoadMoreListener(this);
         mSmartRefreshLayout.setEnableLoadMore(false);    //是否启用上拉加载功能
-        mAdapter.setOnChildClickListener(R.id.user_search_change_password, new BaseAdapter.OnChildClickListener() {
+        mAdapter.setOnChildClickListener(R.id.tv_item_change, new BaseAdapter.OnChildClickListener() {
             @Override
             public void onChildClick(RecyclerView recyclerView, View childView, int position) {
                 if (currentOnlineType) {  //在线
@@ -188,7 +188,7 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        showComplete();
+                        showEmpty();
                         LogUtils.e("=TAG=hy=onSucceed==" + e);
                     }
 

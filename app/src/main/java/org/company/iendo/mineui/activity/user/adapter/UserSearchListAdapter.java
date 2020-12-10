@@ -33,20 +33,32 @@ public class UserSearchListAdapter extends MyAdapter<UserListBean.DsDTO> {
 
 
     private final class ViewHolder extends BaseAdapter.ViewHolder {
-        private TextView mChangePassword;
         private Button mDeleteButton;
-        private TextView mTitle;
+        private TextView mTitleName;
+        private TextView mDec;
+        private TextView mChange;
+        private TextView mID;
+        private TextView mCreatorData;
 
         public ViewHolder() {
-            super(R.layout.item_user_serach_result);
+            super(R.layout.item_user_serach_list);
             mDeleteButton = (Button) findViewById(R.id.user_search_delBtn);
-            mTitle = (TextView) findViewById(R.id.tv_text);
-            mChangePassword = (TextView) findViewById(R.id.user_search_change_password);
+            mTitleName = (TextView) findViewById(R.id.tv_item_user_name);
+            mDec = (TextView) findViewById(R.id.tv_item_dec);
+            mID = (TextView) findViewById(R.id.tv_id);
+            mChange = (TextView) findViewById(R.id.tv_item_change);
+            mCreatorData = (TextView) findViewById(R.id.tv_item_creator_data);
         }
 
         @Override
         public void onBindView(int position) {
-            mTitle.setText("         " + position + ":              " + getItem(position).getDes());
+            UserListBean.DsDTO item = getItem(position);
+            mID.setText("" + position);
+            mTitleName.setText("用户名:" + item.getUserName());
+            mDec.setText("权  限:" + item.getDes());
+            mCreatorData.setText("" + item.getCreatedAt());
+
+
         }
     }
 

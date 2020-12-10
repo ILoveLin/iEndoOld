@@ -96,7 +96,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mineui.activity.casemsg.CaseManageActivity"
+            android:name=".mineui.activity.casemsg.CaseManageListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
@@ -108,7 +108,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mineui.activity.user.UserSearchActivity"
+            android:name=".mineui.activity.user.UserListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/password_reset_title"
             android:launchMode="singleTop"
@@ -141,6 +141,11 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".mineui.activity.casemsg.AddEditActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mineui.activity.user.SearchUserResultActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

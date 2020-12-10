@@ -13,7 +13,6 @@ import com.hjq.base.BaseDialog;
 import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.LoginActivity;
-import org.company.iendo.ui.dialog.DateDialog;
 import org.company.iendo.ui.dialog.DayDialog;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.SharePreferenceUtil;
@@ -24,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Calendar;
 
 /**
  * LoveLin
@@ -113,7 +111,7 @@ public class UserMessageActivity extends MyActivity {
                 changePassword();
                 break;
             case R.id.btn_user_control_else_user:
-                startActivity(UserSearchActivity.class);
+                startActivity(UserListActivity.class);
                 break;
             case R.id.btn_user_exit:   //退出
                 exit();

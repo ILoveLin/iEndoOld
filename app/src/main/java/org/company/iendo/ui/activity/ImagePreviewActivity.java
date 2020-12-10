@@ -67,6 +67,7 @@ public final class ImagePreviewActivity extends MyActivity implements ViewPager.
         mTitle = findViewById(R.id.vp_title);
         mIndicatorView = findViewById(R.id.pv_image_preview_indicator);
         mIndicatorView.setViewPager(mViewPager);
+
     }
 
     @Override
@@ -81,10 +82,23 @@ public final class ImagePreviewActivity extends MyActivity implements ViewPager.
         } else {
             finish();
         }
-
-
         mViewPager.addOnPageChangeListener(this);
 
+        //默认最后一条数据,设置标题
+        String[] split = imagesList.get(imagesList.size() - 1).split("/");
+        String s = split[split.length - 1];
+        mTitle.setText("" + s);
+
+        //Indicator图片过多，就隐藏
+        if (imagesList.size() > 6) {
+            toast("666666666666666666!");
+
+            mIndicatorView.setVisibility(View.GONE);
+        } else {
+            toast("00000000000000000000!");
+
+            mIndicatorView.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -98,16 +112,12 @@ public final class ImagePreviewActivity extends MyActivity implements ViewPager.
 
         String[] split = imagesList.get(position).split("/");
         String s = split[split.length - 1];
-        mTitle.setText(""+s);
+        mTitle.setText("" + s);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
-
-
-
 
     @NonNull
     @Override

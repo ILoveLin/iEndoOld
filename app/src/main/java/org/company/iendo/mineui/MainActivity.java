@@ -7,10 +7,9 @@ import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.helper.ActivityStackManager;
 import org.company.iendo.helper.DoubleClickHelper;
-import org.company.iendo.mineui.activity.live.LiveActivity;
 import org.company.iendo.mineui.activity.live.SMBPlayerActivity;
 import org.company.iendo.mineui.activity.user.UserMessageActivity;
-import org.company.iendo.mineui.activity.casemsg.CaseManageActivity;
+import org.company.iendo.mineui.activity.casemsg.CaseManageListActivity;
 import org.company.iendo.other.KeyboardWatcher;
 
 /**
@@ -44,7 +43,7 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
                 startActivity(UserMessageActivity.class);
                 break;
             case R.id.cv_case_manage:   //病例管理
-                startActivity(CaseManageActivity.class);
+                startActivity(CaseManageListActivity.class);
                 break;
             case R.id.cv_live:          //直播
 //                String item = mAdapter.getItem(position);

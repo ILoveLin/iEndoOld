@@ -29,6 +29,22 @@ public class HttpConstant {
     public static final String CaseManager_Get_LastNo = "last_patients.aspx";     //获取最后一条病例的，检查号
 
 
+    /**
+     * 用户管理
+     */
+    public static final String User_List = "user_list.aspx";            //get 用户列表
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 }
 

@@ -121,6 +121,7 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
                     if (mRootFolder.exists()) {
                         SmbFile[] smbFiles = mRootFolder.listFiles(); // smb://192.168.128.146
                         // /ImageData/Videos/4033/thumb/
+                        mVideoList = new ArrayList<>();
                         for (int i = 0; i < smbFiles.length; i++) {
                             Log.e("========root=====", "第" + i + "条数据");
                             Log.e("========root=====", smbFiles[i].getName());
@@ -132,7 +133,6 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
 //                            String url = mRootFolder + smbFiles[i].getName();
                             Log.e("========root=====", url);
 //                            smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3764/祝柳思20200827165247927.mp4
-                            mVideoList = new ArrayList<>();
                             mVideoList.add(smbFiles[i].getName());
                             mHandler.sendEmptyMessage(REFRESH_04);
                         }

@@ -26,6 +26,7 @@ import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.casemsg.adapter.CaseManageAdapter;
+import org.company.iendo.mineui.activity.user.SearchUserResultActivity;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
@@ -47,16 +48,14 @@ import okhttp3.Call;
  * <p>
  * Describe 病例管理--列表
  */
-public class CaseManageActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
-
+public class CaseManageListActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
+    public static List<CaseManagerListBean.DsDTO> mList;
     private SmartRefreshLayout mSmartRefreshLayout;
     private WrapRecyclerView mRecyclerView;
-    private HintLayout mHintLayout;
     private CaseManageAdapter mAdapter;
+    private HintLayout mHintLayout;
     private TitleBar mTitleBar;
     private String endoType;
-    public static List<CaseManagerListBean.DsDTO> mList;
-
 
     @Override
     protected int getLayoutId() {
@@ -73,30 +72,25 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
         mSmartRefreshLayout.setOnRefreshLoadMoreListener(this);
         mSmartRefreshLayout.setEnableLoadMore(false);    //是否启用上拉加载功能
         mAdapter = new CaseManageAdapter(this);
-//        mAdapter.setData(analogData());
         responseListener();
-
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setAnimation(null);
         mRecyclerView.addItemDecoration(new RecycleViewDivider(this, 1, R.drawable.shape_divideritem_decoration));
-
         LinearLayout mHeaderView = mRecyclerView.addHeaderView(R.layout.header_user_search);
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(this);
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(this);
-
-
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(v -> {
             toast("点击搜索");
-            EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageActivity.this, mHeaderView);
-            Intent intent = new Intent(CaseManageActivity.this, SearchActivity.class);
+            EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageListActivity.this, mHeaderView);
+            Intent intent = new Intent(CaseManageListActivity.this, SearchUserResultActivity.class);
             EasyTransition.startActivity(intent, options);
 
 
         });
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(v -> {
             toast("点击搜索");
-            EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageActivity.this, mHeaderView);
-            Intent intent = new Intent(CaseManageActivity.this, SearchActivity.class);
+            EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageListActivity.this, mHeaderView);
+            Intent intent = new Intent(CaseManageListActivity.this, SearchUserResultActivity.class);
             EasyTransition.startActivity(intent, options);
         });
 
@@ -130,13 +124,11 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     @Override
     protected void onResume() {
         super.onResume();
-//        mAdapter.notifyDataSetChanged();
-
     }
 
     @Override
     protected void initData() {
-        endoType = (String) SharePreferenceUtil.get(CaseManageActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
+        endoType = (String) SharePreferenceUtil.get(CaseManageListActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
         sendRequest();
 
     }
@@ -157,7 +149,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
                     public void onError(Call call, Exception e, int id) {
                         showComplete();
                         LogUtils.e("=TAG=hy=onError==" + e.toString());
-
                     }
 
                     @Override
@@ -195,7 +186,7 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast("第" + position + "条目被点击了");
         LogUtils.e("=TAG=hy=position==" + mAdapter.getItem(position).toString());
-        Intent intent = new Intent(CaseManageActivity.this, CaseDetailMsgActivity.class);
+        Intent intent = new Intent(CaseManageListActivity.this, CaseDetailMsgActivity.class);
         intent.putExtra("ID", mAdapter.getItem(position).getID());
         intent.putExtra("bean", mAdapter.getItem(position));
         intent.putExtra("position", position + "");
@@ -219,12 +210,12 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
             public void onRightClick(View v) {
                 if (getCurrentOnlineType()) {
                     toast("添加");
-                    Intent intent = new Intent(CaseManageActivity.this, AddEditActivity.class);
+                    Intent intent = new Intent(CaseManageListActivity.this, AddEditActivity.class);
                     startActivity(intent);
 
 
                 } else {
-                    new MessageDialog.Builder(CaseManageActivity.this)
+                    new MessageDialog.Builder(CaseManageListActivity.this)
                             // 标题可以不用填写
                             .setTitle("提示")
                             // 内容必须要填写
@@ -261,11 +252,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-//        postDelayed(() -> {
-//            mSmartRefreshLayout.
-//            mRefreshLayout.finishLoadMore();
-//            toast("加载完成");
-//        }, 1000);
         mSmartRefreshLayout.finishLoadMoreWithNoMoreData();
     }
 

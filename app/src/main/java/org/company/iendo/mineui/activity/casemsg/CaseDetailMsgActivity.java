@@ -114,7 +114,7 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         mPagerAdapter.addFragment(fragment04, "视频");
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        sendDetailMSGRequest();
+        sendDetailMSGRequest();   //获取详情接口数据，不用再每个fragment里面处理下载存入到数据库中，更方便
 
     }
 

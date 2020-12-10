@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.hjq.base.BaseAdapter;
 
 import org.company.iendo.R;
+import org.company.iendo.bean.UserListBean;
 import org.company.iendo.common.MyAdapter;
 
 /**
@@ -17,7 +18,7 @@ import org.company.iendo.common.MyAdapter;
  * <p>
  * Describe用户搜索列表
  */
-public class UserSearchListAdapter extends MyAdapter<String> {
+public class UserSearchListAdapter extends MyAdapter<UserListBean.DsDTO> {
 
 
     public UserSearchListAdapter(@NonNull Context context) {
@@ -45,9 +46,8 @@ public class UserSearchListAdapter extends MyAdapter<String> {
 
         @Override
         public void onBindView(int position) {
-            mTitle.setText("         " + position + ":              " + getItem(position));
+            mTitle.setText("         " + position + ":              " + getItem(position).getDes());
         }
     }
-
 
 }

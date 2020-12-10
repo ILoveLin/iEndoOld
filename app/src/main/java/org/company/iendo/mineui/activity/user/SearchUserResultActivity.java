@@ -1,4 +1,4 @@
-package org.company.iendo.mineui.activity.casemsg;
+package org.company.iendo.mineui.activity.user;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import org.company.iendo.bean.CaseManagerListBean;
 import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
+import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.adapter.SearchAdapter;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
@@ -46,9 +47,9 @@ import okhttp3.Call;
 /**
  * LoveLin
  * <p>
- * Describe搜索界面
+ * Describe 搜索用户结果界面
  */
-public class SearchActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener {
+public class SearchUserResultActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener {
     private List<CaseManagerListBean.DsDTO> mDataList;
     public List<CaseManagerListBean.DsDTO> mList;
     private WrapRecyclerView mRecyclerView;
@@ -69,7 +70,6 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
 
     @Override
     protected void initView() {
-        EventBus.getDefault().register(this);
         mTitleBar = findViewById(R.id.linear_sheare);
         mCetSearch = findViewById(R.id.cet_user_search);
         mBack = findViewById(R.id.tv_back);
@@ -81,13 +81,13 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
         params.topMargin = statusBarHeight + 23;
         mTitleBar.setLayoutParams(params);
         setOnClickListener(R.id.tv_back, R.id.iv_user_search);
-        EasyTransition.enter(SearchActivity.this);
+        EasyTransition.enter(SearchUserResultActivity.this);
         mAdapter = new SearchAdapter(this);
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setAnimation(null);
         mRecyclerView.addItemDecoration(new RecycleViewDivider(this, 1, R.drawable.shape_divideritem_decoration));
-        endoType = (String) SharePreferenceUtil.get(SearchActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
+        endoType = (String) SharePreferenceUtil.get(SearchUserResultActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
         showSoftInputFromWindow(this, mEditSearch);
     }
 
@@ -108,7 +108,7 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_back:
-                EasyTransition.exit(SearchActivity.this);
+                EasyTransition.exit(SearchUserResultActivity.this);
                 break;
             case R.id.iv_user_search:   //本地搜索数据
                 tag = mCetSearch.getText().toString().trim();
@@ -148,7 +148,6 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
                         if ("0".equals(response)) {
                             toast("用户名不存在或者参数为空");
                         } else if ("".equals(tag)) {
-
                         } else {
                             Type type = new TypeToken<CaseManagerListBean>() {
                             }.getType();
@@ -165,37 +164,13 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
                         }
                     }
                 });
-
     }
 
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast("第" + position + "条目被点击了");
-        LogUtils.e("=TAG=hy=position==" + mAdapter.getItem(position).toString());
-        Intent intent = new Intent(SearchActivity.this, CaseDetailMsgActivity.class);
-        intent.putExtra("ID", mAdapter.getItem(position).getID());
-        intent.putExtra("bean", mAdapter.getItem(position));
-        intent.putExtra("position", position + "");
-        startActivity(intent);
 
-    }
 
-    //删除之后数据更新
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAddDeleteEvent(AddDeleteEvent event) {
-        LogUtils.e("=TAG=hy=position==");
-        if (mAdapter != null) {
-            LogUtils.e("=TAG=onAddDeleteEvent==" + event.getType());
-            CaseManagerListBean.DsDTO bean = event.getBean();
-            if (event.getType().equals("delete")) {
-                mAdapter.removeItem(event.getPosition());
-            } else if (event.getType().equals("edit")) {
-                mAdapter.notifyDataSetChanged();
-            } else {
-                mAdapter.addItem(0, event.getBean());
-            }
-            mAdapter.notifyDataSetChanged();
-        }
     }
 
     public int getStatusBarHeight() {
@@ -216,7 +191,6 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     /**

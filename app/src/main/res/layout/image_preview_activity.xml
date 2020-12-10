@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
     <RelativeLayout
         android:layout_marginTop="@dimen/padding_20"
         android:layout_width="match_parent"
@@ -24,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/padding_20" />
 
@@ -38,8 +36,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="20dp"
-        android:visibility="invisible"
-        app:piv_animationType="scale"
+        app:piv_animationType="drop"
         app:piv_dynamicCount="true"
         app:piv_interactiveAnimation="true"
         app:piv_padding="5dp"

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
+
+
+    <LinearLayout
+        android:id="@+id/linear_sheare"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_60"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:transitionName="anim_search">
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/arrows_left_ic"
+            android:paddingLeft="@dimen/padding_10" />
+
+        <com.hjq.widget.view.ClearEditText
+            android:id="@+id/cet_user_search"
+            style="@style/EditTextStyle"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_weight="1"
+            android:background="@drawable/home_search_bar_transparent_bg"
+            android:hint="搜索..."
+            android:singleLine="true" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_user_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
+            app:srcCompat="@drawable/search_ic" />
+
+    </LinearLayout>
+
+
+    <!--状态布局-->
+    <org.company.iendo.widget.HintLayout
+        android:id="@+id/hl_status_hint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/rl_status_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlEnablePureScrollMode="true"
+            tools:context="org.company.iendo.ui.fragment.StatusFragment">
+
+            <com.hjq.widget.layout.WrapRecyclerView
+                android:id="@+id/rv_status_caselist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/padding_10" />
+            <!--            tools:listitem="@layout/picker_item"-->
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </org.company.iendo.widget.HintLayout>
+
+</LinearLayout>

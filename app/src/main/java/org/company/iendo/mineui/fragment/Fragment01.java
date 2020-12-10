@@ -1,7 +1,6 @@
 package org.company.iendo.mineui.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -21,7 +20,6 @@ import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.activity.casemsg.EditActivity;
 import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
-import org.company.iendo.mineui.activity.live.LiveConnectDeviceActivity;
 import org.company.iendo.ui.adapter.StatusAdapter;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.widget.HintLayout;
@@ -40,8 +38,7 @@ import okhttp3.Call;
  * <p>
  * Describe 第一个fragment
  */
-public class Fragment01 extends MyFragment<MainActivity> implements
-        StatusAction, CaseOperatorAction {
+public class Fragment01 extends MyFragment<MainActivity> implements StatusAction, CaseOperatorAction {
     private SmartRefreshLayout mRefreshLayout;
     private WrapRecyclerView mRecyclerView;
     private HintLayout mHintLayout;
@@ -60,7 +57,6 @@ public class Fragment01 extends MyFragment<MainActivity> implements
     public Fragment01(CaseDetailMsgActivity Activity) {
         this.mActivity = Activity;
     }
-
 
     @Override
     protected int getLayoutId() {
@@ -81,7 +77,6 @@ public class Fragment01 extends MyFragment<MainActivity> implements
         mAddress = findViewById(R.id.case01_address);
         mHistory = findViewById(R.id.case01_history);
         mActivity.setCaseOperatorAction(this);
-
     }
 
     @Override
@@ -92,7 +87,6 @@ public class Fragment01 extends MyFragment<MainActivity> implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshFragmentEvent(RefreshFragmentEvent event) {
         LogUtils.e("TAG--onRefreshFragmentEvent" + "event====" + event.getType());
-
         if (event.getType().equals("refresh")) {
             LogUtils.e("TAG--onRefreshFragmentEvent" + "onRefreshFragmentEvent");
             sendRequest();
@@ -118,16 +112,12 @@ public class Fragment01 extends MyFragment<MainActivity> implements
                             toast("请求参数有误");
                         } else {
                             LogUtils.e("TAG--01" + response);
-//                            @"\n", @"\r\n", @"\t", @"\\"
-
                             String regEx = "[\n  \\r\\n \\t  \\\\]";
-//                            String regEx="[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。， 、？]";
                             String aa = " ";//这里是将特殊字符换为aa字符串," "代表直接去掉
                             Pattern p = Pattern.compile(regEx);
                             Matcher m = p.matcher(response);//这里把想要替换的字符串传进来
                             String newString = m.replaceAll(aa).trim();
                             LogUtils.e("TAG--01" + newString);
-//                            String myJson=   mGson.toJson(response);//将gson转化为json
                             Type type = new TypeToken<CaseDetailMsgBean>() {
                             }.getType();
                             CaseDetailMsgBean bean = mGson.fromJson(newString, type);
@@ -142,12 +132,9 @@ public class Fragment01 extends MyFragment<MainActivity> implements
                                 mHistory.setText("" + mBean.getMedHistory());
                             }
                         }
-
-
                     }
                 });
     }
-
 
     @Override
     public boolean isStatusBarEnabled() {
@@ -175,30 +162,20 @@ public class Fragment01 extends MyFragment<MainActivity> implements
 
     @Override
     public void onLive() {
-
-//        startActivity(LiveConnectDeviceActivity.class);
-
     }
 
     @Override
     public void onPrint() {
-
     }
 
     @Override
     public void onDelete() {
-
     }
 
     @Override
     public void onDownload() {
-        //下载数据存入DB
-
-
-
 
     }
-
     @Override
     public void onEdit() {
         Intent intent1 = new Intent(getAttachActivity(), EditActivity.class);

@@ -2,11 +2,9 @@ package org.company.iendo.mineui.fragment;
 
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -23,29 +21,20 @@ import org.company.iendo.action.StatusAction;
 import org.company.iendo.common.MyFragment;
 import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
-import org.company.iendo.mineui.activity.casemsg.inter.CaseOperatorAction;
 import org.company.iendo.mineui.activity.live.SMBPlayerActivity;
 import org.company.iendo.mineui.fragment.adapter.VideoAdapter;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Stream;
 
 import jcifs.UniAddress;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileInputStream;
 import jcifs.smb.SmbSession;
 
 /**
@@ -53,8 +42,7 @@ import jcifs.smb.SmbSession;
  * <p>
  * Describe 第四个fragment   读取SMB 共享视频界面
  */
-public class Fragment04 extends MyFragment<MainActivity> implements StatusAction, CaseOperatorAction, BaseAdapter.OnItemClickListener {
-
+public class Fragment04 extends MyFragment<MainActivity> implements StatusAction, BaseAdapter.OnItemClickListener {
     private HintLayout mHintLayout;
     private CaseDetailMsgActivity mActivity;
     private WrapRecyclerView mRecyclerView;
@@ -95,7 +83,6 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
         mRecyclerView = findViewById(R.id.recycleview_case04);
         mAdapter = new VideoAdapter(getAttachActivity());
         mAdapter.setOnItemClickListener(this);
-        mActivity.setCaseOperatorAction(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new RecycleViewDivider(getAttachActivity(), 1, R.drawable.shape_divideritem_decoration));
     }
@@ -120,7 +107,6 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
                 }
             }
         }
-
     }
 
     private void responseListener() {
@@ -164,6 +150,19 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
 
     }
 
+    @Override
+    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+        toast(position);
+        String title = mAdapter.getItem(position);
+        Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
+        String url = "smb://cmeftproot:lzjdzh19861207@" + getCurrentIP() + "/ImageData/Videos/"
+                + CaseDetailMsgActivity.getCurrentID() + "/" + title;
+        intent.putExtra("url", url + "");
+        intent.putExtra("title", title + "");
+        toast(url);
+        startActivity(intent);
+    }
+
     private void initSmb() throws UnknownHostException, SmbException, MalformedURLException {
         System.setProperty("jcifs.smb.client.dfs.disabled", "true"); //true false
         System.setProperty("jcifs.smb.client.soTimeout", "1000000");
@@ -182,27 +181,9 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
         mRootFolder = new SmbFile(rootPath, mAuthentication);
     }
 
-
-    @SuppressLint("NewApi")
-    public ArrayList<String> getLocalImagePathList() {
-        ArrayList<String> images = new ArrayList<>();
-        File localFile = new File(Environment.getExternalStorageDirectory() + "/MyData/Videos/" + CaseDetailMsgActivity.getCurrentID());
-        if (!localFile.exists()) {
-            localFile.mkdirs();
-        }
-        File[] files = localFile.listFiles();
-        Stream.of(files).forEach(f -> images.add(f.getAbsolutePath()));
-        for (int i = 0; i < images.size(); i++) {
-            Log.e("========root=====", "local==collect==" + "" + images.get(i));
-        }
-        return images;
-    }
-
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mHandler.removeCallbacksAndMessages(null);
-        mHandler =null;
+    public HintLayout getHintLayout() {
+        return mHintLayout;
     }
 
     @Override
@@ -217,47 +198,9 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     }
 
     @Override
-    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-        toast(position);
-        String title = mAdapter.getItem(position);
-        Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
-        String url = "smb://cmeftproot:lzjdzh19861207@" + getCurrentIP() + "/ImageData/Videos/"
-                + CaseDetailMsgActivity.getCurrentID() + "/" +title;
-        intent.putExtra("url", url + "");
-        intent.putExtra("title", title + "");
-        toast(url);
-        startActivity(intent);
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler = null;
     }
-
-    @Override
-    public HintLayout getHintLayout() {
-        return mHintLayout;
-    }
-
-    @Override
-    public void onLive() {
-
-    }
-
-    @Override
-    public void onPrint() {
-
-    }
-
-    @Override
-    public void onDelete() {
-
-    }
-
-    @Override
-    public void onDownload() {
-
-    }
-
-    @Override
-    public void onEdit() {
-
-    }
-
-
 }

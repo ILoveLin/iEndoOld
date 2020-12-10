@@ -10,13 +10,11 @@ import org.company.iendo.bean.beandb.image.ImageListDownDBBean;
 import org.company.iendo.bean.beandb.image.ReallyImageBean;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.util.LogUtils;
+import org.company.iendo.util.SDFileUtil;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.db.ImageDBUtils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import jcifs.UniAddress;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileInputStream;
 import jcifs.smb.SmbSession;
 
 /**
@@ -51,7 +48,6 @@ public class DownPictureThread implements Runnable {
     private String downTag;
     private String ip;
 
-
     public DownPictureThread(Context mContext, String itemID, String downTag, boolean exists) {
         this.mContext = mContext;
         this.itemID = itemID;
@@ -60,7 +56,6 @@ public class DownPictureThread implements Runnable {
         //如果是true，则直接读取本地文件写入数据库
         this.exists = exists;
     }
-
 
     @Override
     public void run() {
@@ -81,17 +76,15 @@ public class DownPictureThread implements Runnable {
                                 "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
                         File toFile = new File(Environment.getExternalStorageDirectory() +
                                 "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/");
+                        String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
+
                         if (!toFile.exists()) {   //不存在创建
                             toFile.mkdirs();
-                            String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-                            downloadFileToFolder(remoteUrl, "ImageData/Images/"
-                                            + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
+                            SDFileUtil.downLoadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
                                     smbFiles[i].getName(), toFile.getAbsolutePath());
 
                         } else {
-                            String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-                            downloadFileToFolder(remoteUrl, "ImageData/Images/"
-                                            + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
+                            SDFileUtil.downLoadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
                                     smbFiles[i].getName(), toFile.getAbsolutePath());
                         }
                     }
@@ -110,7 +103,6 @@ public class DownPictureThread implements Runnable {
                     if (mListener != null) {
                         mListener.onOverDownOK();
                     }
-
                 } else {      //SMB服务器bu存在图片
                     if (mListener != null) {
                         mListener.onSmbEmptyPicture();
@@ -133,7 +125,6 @@ public class DownPictureThread implements Runnable {
             if (mListener != null) {
                 mListener.onOverDownOK();
             }
-
         }
     }
 
@@ -279,8 +270,7 @@ public class DownPictureThread implements Runnable {
                 String mPicValuePath = toFile + "/" + PicName;
                 mPicMap.put(mPicKeyName, mPicValuePath);
                 String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-                downloadReallyFileToFolder(remoteUrl, "ImageData/Images/"
-                                + CaseDetailMsgActivity.getCurrentID() + "/",
+                SDFileUtil.downLoadReallyFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/",
                         PicName, toFile.getAbsolutePath());
                 LogUtils.e("====DP==DimPath==下载一条===PicName==" + PicName);
             }
@@ -309,67 +299,11 @@ public class DownPictureThread implements Runnable {
     }
 
 
-    /**
-     * 下载文件到指定文件夹
-     *
-     * @param remoteUrl
-     * @param shareFolderPath
-     * @param fileName
-     * @param localDir
-     */
-    public static void downloadFileToFolder(String remoteUrl, String shareFolderPath, String
-            fileName, String localDir) {
-        try {
-            SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
-            File localFile = new File(localDir + "/" + fileName);
-            BufferedInputStream in = new BufferedInputStream(new SmbFileInputStream(remoteFile));
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
-            byte[] buffer = new byte[8 * 1024];
-            int len = 0;
-            while ((len = in.read(buffer)) > 0) {
-                out.write(buffer, 0, len);
-
-            }
-            in.close();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 下载文件到指定文件夹
-     *
-     * @param remoteUrl
-     * @param fileName
-     * @param localDir
-     */
-    public static void downloadReallyFileToFolder(String remoteUrl, String
-            shareFolderPath, String fileName, String localDir) {
-        try {
-            SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
-            File localFile = new File(localDir + "/" + fileName);
-            BufferedInputStream in = new BufferedInputStream(new SmbFileInputStream(remoteFile));
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
-            byte[] buffer = new byte[10 * 1024];
-            int len = 0;
-            while ((len = in.read(buffer)) > 0) {
-                out.write(buffer, 0, len);
-            }
-            in.close();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public onThreadStatueListener mListener;
 
     public void setOnThreadStatueListener(onThreadStatueListener mListener) {
         this.mListener = mListener;
     }
-
 
     /**
      * 现在下载状态的接口回调
@@ -396,8 +330,6 @@ public class DownPictureThread implements Runnable {
          */
         void onOverDownOK();
 
-
     }
-
 
 }

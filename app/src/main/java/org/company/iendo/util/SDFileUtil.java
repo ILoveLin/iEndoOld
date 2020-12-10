@@ -1,11 +1,16 @@
 package org.company.iendo.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileInputStream;
 
 /**
  * LoveLin
  * <p>
- * Describe
+ * Describe  删除SD卡图片，读取SMB文件到SD卡之中的工具类
  */
 public class SDFileUtil {
     private static boolean flag;
@@ -86,6 +91,62 @@ public class SDFileUtil {
             return true;
         } else {
             return false;
+        }
+    }
+    /**
+     * 已下是SMB文件读取到本地SD卡的下载工具
+     *==========================================================================================
+     */
+    /**
+     * 下载文件到指定文件夹
+     *
+     * @param remoteUrl
+     * @param shareFolderPath
+     * @param fileName
+     * @param localDir
+     */
+    public static void downLoadFileToFolder(String remoteUrl, String shareFolderPath, String fileName,
+                                            String localDir) {
+        try {
+            SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
+            File localFile = new File(localDir + "/" + fileName);
+            BufferedInputStream in = new BufferedInputStream(new SmbFileInputStream(remoteFile));
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
+            byte[] buffer = new byte[8 * 1024];
+            int len = 0;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+
+            }
+            in.close();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 下载（原）文件到指定文件夹
+     *
+     * @param remoteUrl
+     * @param fileName
+     * @param localDir
+     */
+    public static void downLoadReallyFileToFolder(String remoteUrl, String shareFolderPath, String fileName, String localDir) {
+        try {
+            SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
+            File localFile = new File(localDir + "/" + fileName);
+            BufferedInputStream in = new BufferedInputStream(new SmbFileInputStream(remoteFile));
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(localFile));
+            byte[] buffer = new byte[10 * 1024];
+            int len = 0;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+            in.close();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -61,21 +61,22 @@ import okhttp3.Call;
  * Describe 病例信息详情界面
  */
 public class CaseDetailMsgActivity extends MyActivity implements DownPictureThread.onThreadStatueListener {
+    private ArrayList<String> selectedList = new ArrayList<>();
+    private BaseFragmentAdapter<MyFragment> mPagerAdapter;
+    private CaseManagerListBean.DsDTO bean;
+    private CaseDetailMsgBean.DsDTO mBean;
+    private CaseOperatorAction mAction;
+    private static String itemID;
+    private LinearLayout mTitleBar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
-    private BaseFragmentAdapter<MyFragment> mPagerAdapter;
-    private LinearLayout mTitleBar;
-    private ImageButton mLeft;
-    private TextView mLive;
-    private TextView mPrint;
-    private TextView mDelete;
-    private TextView mDownload;
-    private TextView mEdit;
-    private static String itemID;
-    private CaseManagerListBean.DsDTO bean;
     private int deletePosition;
-    private ArrayList<String> selectedList = new ArrayList<>();
-    private CaseDetailMsgBean.DsDTO mBean;
+    private TextView mDownload;
+    private ImageButton mLeft;
+    private TextView mDelete;
+    private TextView mPrint;
+    private TextView mLive;
+    private TextView mEdit;
 
     @Override
     protected int getLayoutId() {
@@ -99,7 +100,6 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = statusBarHeight + 23;
         mTitleBar.setLayoutParams(params);
-
         itemID = getIntent().getStringExtra("ID");
         deletePosition = Integer.parseInt(getIntent().getStringExtra("position"));
         bean = (CaseManagerListBean.DsDTO) getIntent().getSerializableExtra("bean");
@@ -108,60 +108,25 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         Fragment02 fragment02 = new Fragment02(this);
         Fragment03 fragment03 = new Fragment03(this);
         Fragment04 fragment04 = new Fragment04(this);
-
         mPagerAdapter.addFragment(fragment01, "个人信息");
         mPagerAdapter.addFragment(fragment02, "病例信息");
         mPagerAdapter.addFragment(fragment03, "图片");
         mPagerAdapter.addFragment(fragment04, "视频");
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-
         sendDetailMSGRequest();
 
     }
 
-    private void sendDetailMSGRequest() {
-        showDialog();
-        OkHttpUtils.get()
-                .url(getCurrentHost() + HttpConstant.CaseManager_Case_Detail)
-                .addParams("patientsid", getCurrentID())
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        hideDialog();
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        hideDialog();
-                        if ("0".equals(response)) {
-                            toast("请求参数有误");
-                        } else {
-                            LogUtils.e("TAG--01" + response);
-//                            @"\n", @"\r\n", @"\t", @"\\"
-
-                            String regEx = "[\n  \\r\\n \\t  \\\\]";
-//                            String regEx="[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。， 、？]";
-                            String aa = " ";//这里是将特殊字符换为aa字符串," "代表直接去掉
-                            Pattern p = Pattern.compile(regEx);
-                            Matcher m = p.matcher(response);//这里把想要替换的字符串传进来
-                            String newString = m.replaceAll(aa).trim();
-                            LogUtils.e("TAG--01" + newString);
-//                            String myJson=   mGson.toJson(response);//将gson转化为json
-                            Type type = new TypeToken<CaseDetailMsgBean>() {
-                            }.getType();
-                            CaseDetailMsgBean bean = mGson.fromJson(newString, type);
-                            if (bean.getDs().size() >= 0) {
-                                mBean = bean.getDs().get(0);
-                            }
-                        }
-
-
-                    }
-                });
+    @Override
+    protected void initData() {
+        mLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
-
 
     @Override
     public void onClick(View v) {
@@ -207,6 +172,152 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         }
     }
 
+    private void sendDetailMSGRequest() {
+        showDialog();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Case_Detail)
+                .addParams("patientsid", getCurrentID())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        if ("0".equals(response)) {
+                            toast("请求参数有误");
+                        } else {
+                            LogUtils.e("TAG--01" + response);
+                            String regEx = "[\n  \\r\\n \\t  \\\\]";
+                            String aa = " ";//这里是将特殊字符换为aa字符串," "代表直接去掉
+                            Pattern p = Pattern.compile(regEx);
+                            Matcher m = p.matcher(response);//这里把想要替换的字符串传进来
+                            String newString = m.replaceAll(aa).trim();
+                            LogUtils.e("TAG--01" + newString);
+                            Type type = new TypeToken<CaseDetailMsgBean>() {
+                            }.getType();
+                            CaseDetailMsgBean bean = mGson.fromJson(newString, type);
+                            if (bean.getDs().size() >= 0) {
+                                mBean = bean.getDs().get(0);
+                            }
+                        }
+
+
+                    }
+                });
+    }
+
+    private void sendRequest(String type) {
+        showDialog();
+        OkHttpUtils.post()
+                .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect)
+                .addParams("Name", type)
+                .addParams("Param", itemID)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        LogUtils.e("path===onError===" + e);
+                        toast("链接服务器失败");
+                        //todo 联调有问题 和ios一样
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("path===onResponse===" + response);
+                    }
+                });
+    }
+
+    private void sendDeleteRequest() {
+        if ("True".equals(getCurrentUserCan())) {  //可以删除
+            showDialog();
+            OkHttpUtils.get()
+                    .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect_Delete)
+                    .addParams("patientsId", itemID)   //要删除的病例id
+                    .addParams("UserID", getUserId())        //当前用户id
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            hideDialog();
+                            toast("链接服务器失败");
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            hideDialog();
+                            //返回值 1成功   0传入参数为空 -1传入病人id不存在
+                            if ("1".equals(response)) {
+                                toast("删除成功");
+                                EventBus.getDefault().post(new AddDeleteEvent(bean, "delete", deletePosition));
+                                //删除成功的话需要把数据库的用户信息和图片信息删除
+                                synchronizedDBDataAndFileData();
+                            } else if ("-1".equals(response)) {
+                                toast("传入病人id不存在");
+                            }
+                        }
+                    });
+        }
+    }
+
+    //删除数据库用户表和图片表,以及SD卡图片
+    private void synchronizedDBDataAndFileData() {
+        boolean isExist = UserDetailMSGDBUtils.queryListIsExist(itemID);
+        LogUtils.e("====DP==删除,用户表是否存在====isExist===" + isExist);
+        //删除DB的用户表
+        if (UserDetailMSGDBUtils.queryListIsExist(itemID)) {
+            //删除数据库用户Bean
+            UserDetailMSGDBBean userDetailMSGDBBean = UserDetailMSGDBUtils.queryListByTag(itemID).get(0);
+            UserDetailMSGDBUtils.deleteData(userDetailMSGDBBean);
+        }
+        //删除SD卡图片文件，和DB数据Bean
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean isExist1 = ImageDBUtils.queryListIsExist(itemID);
+                LogUtils.e("====DP==删除,图片--表--是否存在====isExist1===" + isExist1);
+                if (ImageDBUtils.queryListIsExist(itemID)) {   //存在才删除
+                    LogUtils.e("====DP==删除,=====删除本地图片==");
+                    //先删除本地图片
+                    File file = new File(Environment.getExternalStorageDirectory() +
+                            "/MyData/Images/" + itemID);
+                    LogUtils.e("====DP==删除,文件夹存在=====file.exists()==" + file.exists());
+                    if (file.exists()) {
+                        LogUtils.e("====DP==删除,文件夹存在=======" + file.exists());
+                        SDFileUtil.DeleteFolder(Environment.getExternalStorageDirectory() +
+                                "/MyData/Images/" + itemID);
+                        LogUtils.e("====DP==删除,文件夹存在=====递归删除完毕==");
+                    }
+                    //删除数据库图片Bean
+                    ImageListDownDBBean mBean = ImageDBUtils.queryListByTag(itemID).get(0);
+                    ImageDBUtils.deleteData(mBean);
+                    finish();
+                } else {
+                    //如果有本地图片，删除本地图片
+                    LogUtils.e("====DP==删除,=====如果有本地图片，删除本地图片==");
+                    File file = new File(Environment.getExternalStorageDirectory() +
+                            "/MyData/Images/" + itemID);
+                    LogUtils.e("====DP==删除,文件夹存在=====file.exists()==" + file.exists());
+                    if (file.exists()) {
+                        LogUtils.e("====DP==删除,文件夹存在=======" + file.exists());
+                        SDFileUtil.DeleteFolder(Environment.getExternalStorageDirectory() +
+                                "/MyData/Images/" + itemID);
+                        LogUtils.e("====DP==删除,文件夹存在=====删除了==");
+                    }
+                    finish();
+                }
+            }
+        }).start();
+
+
+    }
+
     private void showDownDialog() {
         new SelectDialog.Builder(this)
                 .setTitle("提示!")
@@ -237,6 +348,98 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
 
     }
 
+    private void showDeleteDialog() {
+        new MessageDialog.Builder(CaseDetailMsgActivity.this)
+                // 标题可以不用填写
+                .setTitle("提示")
+                // 内容必须要填写
+                .setMessage("确定删除吗？")
+                // 确定按钮文本
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                // 设置点击按钮后不关闭对话框
+                //.setAutoDismiss(false)
+                .setListener(new MessageDialog.OnListener() {
+                    @Override
+                    public void onConfirm(BaseDialog dialog) {
+                        toast("确定");
+                        sendDeleteRequest();
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                        toast("取消");
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * 利用反射获取状态栏高度
+     *
+     * @return
+     */
+    public int getStatusBarHeight() {
+        int result = 0;
+        //获取状态栏高度的资源id
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+
+    public static String getCurrentID() {
+        return itemID;
+    }
+
+
+    public void setCaseOperatorAction(CaseOperatorAction action) {
+        this.mAction = action;
+    }
+
+
+    //下载用户信息
+    private void downLoadUserMsg() {
+        UserDetailMSGDBBean userDetailMSGDBBean = setUserMSGToDB(mBean);
+        UserDetailMSGDBUtils.insertOrReplaceData(userDetailMSGDBBean);
+        LogUtils.e("选择的数据==db=用户表存=======存入成功");
+    }
+
+    //设置数据,再获取到能存数据库的Bean
+    private UserDetailMSGDBBean setUserMSGToDB(CaseDetailMsgBean.DsDTO mBean) {
+        UserDetailMSGDBBean mDBDetailBean = new UserDetailMSGDBBean();
+        mDBDetailBean.setTag(getCurrentID());  //设置查询条件的TAG
+        mDBDetailBean.setCaseID("" + mBean.getCaseID());
+        mDBDetailBean.setName("" + mBean.getName());
+        mDBDetailBean.setPatientAge("" + mBean.getPatientAge());
+        mDBDetailBean.setSex("" + mBean.getSex());
+        mDBDetailBean.setOccupatior("" + mBean.getOccupatior());
+        mDBDetailBean.setTel("" + mBean.getTel());
+        mDBDetailBean.setMedHistory("" + mBean.getMedHistory());
+        if (mBean.getReturnVisit().equals("False")) {
+            mDBDetailBean.setReturnVisit("否");
+        } else {
+            mDBDetailBean.setReturnVisit("是");
+        }
+        mDBDetailBean.setCaseNo("" + mBean.getCaseNo());
+        mDBDetailBean.setFee("" + mBean.getFee());
+        mDBDetailBean.setSubmitDoctor("" + mBean.getSubmitDoctor());
+        mDBDetailBean.setDepartment("" + mBean.getDepartment());
+        mDBDetailBean.setChiefComplaint("" + mBean.getChiefComplaint());
+        mDBDetailBean.setClinicalDiagnosis("" + mBean.getClinicalDiagnosis());
+        mDBDetailBean.setCheckContent("" + mBean.getCheckContent());
+        mDBDetailBean.setCheckDiagnosis("" + mBean.getCheckDiagnosis());
+        mDBDetailBean.setBiopsy("" + mBean.getBiopsy());
+        mDBDetailBean.setTest("" + mBean.getTest());
+        mDBDetailBean.setCtology("" + mBean.getCtology());
+        mDBDetailBean.setPathology("" + mBean.getPathology());
+        mDBDetailBean.setAdvice("" + mBean.getAdvice());
+        mDBDetailBean.setExaminingPhysician("" + mBean.getExaminingPhysician());
+        return mDBDetailBean;
+    }
 
     /**
      * 此处下载用户信息或者图片信息
@@ -293,37 +496,36 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("TAG", "fragment01");
+    }
+
     /**
      * 开启线城下载图片和用户信息的接口回调
      */
-
     @Override
     public void onSmbEmptyPicture() {
         toast("smb服务器暂无该用户图片");
-
     }
 
     @Override
     public void onDimPictureDownOK() {
         toast("模糊图下载完毕");
-
-
     }
 
     @Override
     public void onReallyPictureDownOK() {
         toast("原图下载完毕");
-
     }
 
     @Override
     public void onOverDownOK() {
         toast("图片下载完毕,并且存入数据库之中");
-
         /**
          * 存入数据库后获取图片。这里只是做数据的打印查看
          */
-//        ImageDBUtils
         List<ImageListDownDBBean> ImageListDownDBBeans = ImageDBUtils.queryListByTag(CaseDetailMsgActivity.getCurrentID());
         for (int i = 0; i < ImageListDownDBBeans.size(); i++) {
             List<DimImageBean> mDimImageList = ImageListDownDBBeans.get(i).getMDimImageList();
@@ -331,7 +533,6 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
             LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getItemID());
             LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMDimImageList().size());
             LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMReallyImageList().size());
-
             for (int x = 0; x < ImageListDownDBBeans.get(i).getMDimImageList().size(); x++) {
                 LogUtils.e("====DP==ReallyPath=====DB之后===模糊图====" +
                         ImageListDownDBBeans.get(i).getMDimImageList().get(x).getDimFilePath());
@@ -342,245 +543,4 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
             }
         }
     }
-
-    private void sendDeleteRequest() {
-        if ("True".equals(getCurrentUserCan())) {  //可以删除
-            showDialog();
-            OkHttpUtils.get()
-                    .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect_Delete)
-                    .addParams("patientsId", itemID)   //要删除的病例id
-                    .addParams("UserID", getUserId())        //当前用户id
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
-                            hideDialog();
-                            toast("链接服务器失败");
-
-                        }
-
-                        @Override
-                        public void onResponse(String response, int id) {
-                            hideDialog();
-                            //返回值 1成功   0传入参数为空 -1传入病人id不存在
-                            if ("1".equals(response)) {
-                                toast("删除成功");
-                                EventBus.getDefault().post(new AddDeleteEvent(bean, "delete", deletePosition));
-                                //删除成功的话需要把数据库的用户信息和图片信息删除
-                                synchronizedDBDataAndFileData();
-                            } else if ("-1".equals(response)) {
-                                toast("传入病人id不存在");
-                            }
-                        }
-                    });
-        } else {
-
-        }
-
-    }
-
-    //删除数据库用户表和图片表,以及SD卡图片
-    private void synchronizedDBDataAndFileData() {
-        boolean isExist = UserDetailMSGDBUtils.queryListIsExist(itemID);
-        LogUtils.e("====DP==删除,用户表是否存在====isExist===" + isExist);
-
-        //删除DB的用户表
-        if (UserDetailMSGDBUtils.queryListIsExist(itemID)) {
-            //删除数据库用户Bean
-            UserDetailMSGDBBean userDetailMSGDBBean = UserDetailMSGDBUtils.queryListByTag(itemID).get(0);
-            UserDetailMSGDBUtils.deleteData(userDetailMSGDBBean);
-        }
-        //删除SD卡图片文件，和DB数据Bean
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                boolean isExist1 = ImageDBUtils.queryListIsExist(itemID);
-                LogUtils.e("====DP==删除,图片--表--是否存在====isExist1===" + isExist1);
-                if (ImageDBUtils.queryListIsExist(itemID)) {   //存在才删除
-                    LogUtils.e("====DP==删除,=====删除本地图片==" );
-                    //先删除本地图片
-                    File file = new File(Environment.getExternalStorageDirectory() +
-                            "/MyData/Images/" + itemID);
-                    LogUtils.e("====DP==删除,文件夹存在=====file.exists()==" + file.exists());
-                    if (file.exists()) {
-                        LogUtils.e("====DP==删除,文件夹存在=======" + file.exists());
-                        SDFileUtil.DeleteFolder(Environment.getExternalStorageDirectory() +
-                                "/MyData/Images/" + itemID);
-                        LogUtils.e("====DP==删除,文件夹存在=====递归删除完毕==");
-                    }
-                    //删除数据库图片Bean
-                    ImageListDownDBBean mBean = ImageDBUtils.queryListByTag(itemID).get(0);
-                    ImageDBUtils.deleteData(mBean);
-                    finish();
-                }else{
-                    //如果有本地图片，删除本地图片
-                    LogUtils.e("====DP==删除,=====如果有本地图片，删除本地图片==" );
-
-                    File file = new File(Environment.getExternalStorageDirectory() +
-                            "/MyData/Images/" + itemID);
-                    LogUtils.e("====DP==删除,文件夹存在=====file.exists()==" + file.exists());
-                    if (file.exists()) {
-                        LogUtils.e("====DP==删除,文件夹存在=======" + file.exists());
-                        SDFileUtil.DeleteFolder(Environment.getExternalStorageDirectory() +
-                                "/MyData/Images/" + itemID);
-                        LogUtils.e("====DP==删除,文件夹存在=====删除了==");
-
-                    }
-                    finish();
-                }
-            }
-        }).start();
-
-
-    }
-
-    private void sendRequest(String type) {
-        showDialog();
-        OkHttpUtils.post()
-                .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect)
-                .addParams("Name", type)
-                .addParams("Param", itemID)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        hideDialog();
-                        LogUtils.e("path===onError===" + e);
-                        toast("链接服务器失败");
-                        //todo 联调有问题 和ios一样
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        hideDialog();
-                        LogUtils.e("path===onResponse===" + response);
-
-
-                    }
-                });
-    }
-
-    private void showDeleteDialog() {
-        new MessageDialog.Builder(CaseDetailMsgActivity.this)
-                // 标题可以不用填写
-                .setTitle("提示")
-                // 内容必须要填写
-                .setMessage("确定删除吗？")
-                // 确定按钮文本
-                .setConfirm(getString(R.string.common_confirm))
-                // 设置 null 表示不显示取消按钮
-                .setCancel(getString(R.string.common_cancel))
-                // 设置点击按钮后不关闭对话框
-                //.setAutoDismiss(false)
-                .setListener(new MessageDialog.OnListener() {
-
-                    @Override
-                    public void onConfirm(BaseDialog dialog) {
-                        toast("确定");
-                        sendDeleteRequest();
-                    }
-
-                    @Override
-                    public void onCancel(BaseDialog dialog) {
-                        toast("取消");
-
-                    }
-                })
-                .show();
-
-    }
-
-
-    /**
-     * 利用反射获取状态栏高度
-     *
-     * @return
-     */
-    public int getStatusBarHeight() {
-        int result = 0;
-        //获取状态栏高度的资源id
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-    @Override
-    protected void initData() {
-
-        mLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-    }
-
-
-    public static String getCurrentID() {
-        return itemID;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e("TAG", "fragment01");
-    }
-
-    private CaseOperatorAction mAction;
-
-    public void setCaseOperatorAction(CaseOperatorAction action) {
-        this.mAction = action;
-    }
-
-    //下载用户信息
-    private void downLoadUserMsg() {
-        UserDetailMSGDBBean userDetailMSGDBBean = setUserMSGToDB(mBean);
-        UserDetailMSGDBUtils.insertOrReplaceData(userDetailMSGDBBean);
-                LogUtils.e("选择的数据==db=用户表存=======存入成功" );
-
-//        //测试存到数据库的数据是否存在
-//        List<UserDetailMSGDBBean> userDetailMSGDBBeans = UserDetailMSGDBUtils.queryListByTag(itemID);
-//        String sex = userDetailMSGDBBeans.get(0).getSex();
-//        LogUtils.e("选择的数据==db=用户表存在吗==isExist===数据库中取来的=性别==03==" + sex);
-
-    }
-
-    //设置数据,再获取到能存数据库的Bean
-    private UserDetailMSGDBBean setUserMSGToDB(CaseDetailMsgBean.DsDTO mBean) {
-        UserDetailMSGDBBean mDBDetailBean = new UserDetailMSGDBBean();
-        mDBDetailBean.setTag(getCurrentID());  //设置查询条件的TAG
-        mDBDetailBean.setCaseID("" + mBean.getCaseID());
-        mDBDetailBean.setName("" + mBean.getName());
-        mDBDetailBean.setPatientAge("" + mBean.getPatientAge());
-        mDBDetailBean.setSex("" + mBean.getSex());
-        mDBDetailBean.setOccupatior("" + mBean.getOccupatior());
-        mDBDetailBean.setTel("" + mBean.getTel());
-        mDBDetailBean.setMedHistory("" + mBean.getMedHistory());
-        if (mBean.getReturnVisit().equals("False")) {
-            mDBDetailBean.setReturnVisit("否");
-        } else {
-            mDBDetailBean.setReturnVisit("是");
-        }
-        mDBDetailBean.setCaseNo("" + mBean.getCaseNo());
-        mDBDetailBean.setFee("" + mBean.getFee());
-        mDBDetailBean.setSubmitDoctor("" + mBean.getSubmitDoctor());
-        mDBDetailBean.setDepartment("" + mBean.getDepartment());
-        mDBDetailBean.setChiefComplaint("" + mBean.getChiefComplaint());
-        mDBDetailBean.setClinicalDiagnosis("" + mBean.getClinicalDiagnosis());
-        mDBDetailBean.setCheckContent("" + mBean.getCheckContent());
-        mDBDetailBean.setCheckDiagnosis("" + mBean.getCheckDiagnosis());
-        mDBDetailBean.setBiopsy("" + mBean.getBiopsy());
-        mDBDetailBean.setTest("" + mBean.getTest());
-        mDBDetailBean.setCtology("" + mBean.getCtology());
-        mDBDetailBean.setPathology("" + mBean.getPathology());
-        mDBDetailBean.setAdvice("" + mBean.getAdvice());
-        mDBDetailBean.setExaminingPhysician("" + mBean.getExaminingPhysician());
-
-        return mDBDetailBean;
-    }
-
-
 }

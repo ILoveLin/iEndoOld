@@ -31,7 +31,7 @@ import okhttp3.Call;
  * <p>
  * Describe 第二个fragment
  */
-public class Fragment02 extends MyFragment<MainActivity> implements StatusAction, CaseOperatorAction {
+public class Fragment02 extends MyFragment<MainActivity> implements StatusAction {
 
 
     private HintLayout mHintLayout;
@@ -66,7 +66,6 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-
         mHintLayout = findViewById(R.id.hl_status_hint);
         case02_check_number = findViewById(R.id.case02_check_number);
         case02_again_see = findViewById(R.id.case02_again_see);
@@ -84,7 +83,6 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
         case02_pathology = findViewById(R.id.case02_pathology);
         case02_advise = findViewById(R.id.case02_advise);
         case02_check_doctor = findViewById(R.id.case02_check_doctor);
-        mActivity.setCaseOperatorAction(this);
     }
 
     @Override
@@ -95,7 +93,6 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshFragmentEvent(RefreshFragmentEvent event){
         LogUtils.e("TAG--onRefreshFragmentEvent" + "event===="+event.getType());
-
         if (event.getType().equals("refresh")) {
             LogUtils.e("TAG--onRefreshFragmentEvent" + "onRefreshFragmentEvent");
             sendRequest();
@@ -146,15 +143,8 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
                                 case02_pathology.setText(mBean.getPathology() + "");
                                 case02_advise.setText(mBean.getAdvice() + "");
                                 case02_check_doctor.setText(mBean.getExaminingPhysician() + "");
-
-
-//                                private TextView ;
-//                                private TextView ;
-
                             }
                         }
-
-
                     }
                 });
     }
@@ -180,31 +170,5 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onLive() {
-        Log.e("TAG", "fragment02=====onLive");
-
-    }
-
-    @Override
-    public void onPrint() {
-
-    }
-
-    @Override
-    public void onDelete() {
-
-    }
-
-    @Override
-    public void onDownload() {
-
-    }
-
-    @Override
-    public void onEdit() {
-
     }
 }

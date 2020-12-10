@@ -66,7 +66,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-
         mHintLayout = findViewById(R.id.hl_status_hint);
         mSmartRefreshLayout = findViewById(R.id.rl_status_refresh);
         mRecyclerView = findViewById(R.id.rv_status_caselist);
@@ -106,7 +105,6 @@ public class CaseManageActivity extends MyActivity implements StatusAction, Base
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAddDeleteEvent(AddDeleteEvent event) {
-
         if (mAdapter != null) {
             LogUtils.e("=TAG=onAddDeleteEvent==" + event.getType());
             CaseManagerListBean.DsDTO bean = event.getBean();

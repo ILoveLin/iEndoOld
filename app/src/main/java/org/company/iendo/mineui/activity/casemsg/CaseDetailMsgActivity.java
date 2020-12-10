@@ -39,6 +39,7 @@ import org.company.iendo.mineui.fragment.Fragment04;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.ui.dialog.SelectDialog;
 import org.company.iendo.util.LogUtils;
+import org.company.iendo.util.SDFileUtil;
 import org.company.iendo.util.db.ImageDBUtils;
 import org.company.iendo.util.db.UserDetailMSGDBUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -224,7 +225,7 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
                             selectedList.add(entry.getValue());
                         }
                         //根据选择进行图片和用户信息的下载
-                        getDownData(selectedList);
+                        getDownLoadData(selectedList);
                     }
 
                     @Override
@@ -243,7 +244,7 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
      * @param mList
      */
 
-    private void getDownData(ArrayList<String> mList) {
+    private void getDownLoadData(ArrayList<String> mList) {
         LogUtils.e("选择的数据===mList.size()===" + mList.size());
         LogUtils.e("选择的数据===mList.size(0)===" + mList.get(0));
         boolean isExistt = ImageDBUtils.queryListIsExist(getCurrentID());
@@ -261,7 +262,6 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
 
         } else if (mList.get(0).equals("图片信息")) {
             LogUtils.e("选择的数据==db=isExist==1===图片信息===");
-
             //因为fragment03界面开启了线程下载过模糊图和原图,只是没有写入数据库而已,这里做判断可以优化性能
             downLoadPicture();
         }
@@ -282,10 +282,10 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
             mCacheBean.setDownTag("1");
             ImageDBUtils.insertOrReplaceData(mCacheBean);       //手动更新，换当前用户缓存，设置为下载类型
 
-
         } else {   //不存在,开启线程取下载SMB文件,并且存入数据库
 //                不存在,表示没有进入过03界面,本地没有缓存,所以需要开启线程下载
             LogUtils.e("选择的数据===数据库=不存在==开启线程=====");
+            LogUtils.e("选择的数据===数据库=不存在==开启线程===toFile.exists()==" + toFile.exists());
             DownPictureThread downThread = new DownPictureThread(this, itemID, "1", toFile.exists());
             downThread.setOnThreadStatueListener(this);
             new Thread(downThread).start();
@@ -296,9 +296,11 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     /**
      * 开启线城下载图片和用户信息的接口回调
      */
+
     @Override
-    public void onUserMSGDownOK() {
-        toast("用户表下载完毕");
+    public void onSmbEmptyPicture() {
+        toast("smb服务器暂无该用户图片");
+
     }
 
     @Override
@@ -365,10 +367,7 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
                                 toast("删除成功");
                                 EventBus.getDefault().post(new AddDeleteEvent(bean, "delete", deletePosition));
                                 //删除成功的话需要把数据库的用户信息和图片信息删除
-                                //删除用户信息
                                 synchronizedDBDataAndFileData();
-
-
                             } else if ("-1".equals(response)) {
                                 toast("传入病人id不存在");
                             }
@@ -383,21 +382,52 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     //删除数据库用户表和图片表,以及SD卡图片
     private void synchronizedDBDataAndFileData() {
         boolean isExist = UserDetailMSGDBUtils.queryListIsExist(itemID);
-        if (isExist) {
+        LogUtils.e("====DP==删除,用户表是否存在====isExist===" + isExist);
+
+        //删除DB的用户表
+        if (UserDetailMSGDBUtils.queryListIsExist(itemID)) {
             //删除数据库用户Bean
             UserDetailMSGDBBean userDetailMSGDBBean = UserDetailMSGDBUtils.queryListByTag(itemID).get(0);
             UserDetailMSGDBUtils.deleteData(userDetailMSGDBBean);
         }
-        //删除数据库图片Bean
-        ImageListDownDBBean imageListDownDBBean = ImageDBUtils.queryListByTag(itemID).get(0);
-        ImageDBUtils.deleteData(imageListDownDBBean);
-        //删除SD卡图片文件
+        //删除SD卡图片文件，和DB数据Bean
         new Thread(new Runnable() {
             @Override
             public void run() {
+                boolean isExist1 = ImageDBUtils.queryListIsExist(itemID);
+                LogUtils.e("====DP==删除,图片--表--是否存在====isExist1===" + isExist1);
+                if (ImageDBUtils.queryListIsExist(itemID)) {   //存在才删除
+                    LogUtils.e("====DP==删除,=====删除本地图片==" );
+                    //先删除本地图片
+                    File file = new File(Environment.getExternalStorageDirectory() +
+                            "/MyData/Images/" + itemID);
+                    LogUtils.e("====DP==删除,文件夹存在=====file.exists()==" + file.exists());
+                    if (file.exists()) {
+                        LogUtils.e("====DP==删除,文件夹存在=======" + file.exists());
+                        SDFileUtil.DeleteFolder(Environment.getExternalStorageDirectory() +
+                                "/MyData/Images/" + itemID);
+                        LogUtils.e("====DP==删除,文件夹存在=====递归删除完毕==");
+                    }
+                    //删除数据库图片Bean
+                    ImageListDownDBBean mBean = ImageDBUtils.queryListByTag(itemID).get(0);
+                    ImageDBUtils.deleteData(mBean);
+                    finish();
+                }else{
+                    //如果有本地图片，删除本地图片
+                    LogUtils.e("====DP==删除,=====如果有本地图片，删除本地图片==" );
 
+                    File file = new File(Environment.getExternalStorageDirectory() +
+                            "/MyData/Images/" + itemID);
+                    LogUtils.e("====DP==删除,文件夹存在=====file.exists()==" + file.exists());
+                    if (file.exists()) {
+                        LogUtils.e("====DP==删除,文件夹存在=======" + file.exists());
+                        SDFileUtil.DeleteFolder(Environment.getExternalStorageDirectory() +
+                                "/MyData/Images/" + itemID);
+                        LogUtils.e("====DP==删除,文件夹存在=====删除了==");
 
-
+                    }
+                    finish();
+                }
             }
         }).start();
 
@@ -507,25 +537,20 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
 
     //下载用户信息
     private void downLoadUserMsg() {
-        boolean isExistT = UserDetailMSGDBUtils.queryListIsExist(itemID);
-        LogUtils.e("选择的数据==db=用户表存在吗==isExist===isExist==00==" + isExistT);
         UserDetailMSGDBBean userDetailMSGDBBean = setUserMSGToDB(mBean);
         UserDetailMSGDBUtils.insertOrReplaceData(userDetailMSGDBBean);
-        boolean isExist = UserDetailMSGDBUtils.queryListIsExist(itemID);
+                LogUtils.e("选择的数据==db=用户表存=======存入成功" );
 
-        LogUtils.e("选择的数据==db=用户表存在吗==isExist===isExist==01==" + isExist);
-
-        List<UserDetailMSGDBBean> userDetailMSGDBBeans = UserDetailMSGDBUtils.queryListByTag(itemID);
-        String sex = userDetailMSGDBBeans.get(0).getSex();
-        LogUtils.e("选择的数据==db=用户表存在吗==isExist===数据库中取来的=性别==03==" + sex);
+//        //测试存到数据库的数据是否存在
+//        List<UserDetailMSGDBBean> userDetailMSGDBBeans = UserDetailMSGDBUtils.queryListByTag(itemID);
+//        String sex = userDetailMSGDBBeans.get(0).getSex();
+//        LogUtils.e("选择的数据==db=用户表存在吗==isExist===数据库中取来的=性别==03==" + sex);
 
     }
 
     //设置数据,再获取到能存数据库的Bean
     private UserDetailMSGDBBean setUserMSGToDB(CaseDetailMsgBean.DsDTO mBean) {
-
         UserDetailMSGDBBean mDBDetailBean = new UserDetailMSGDBBean();
-
         mDBDetailBean.setTag(getCurrentID());  //设置查询条件的TAG
         mDBDetailBean.setCaseID("" + mBean.getCaseID());
         mDBDetailBean.setName("" + mBean.getName());

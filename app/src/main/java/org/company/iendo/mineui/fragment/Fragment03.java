@@ -223,6 +223,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
             @Override
             public void run() {
                 super.run();
+                //获取模糊图
                 try {
                     ip = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_IP, "");
                     String path = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
@@ -242,12 +243,15 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                                 downloadFileToFolder(remoteUrl, "ImageData/Images/"
                                                 + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
                                         smbFiles[i].getName(), toFile.getAbsolutePath());
-
                             } else {
-                                String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-                                downloadFileToFolder(remoteUrl, "ImageData/Images/"
-                                                + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
-                                        smbFiles[i].getName(), toFile.getAbsolutePath());
+                                //存在，在判断smb文件数量和本地文件数量，不同就同步文件
+                                if (toFile.listFiles().length != smbFiles.length) {
+
+                                    String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
+                                    downloadFileToFolder(remoteUrl, "ImageData/Images/"
+                                                    + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
+                                            smbFiles[i].getName(), toFile.getAbsolutePath());
+                                }
                             }
                         }
                         mHandler.sendEmptyMessage(REFRESH);
@@ -276,25 +280,31 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                     initSmb(picRootPath);
                     SmbFile[] smbFiles = mRootFolder.listFiles();
                     LogUtils.e("====DP==DimPath==开始下载=====");
-
                     for (int i = 0; i < smbFiles.length; i++) {
                         if (!smbFiles[i].isDirectory()) {   //不是文件夹,是原图,才读取
+                            String localPath = Environment.getExternalStorageDirectory() +
+                                    "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID();
                             String PicName = smbFiles[i].getName();
-                            File toFile = new File(Environment.getExternalStorageDirectory() +
-                                    "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
-                            String mPicKeyName = PicName.split("\\.")[0];  //截取20000236.bmp   的20000236部分,到时候需要对比模糊图相同的名字才显示
-                            String mPicValuePath = toFile + "/" + PicName;
+                            String mPicKeyName = PicName.split("\\.")[0];
+                            String mPicValuePath = localPath + "/" + PicName;
+                            //存入map,key是name,value是文件路径
                             mPicMap.put(mPicKeyName, mPicValuePath);
-                            String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-                            downloadReallyFileToFolder(remoteUrl, "ImageData/Images/"
-                                            + CaseDetailMsgActivity.getCurrentID() + "/",
-                                    PicName, toFile.getAbsolutePath());
-                            LogUtils.e("====DP==DimPath==下载一条===PicName=="+PicName);
+                            File file = new File(localPath + "/" + PicName);
+                            if (!file.exists()) { //存在就不用读取
+                                String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
+                                downloadReallyFileToFolder(remoteUrl, "ImageData/Images/"
+                                                + CaseDetailMsgActivity.getCurrentID() + "/",
+                                        PicName, localPath);
+                                LogUtils.e("====DP==DimPath===这条数据=不存在==下载一条===PicName==" + PicName);
+
+                            } else {
+                                LogUtils.e("====DP==DimPath==这条数据=存在=本地取===PicName==" + PicName);
+                            }
+//                            getViewPagerPicturePath();
 
                         }
                     }
-                    LogUtils.e("====DP==DimPath==全部===下载完毕=====");
-
+                    LogUtils.e("====DP==DimPath==全部===下载读取完毕=====");
                     mHandler.sendEmptyMessage(REALLYOK);
 
                 } catch (Exception e) {
@@ -312,11 +322,6 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
         System.setProperty("jcifs.smb.client.responseTimeout", "30000");
         String username = "cmeftproot";
         String password = "lzjdzh19861207";
-
-//        String rootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
-//        String rootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
-        Log.e("========root==rootPath=", rootPath);
-
         UniAddress mDomain = UniAddress.getByName(ip);
         NtlmPasswordAuthentication mAuthentication = new NtlmPasswordAuthentication(ip, username, password);
         SmbSession.logon(mDomain, mAuthentication);
@@ -394,6 +399,8 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     public HintLayout getHintLayout() {
         return mHintLayout;
     }
+    //原图下载完毕才可以进入查看
+    private boolean canClick = false;
 
     /**
      * itemClick
@@ -406,15 +413,14 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast(position);
-
-        ArrayList viewPagerDataList = getViewPagerPicturePath();
-        if (viewPagerDataList.size() != 0) {
-            ImagePreviewActivity.start(getAttachActivity(), viewPagerDataList, viewPagerDataList.size() - 1);
-        } else {
-            toast("暂无数据!");
+        if (canClick){
+            ArrayList viewPagerDataList = getViewPagerPicturePath();
+            if (viewPagerDataList.size() != 0) {
+                ImagePreviewActivity.start(getAttachActivity(), viewPagerDataList, viewPagerDataList.size() - 1);
+            } else {
+                toast("暂无数据!");
+            }
         }
-
-
     }
 
 

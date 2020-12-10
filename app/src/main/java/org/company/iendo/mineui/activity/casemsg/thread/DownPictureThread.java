@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -39,20 +38,19 @@ import jcifs.smb.SmbSession;
  * Describe  下载图片的线程
  */
 public class DownPictureThread implements Runnable {
-    private Context mContext;
-    private String itemID;
-    public static final int REFRESH = 10;
-    public static final int EMPTY = 11;
-    private SmbFile mRootFolder;
-    private String ip;
-    private Boolean exists;
-    private String downTag;
-    private File toLocalFile;
     public HashMap<String, String> mPicMap = new HashMap<>();
     public ArrayList<String> mDataList = new ArrayList<>();
     private ImageListDownDBBean mImageListBean;
     private ArrayList<String> dimImageList;
     private ArrayList<String> reallyPathList;
+    private SmbFile mRootFolder;
+    private File toLocalFile;
+    private Context mContext;
+    private String itemID;
+    private Boolean exists;
+    private String downTag;
+    private String ip;
+
 
     public DownPictureThread(Context mContext, String itemID, String downTag, boolean exists) {
         this.mContext = mContext;
@@ -66,16 +64,16 @@ public class DownPictureThread implements Runnable {
 
     @Override
     public void run() {
-        LogUtils.e("缓存===exists===" + exists);
-
+        LogUtils.e("缓存=本地SD卡里面是否有缓存==exists===" + exists);
         if (!exists) {
-            LogUtils.e("缓存===不存在下载===" + exists);
+            LogUtils.e("缓存===本地SD卡bu存在=== 开始下载===" + exists);
             ip = (String) SharePreferenceUtil.get(mContext, SharePreferenceUtil.Current_IP, "");
             String path = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
             try {
                 initSmb(path);
-                if (mRootFolder.exists()) {
+                if (mRootFolder.exists()) {  //SMB服务器存在图片
                     SmbFile[] smbFiles = mRootFolder.listFiles(); // smb://192.168.128.146/ImageData/Images/4033/thumb/
+                    LogUtils.e("缓存===本地SD卡bu存在=== smb服务器====smbFiles.length===" + smbFiles.length);
                     for (int i = 0; i < smbFiles.length; i++) {
                         //添加每个图片名字的前缀
                         mDataList.add(smbFiles[i].getName().split("\\.")[0]);
@@ -113,14 +111,20 @@ public class DownPictureThread implements Runnable {
                         mListener.onOverDownOK();
                     }
 
+                } else {      //SMB服务器bu存在图片
+                    if (mListener != null) {
+                        mListener.onSmbEmptyPicture();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-
             //获取本地模糊图
-            getLocalImagePathList();
+            ArrayList<String> localImagePathList = getLocalImagePathList();
+            for (int i = 0; i < localImagePathList.size(); i++) {
+                LogUtils.e("缓存===存在载=缓存里面拿=====localImagePathList====" + localImagePathList.size());
+            }
             //获取本地原图
             getLocalReallyPathList();
             LogUtils.e("缓存===存在载=缓存里面拿==" + exists);
@@ -131,62 +135,14 @@ public class DownPictureThread implements Runnable {
             }
 
         }
-//
-//        ip = (String) SharePreferenceUtil.get(mContext, SharePreferenceUtil.Current_IP, "");
-//        String path = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
-//        try {
-//            initSmb(path);
-//            if (mRootFolder.exists()) {
-//                SmbFile[] smbFiles = mRootFolder.listFiles(); // smb://192.168.128.146/ImageData/Images/4033/thumb/
-//                for (int i = 0; i < smbFiles.length; i++) {
-//                    //添加每个图片名字的前缀
-//                    mDataList.add(smbFiles[i].getName().split("\\.")[0]);
-//                    toLocalFile = new File(Environment.getExternalStorageDirectory() +
-//                            "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
-//                    File toFile = new File(Environment.getExternalStorageDirectory() +
-//                            "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/");
-//                    if (!toFile.exists()) {   //不存在创建
-//                        toFile.mkdirs();
-//                        String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-//                        downloadFileToFolder(remoteUrl, "ImageData/Images/"
-//                                        + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
-//                                smbFiles[i].getName(), toFile.getAbsolutePath());
-//
-//                    } else {
-//                        String remoteUrl = "smb://cmeftproot:lzjdzh19861207@" + ip + "/";
-//                        downloadFileToFolder(remoteUrl, "ImageData/Images/"
-//                                        + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
-//                                smbFiles[i].getName(), toFile.getAbsolutePath());
-//                    }
-//                }
-//                if (mListener != null) {
-//                    mListener.onDimPictureDownOK();
-//                }
-//                //获取到下载好的模糊图本地路径list
-//                getLocalImagePathList();
-//                //开始下载原图到本地
-//                startGetReallyPic();
-//                if (mListener != null) {
-//                    mListener.onReallyPictureDownOK();
-//                }
-//                //存入数据库
-//                insertFilePathToDB();
-//                if (mListener != null) {
-//                    mListener.onOverDownOK();
-//                }
-//
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
     @SuppressLint("NewApi")
     private ArrayList<String> getLocalReallyPathList() {
         ArrayList<String> mLocalReallyPathList = new ArrayList<String>();   //存和模糊图名字相同的原图集合
-        HashMap<String, String> mPicMap = new HashMap<>();                  //所有原图的map key是名字,value是path
-        ArrayList<String> list = new ArrayList<>();                         //存模糊图的前缀名字
-//        /storage/emulated/0/MyData/Images/4012/2020110317581095.jpg
+        HashMap<String, String> mPicMap = new HashMap<>();             //所有原图的map key是名字,value是path
+        ArrayList<String> list = new ArrayList<>();                    //存模糊图的前缀名字
+        // /storage/emulated/0/MyData/Images/4012/2020110317581095.jpg
         dimImageList.stream().forEach((String str) -> {
             String[] split = str.split("/");
             String s = split[split.length - 1];
@@ -203,7 +159,8 @@ public class DownPictureThread implements Runnable {
                 String PicName = files[i].getName();
                 File toFile = new File(Environment.getExternalStorageDirectory() +
                         "/MyData/Images/" + CaseDetailMsgActivity.getCurrentID());
-                String mPicKeyName = PicName.split("\\.")[0];  //截取20000236.bmp   的20000236部分,到时候需要对比模糊图相同的名字才显示
+                //截取20000236.bmp   的20000236部分,到时候需要对比模糊图相同的名字才显示
+                String mPicKeyName = PicName.split("\\.")[0];
                 String mPicValuePath = toFile + "/" + PicName;
                 mPicMap.put(mPicKeyName, mPicValuePath);
             }
@@ -254,7 +211,6 @@ public class DownPictureThread implements Runnable {
                     }
                 }
             });
-
             return reallyPathList;
         }
         return reallyPathList;
@@ -280,7 +236,6 @@ public class DownPictureThread implements Runnable {
         //存入模糊图片路径的list
         mImageListBean.setMDimImageList(list00);
 
-
         //然后开始存原图
         ArrayList ReallyPathList = null;
         if (!exists) {   //exists ==false表示没有进入03界面,需要开启线程下载
@@ -303,24 +258,6 @@ public class DownPictureThread implements Runnable {
         ImageDBUtils.insertOrReplaceData(mImageListBean);
         boolean isExist = ImageDBUtils.queryListIsExist(CaseDetailMsgActivity.getCurrentID());
         LogUtils.e("====DP==ReallyPath==DB===是否存在==" + isExist);
-
-//        List<ImageListDownDBBean> ImageListDownDBBeans = ImageDBUtils.queryListByTag(CaseDetailMsgActivity.getCurrentID());
-//        for (int i = 0; i < ImageListDownDBBeans.size(); i++) {
-//            List<DimImageBean> mDimImageList = ImageListDownDBBeans.get(i).getMDimImageList();
-//            List<ReallyImageBean> mReallyImageList = ImageListDownDBBeans.get(i).getMReallyImageList();
-//            LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getItemID());
-//            LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMDimImageList().size());
-//            LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMReallyImageList().size());
-//
-//            for (int x = 0; x < ImageListDownDBBeans.get(i).getMDimImageList().size(); x++) {
-//                LogUtils.e("====DP==ReallyPath=====DB之后===模糊图====" +
-//                        ImageListDownDBBeans.get(i).getMDimImageList().get(x).getDimFilePath());
-//            }
-//            for (int y = 0; y < ImageListDownDBBeans.get(i).getMReallyImageList().size(); y++) {
-//                LogUtils.e("====DP==ReallyPath=====DB之后===原图====" +
-//                        ImageListDownDBBeans.get(i).getMReallyImageList().get(y).getReallyFilePath());
-//            }
-//        }
     }
 
 
@@ -364,11 +301,7 @@ public class DownPictureThread implements Runnable {
         System.setProperty("jcifs.smb.client.responseTimeout", "30000");
         String username = "cmeftproot";
         String password = "lzjdzh19861207";
-
-//        String rootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
-//        String rootPath = "smb://" + ip + "/ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
         Log.e("========root==rootPath=", rootPath);
-
         UniAddress mDomain = UniAddress.getByName(ip);
         NtlmPasswordAuthentication mAuthentication = new NtlmPasswordAuthentication(ip, username, password);
         SmbSession.logon(mDomain, mAuthentication);
@@ -385,8 +318,7 @@ public class DownPictureThread implements Runnable {
      * @param localDir
      */
     public static void downloadFileToFolder(String remoteUrl, String shareFolderPath, String
-            fileName,
-                                            String localDir) {
+            fileName, String localDir) {
         try {
             SmbFile remoteFile = new SmbFile(remoteUrl + shareFolderPath + fileName);
             File localFile = new File(localDir + "/" + fileName);
@@ -439,14 +371,29 @@ public class DownPictureThread implements Runnable {
     }
 
 
+    /**
+     * 现在下载状态的接口回调
+     */
     public interface onThreadStatueListener {
 
-        void onUserMSGDownOK();
+        /**
+         * SMB服务器图片数据为空
+         */
+        void onSmbEmptyPicture();
 
+        /**
+         * 模糊图下载完毕
+         */
         void onDimPictureDownOK();
 
+        /**
+         * 原图下载完毕
+         */
         void onReallyPictureDownOK();
 
+        /**
+         * 所有下载完毕
+         */
         void onOverDownOK();
 
 

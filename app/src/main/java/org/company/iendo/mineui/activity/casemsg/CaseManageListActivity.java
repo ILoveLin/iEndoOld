@@ -83,7 +83,7 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(v -> {
             toast("点击搜索");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageListActivity.this, mHeaderView);
-            Intent intent = new Intent(CaseManageListActivity.this, SearchUserResultActivity.class);
+            Intent intent = new Intent(CaseManageListActivity.this, SearchActivity.class);
             EasyTransition.startActivity(intent, options);
 
 
@@ -91,7 +91,7 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(v -> {
             toast("点击搜索");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageListActivity.this, mHeaderView);
-            Intent intent = new Intent(CaseManageListActivity.this, SearchUserResultActivity.class);
+            Intent intent = new Intent(CaseManageListActivity.this, SearchActivity.class);
             EasyTransition.startActivity(intent, options);
         });
 

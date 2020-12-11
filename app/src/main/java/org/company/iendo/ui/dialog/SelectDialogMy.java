@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
+import com.hjq.toast.ToastUtils;
+
 import org.company.iendo.R;
 import org.company.iendo.aop.SingleClick;
 import org.company.iendo.common.MyAdapter;
-import com.hjq.toast.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ import java.util.List;
  *    time   : 2019/10/09
  *    desc   : 单选或者多选对话框
  */
-public final class SelectDialog {
+public final class SelectDialogMy {
 
     public static final class Builder
             extends UIDialog.Builder<Builder> {
@@ -40,7 +41,7 @@ public final class SelectDialog {
         public Builder(Context context) {
             super(context);
 
-            setCustomView(R.layout.select_dialog);
+            setCustomView(R.layout.dialog_my_select);
             RecyclerView recyclerView = findViewById(R.id.rv_select_list);
             recyclerView.setItemAnimator(null);
 
@@ -187,7 +188,7 @@ public final class SelectDialog {
         }
 
         /**
-         * {@link BaseAdapter.OnItemClickListener}
+         * {@link OnItemClickListener}
          */
 
         @Override

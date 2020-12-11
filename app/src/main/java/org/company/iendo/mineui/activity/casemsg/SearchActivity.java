@@ -129,6 +129,7 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     private void sendRequest() {
         tag = mCetSearch.getText().toString().trim();
         LogUtils.e("=TAG=hy=onError==" + endoType);
+        LogUtils.e("=TAG=hy=tag==" + tag);
         showLoading();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.CaseManager_List)

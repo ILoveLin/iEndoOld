@@ -38,6 +38,7 @@ import org.company.iendo.mineui.fragment.Fragment03;
 import org.company.iendo.mineui.fragment.Fragment04;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.ui.dialog.SelectDialog;
+import org.company.iendo.ui.dialog.SelectDialogMy;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SDFileUtil;
 import org.company.iendo.util.db.ImageDBUtils;
@@ -343,14 +344,14 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     }
 
     private void showDownDialog() {
-        new SelectDialog.Builder(this)
+        new SelectDialogMy.Builder(this)
                 .setTitle("提示!")
                 .setList("病例信息", "图片信息")
                 // 设置最大选择数
                 .setMaxSelect(2)
                 // 设置默认选中
                 .setSelect(0)
-                .setListener(new SelectDialog.OnListener<String>() {
+                .setListener(new SelectDialogMy.OnListener<String>() {
                     @Override
                     public void onSelected(BaseDialog dialog, HashMap<Integer, String> data) {
                         selectedList.clear();

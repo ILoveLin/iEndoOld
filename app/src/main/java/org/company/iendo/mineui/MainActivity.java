@@ -1,6 +1,9 @@
 package org.company.iendo.mineui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.view.View;
 
 import org.company.iendo.R;
@@ -33,7 +36,20 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
     @Override
     protected void initData() {
         setOnClickListener(R.id.cv_user, R.id.cv_case_manage, R.id.cv_live);
-
+        //验证是否许可权限
+        if (Build.VERSION.SDK_INT >= 23) {
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            //验证是否许可权限
+            for (String str : permissions) {
+                if (getActivity().checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    //申请权限
+                    getActivity().requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                    return;
+                }
+            }
+        }
     }
 
     @Override
@@ -48,7 +64,7 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
             case R.id.cv_live:          //直播
 //                String item = mAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
-                intent.putExtra("url",  "");
+                intent.putExtra("url", "");
                 startActivity(intent);
 //                startActivity(LiveActivity.class);
                 break;

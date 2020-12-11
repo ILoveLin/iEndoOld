@@ -5,84 +5,93 @@
     android:background="@drawable/selector_item_ffffff"
     android:orientation="horizontal">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_60"
+        android:layout_height="@dimen/padding_65"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_result_change"
+        <LinearLayout
+            android:layout_width="@dimen/padding_65"
+            android:layout_height="@dimen/padding_65"
+
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_id"
+                android:layout_width="@dimen/padding_35"
+                android:layout_height="@dimen/padding_35"
+                android:gravity="center"
+                android:text="01:"
+                android:textSize="@dimen/padding_15" />
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_10"
+                android:text="Adimn"
+                android:textSize="@dimen/padding_15" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/tv_item_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_10"
+                android:text="超级管理员"
+                android:textSize="@dimen/padding_13" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingLeft="@dimen/padding_10"
-            android:paddingRight="@dimen/padding_10"
-            android:text="修改密码"
-            android:textColor="@color/black70"
-            android:textSize="@dimen/padding_15" />
+            android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/tv_result_creator_data"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tv_result_change"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingRight="@dimen/padding_10"
+            android:orientation="vertical"
+            android:paddingRight="@dimen/padding_10">
 
-            android:text="2020/11/27/ 16:06:08"
-            android:textColor="@color/black70"
-            android:textSize="@dimen/padding_10" />
+            <TextView
+                android:id="@+id/tv_item_change_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_10"
+                android:text="修改密码"
+                android:textSize="@dimen/padding_14" />
 
-        <TextView
-            android:id="@+id/tv_id"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/padding_10"
-            android:gravity="center"
-            android:lines="1"
-            android:text="01"
-            android:textColor="@color/black80"
-            android:textSize="@dimen/padding_14" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="" />
 
+            <TextView
+                android:id="@+id/tv_item_delete_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_10"
+                android:text="删除用户"
+                android:textSize="@dimen/padding_14" />
 
-        <TextView
-            android:id="@+id/tv_user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/padding_10"
-            android:layout_toRightOf="@+id/tv_id"
-            android:gravity="center_vertical"
-            android:lines="1"
-            android:text="QQ"
-            android:textColor="@color/black80"
-            android:textSize="@dimen/padding_14" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_result_dec"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/tv_user_name"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/padding_10"
-            android:layout_toRightOf="@+id/tv_id"
-            android:gravity="center"
-            android:lines="1"
-            android:text="超级用户"
-            android:textColor="@color/black70"
-            android:textSize="@dimen/padding_10" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <!--    <Button-->
     <!--        android:id="@+id/cancleBtn"-->

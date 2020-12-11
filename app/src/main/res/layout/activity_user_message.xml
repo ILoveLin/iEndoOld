@@ -276,26 +276,8 @@
                         android:layout_marginTop="@dimen/padding_20"
                         android:layout_weight="1"
                         android:text="注销登录" />
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/copy"
-                        style="@style/RectButtonStyle"
-                        android:layout_width="@dimen/padding_120"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="@dimen/padding_20"
-                        android:layout_weight="1"
-                        android:text="拷贝图片" />
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/text"
-                        style="@style/RectButtonStyle"
-                        android:layout_width="@dimen/padding_120"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="@dimen/padding_20"
-                        android:layout_weight="1"
-                        android:text="test" />
+
+
 
                 </LinearLayout>
 

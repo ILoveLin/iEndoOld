@@ -8,14 +8,15 @@ import android.widget.EditText;
 import androidx.annotation.StringRes;
 
 import com.hjq.base.BaseDialog;
+
 import org.company.iendo.R;
 import org.company.iendo.aop.SingleClick;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2019/02/27
- *    desc   : 输入对话框
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2019/02/27
+ * desc   : 输入对话框
  */
 public final class InputDialog {
 
@@ -25,27 +26,34 @@ public final class InputDialog {
 
         private OnListener mListener;
         private final EditText mInputView;
+        private final EditText mInputViewTow;
 
         public Builder(Context context) {
             super(context);
-            setCustomView(R.layout.input_dialog);
-
+            setCustomView(R.layout.dialog_tow_input);
             mInputView = findViewById(R.id.tv_input_message);
-
+            mInputViewTow = findViewById(R.id.tv_input_message_tow);
             addOnShowListener(this);
         }
 
         public Builder setHint(@StringRes int id) {
             return setHint(getString(id));
         }
+
         public Builder setHint(CharSequence text) {
             mInputView.setHint(text);
+            return this;
+        }
+
+        public Builder setHintTow(CharSequence text) {
+            mInputViewTow.setHint(text);
             return this;
         }
 
         public Builder setContent(@StringRes int id) {
             return setContent(getString(id));
         }
+
         public Builder setContent(CharSequence text) {
             mInputView.setText(text);
             int index = mInputView.getText().toString().length();
@@ -76,7 +84,15 @@ public final class InputDialog {
                 case R.id.tv_ui_confirm:
                     autoDismiss();
                     if (mListener != null) {
-                        mListener.onConfirm(getDialog(), mInputView.getText().toString());
+                        String oldP = mInputView.getText().toString();
+                        if ("".equals(oldP)) {
+                            oldP = "oldP";
+                        }
+                        String newP = mInputViewTow.getText().toString();
+                        if ("".equals(newP)) {
+                            newP = "newP";
+                        }
+                        mListener.onConfirm(getDialog(), oldP + "&&" + newP);
                     }
                     break;
                 case R.id.tv_ui_cancel:
@@ -101,6 +117,7 @@ public final class InputDialog {
         /**
          * 点击取消时回调
          */
-        default void onCancel(BaseDialog dialog) {}
+        default void onCancel(BaseDialog dialog) {
+        }
     }
 }

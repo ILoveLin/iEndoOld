@@ -191,8 +191,8 @@ public abstract class MyActivity extends BaseActivity
      *
      * @return
      */
-    public String getCurrentUserCan() {
-        return (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_Can_Delete, "");
+    public String getCurrentUserPower() {
+        return (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_UserType, "");
     }
     /**
      * 获取userId

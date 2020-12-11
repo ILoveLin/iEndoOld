@@ -83,12 +83,44 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
         setOnClickListener(R.id.tv_back, R.id.iv_user_search);
         EasyTransition.enter(SearchUserResultActivity.this);
         mAdapter = new SearchUserResultAdapter(this);
+        responseListener();
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setAnimation(null);
         mRecyclerView.addItemDecoration(new RecycleViewDivider(this, 1, R.drawable.shape_divideritem_decoration));
         endoType = (String) SharePreferenceUtil.get(SearchUserResultActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
         showSoftInputFromWindow(this, mEditSearch);
+
+
+
+
+    }
+
+    private void responseListener() {
+        mAdapter.setOnChildClickListener(R.id.tv_item_delete_user, new BaseAdapter.OnChildClickListener() {
+            @Override
+            public void onChildClick(RecyclerView recyclerView, View childView, int position) {
+                if (getCurrentOnlineType()) {  //在线
+                    toast("删除====第：" + position + "的密码?");
+
+                } else {
+                    toast("离线用户不能修改密码");
+
+                }
+            }
+        });
+        mAdapter.setOnChildClickListener(R.id.tv_item_change_password, new BaseAdapter.OnChildClickListener() {
+            @Override
+            public void onChildClick(RecyclerView recyclerView, View childView, int position) {
+                if (getCurrentOnlineType()) {  //在线
+                    toast("修改====第：" + position + "的密码?");
+
+                } else {
+                    toast("离线用户不能修改密码");
+
+                }
+            }
+        });
     }
 
 

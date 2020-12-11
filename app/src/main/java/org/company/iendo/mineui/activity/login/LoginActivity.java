@@ -197,17 +197,21 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                                     @Override
                                     public void onResponse(String response, int id) {
 //                                        返回值 0传入参数为空或用户名不存在, -1密码不正确 1登陆成功
+                                        LogUtils.e("=TAGpassword=hy=onSucceed==" + response.toString());
                                         hideDialog();
                                         if ("0".equals(response)) {
                                             toast("用户名不存在或者参数为空");
                                         } else if ("-1".equals(response)) {
                                             toast("密码不正确");
                                         } else {
-                                            LogUtils.e("=TAGpassword=hy=onSucceed==" + response.toString());
                                             Type type = new TypeToken<LoginBean>() {
                                             }.getType();
                                             LoginBean mBean = mGson.fromJson(response, type);
                                             for (int i = 0; i < mBean.getDs().size(); i++) {
+
+                                                String userType = mBean.getDs().get(mBean.getDs().size()-1).getRole();
+                                                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, userType);
+
                                                 if (i == 0) {
                                                     String createdAt = mBean.getDs().get(i).getCreatedAt();
                                                     String lastLoginAt = mBean.getDs().get(i).getLastLoginAt();
@@ -217,13 +221,11 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LoginOnlineTime, loginTimes + "");
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_CreateTime, createdAt + "");
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_LastOnlineTime, lastLoginAt + "");
-
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Case_Num, endoType);
+                                                    SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Password, password);
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Can_Delete, canUSE);
                                                     SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.UserId, userid);
-
                                                     //存入当前科室
-
                                                     setCurrentOnlineType(true);
                                                     startActivity(MainActivity.class);
 

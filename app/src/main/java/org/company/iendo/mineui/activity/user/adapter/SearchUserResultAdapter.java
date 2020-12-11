@@ -2,6 +2,7 @@ package org.company.iendo.mineui.activity.user.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,27 +30,34 @@ public class SearchUserResultAdapter extends MyAdapter<UserListBean.DsDTO> {
     }
 
     private final class ViewHolder extends BaseAdapter.ViewHolder {
-        private TextView tv_id;
-        private TextView tv_user_name;
-        private TextView tv_result_dex;
-        private TextView tv_result_creator_data;
+        private Button mDeleteButton;
+        private TextView mTitleName;
+        private TextView mDec;
+        private TextView mChange;
+        private TextView mID;
+        private TextView mCreatorData;
 
         public ViewHolder() {
             super(R.layout.item_user_search_result);
-            tv_id = (TextView) findViewById(R.id.tv_id);
-            tv_user_name = (TextView) findViewById(R.id.tv_user_name);
-            tv_result_dex = (TextView) findViewById(R.id.tv_result_change);
-            tv_result_creator_data = (TextView) findViewById(R.id.tv_result_creator_data);
+            mDeleteButton = (Button) findViewById(R.id.user_search_delBtn);
+            mTitleName = (TextView) findViewById(R.id.tv_item_name);
+            mDec = (TextView) findViewById(R.id.tv_item_power);
+            mID = (TextView) findViewById(R.id.tv_id);
+            mChange = (TextView) findViewById(R.id.tv_item_change_password);
 
         }
 
         @Override
         public void onBindView(int position) {
-            UserListBean.DsDTO bean = getItem(position);
-            tv_id.setText(position);
-            tv_user_name.setText("用户名:" + bean.getUserName());
-            tv_result_dex.setText("" + bean.getDes());
-            tv_result_creator_data.setText("" + bean.getCreatedAt());
+            UserListBean.DsDTO item = getItem(position);
+            mID.setText("" + position);
+            if (position % 2 == 0) {
+                mID.setBackgroundResource(R.drawable.shape_bg_item_id_2);
+            } else {
+                mID.setBackgroundResource(R.drawable.shape_bg_item_id);
+            }
+            mTitleName.setText("" + item.getUserName());
+            mDec.setText("" + item.getDes());
         }
     }
 

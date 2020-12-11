@@ -31,8 +31,10 @@ import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseManageListActivity;
 import org.company.iendo.mineui.activity.casemsg.SearchActivity;
 import org.company.iendo.mineui.activity.user.adapter.UserSearchListAdapter;
+import org.company.iendo.ui.dialog.InputDialog;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.LogUtils;
+import org.company.iendo.util.MD5ChangeUtil;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.anim.EasyTransition;
 import org.company.iendo.util.anim.EasyTransitionOptions;
@@ -106,7 +108,19 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
 
         mSmartRefreshLayout.setOnRefreshLoadMoreListener(this);
         mSmartRefreshLayout.setEnableLoadMore(false);    //是否启用上拉加载功能
-        mAdapter.setOnChildClickListener(R.id.tv_item_change, new BaseAdapter.OnChildClickListener() {
+        mAdapter.setOnChildClickListener(R.id.tv_item_delete_user, new BaseAdapter.OnChildClickListener() {
+            @Override
+            public void onChildClick(RecyclerView recyclerView, View childView, int position) {
+                if (currentOnlineType) {  //在线
+                    toast("删除====第：" + position + "的密码?");
+
+                } else {
+                    toast("离线用户不能修改密码");
+
+                }
+            }
+        });
+        mAdapter.setOnChildClickListener(R.id.tv_item_change_password, new BaseAdapter.OnChildClickListener() {
             @Override
             public void onChildClick(RecyclerView recyclerView, View childView, int position) {
                 if (currentOnlineType) {  //在线
@@ -147,30 +161,14 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
             public void onRightClick(View v) {
                 // 消息提示对话框
                 if (currentOnlineType) {  //在线
+                    if (getCurrentUserPower().equals("0")) {
+                        showAddUserDialog();
+                    } else {
+                        toast("普通用户无法添加用户");
+                    }
 
                 } else {
-                    new MessageDialog.Builder(UserListActivity.this)
-                            // 标题可以不用填写
-                            .setTitle("提示")
-                            // 内容必须要填写
-                            .setMessage("离线用户无法添加用户")
-                            // 确定按钮文本
-                            .setConfirm(getString(R.string.common_confirm))
-                            // 设置 null 表示不显示取消按钮
-                            .setCancel(getString(R.string.common_cancel))
-                            // 设置点击按钮后不关闭对话框
-                            //.setAutoDismiss(false)
-                            .setListener(new MessageDialog.OnListener() {
-
-                                @Override
-                                public void onConfirm(BaseDialog dialog) {
-                                }
-
-                                @Override
-                                public void onCancel(BaseDialog dialog) {
-                                }
-                            })
-                            .show();
+                    toast("离线用户无法添加用户");
                 }
 
 
@@ -178,17 +176,102 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
         });
     }
 
+    private void showAddUserDialog() {
+        new InputDialog.Builder(this)
+                // 标题可以不用填写
+                .setTitle("添加用户")
+                // 提示可以不用填写
+                .setHint("请输入用户名")
+                .setHintTow("请输入密码")
+                // 确定按钮文本
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                // 设置点击按钮后不关闭对话框
+                //.setAutoDismiss(false)
+                .setListener(new InputDialog.OnListener() {
+
+                    @Override
+                    public void onConfirm(BaseDialog dialog, String str) {
+                        LogUtils.e("TAG===String=" + str);
+                        String[] split = str.split("&&");
+                        String username = split[0];
+                        String password = split[1];
+                        if (username.equals("oldP")) {
+                            username = "";
+                        }
+                        if (password.equals("newP")) {
+                            password = "";
+                        }
+                        toast("旧密码：" + username + "===新密码：" + password);
+                        toast("旧密码：" + username + "===新密码：" + password);
+                        String UserId = (String) SharePreferenceUtil.get(UserListActivity.this, SharePreferenceUtil.UserId, "");
+                        LogUtils.e("TAG===oldPassword=" + username);
+                        LogUtils.e("TAG===newPassword=" + password);
+                        if (!username.equals("")) {
+                            sendAddUserRequest(MD5ChangeUtil.Md5_32(password), UserId, username);
+                        } else {
+                            toast("用户名不能为空!");
+                        }
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                    }
+                })
+                .show();
+    }
+
+    //添加一个用户
+    private void sendAddUserRequest(String password, String userId, String username) {
+        showDialog();
+        OkHttpUtils.post()
+                .url(getCurrentHost() + HttpConstant.User_Add)
+                .addParams("UserName", username)
+                .addParams("userpassword", password)
+                .addParams("UserID", userId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        toast("请求错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("=修改11111密码=onResponse==" + response);
+//                        返回值 1成功   0传入参数为空 -1用户id不存在
+                        if (response.equals("1")) {
+                            UserListBean.DsDTO mItemBean = new UserListBean.DsDTO();
+                            mItemBean.setUserName(username);
+                            mItemBean.setDes("普通用户");
+                            mAdapter.addItem(mItemBean);
+                            mAdapter.notifyDataSetChanged();
+                        } else if (response.equals("0")) {
+                            toast("请求失败");
+                        }
+
+                    }
+                });
+    }
+
     private void sendRequest() {
         LogUtils.e("=TAG=hy=onError==" + endoType);
         showLoading();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.User_List)
-//                .addParams("endoType", endoType)
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        showEmpty();
+                        showError(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                toast("网络请求错误");
+                            }
+                        });
                         LogUtils.e("=TAG=hy=onSucceed==" + e);
                     }
 

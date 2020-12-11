@@ -1,20 +1,23 @@
 package org.company.iendo.mineui.activity.user;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.hjq.base.BaseDialog;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
+import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.login.LoginActivity;
 import org.company.iendo.ui.dialog.DayDialog;
+import org.company.iendo.ui.dialog.InputDialog;
 import org.company.iendo.ui.dialog.MessageDialog;
+import org.company.iendo.util.LogUtils;
+import org.company.iendo.util.MD5ChangeUtil;
 import org.company.iendo.util.SharePreferenceUtil;
 
 import java.io.File;
@@ -23,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import okhttp3.Call;
 
 /**
  * LoveLin
@@ -36,6 +41,9 @@ public class UserMessageActivity extends MyActivity {
     private TextView mCreateTime;
     private TextView mLastOnlineTime;
     private TextView mLoginOnlineTimes;
+    private DayDialog.Builder mDayDialog;
+    private MessageDialog.Builder mMessageDialog;
+    private MessageDialog.Builder mExitDialog;
 
     @Override
     protected int getLayoutId() {
@@ -50,13 +58,13 @@ public class UserMessageActivity extends MyActivity {
         mLastOnlineTime = findViewById(R.id.user_lasttime_online);
         mLoginOnlineTimes = findViewById(R.id.user_online_times);
         setOnClickListener(R.id.btn_user_msg_leave_user, R.id.btn_user_msg_change_password,
-                R.id.btn_user_control_else_user, R.id.btn_user_exit, R.id.copy, R.id.text);
+                R.id.btn_user_control_else_user, R.id.btn_user_exit);
     }
 
     @Override
     protected void initData() {
         String currentName = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.Current_Username, "");
-        String currentUserType = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.Current_UserType, "");
+        String currentUserType = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.Current_UserType, "1");//默认普通用户
         mUsername.setText(currentName + "");
         if ("1".equals(currentUserType)) {
             mDescribe.setText("超级管理员");
@@ -83,88 +91,72 @@ public class UserMessageActivity extends MyActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.copy:  //离线用户
-                try {
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        int REQUEST_CODE_CONTACT = 101;
-                        String[] permissions = {
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                        //验证是否许可权限
-                        for (String str : permissions) {
-                            if (checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
-                                //申请权限
-                                requestPermissions(permissions, REQUEST_CODE_CONTACT);
-                                return;
-                            } else {
-                                //这里就是权限打开之后自己要操作的逻辑
-                                writPic();
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
             case R.id.btn_user_msg_leave_user:  //离线用户
+                //设置当前为离线模式
+                setCurrentOnlineType(false);
                 break;
             case R.id.btn_user_msg_change_password:
                 changePassword();
                 break;
-            case R.id.btn_user_control_else_user:
-                startActivity(UserListActivity.class);
+            case R.id.btn_user_control_else_user:  //管理其他用户
+                if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                    startActivity(UserListActivity.class);
+                } else {        //普通用户
+                    toast("普通用户暂无该权限");
+                }
                 break;
             case R.id.btn_user_exit:   //退出
                 exit();
                 break;
             case R.id.text:
-                // 日期选择对话框
-                new DayDialog.Builder(this)
-                        .setTitle(getString(R.string.age_title))
-                        // 确定按钮文本
-                        .setConfirm(getString(R.string.common_confirm))
-                        // 设置 null 表示不显示取消按钮
-                        .setCancel(getString(R.string.common_cancel))
-                        // 设置日期
-                        //.setDate("2018-12-31")
-                        //.setDate("20181231")
-                        //.setDate(1546263036137)
-                        // 设置年份
-                        .setYear(20)
-                        // 设置月份
-                        .setMonth(6)
-                        // 设置天数
-                        .setDay(18)
-                        // 不选择天数
-                        //.setIgnoreDay()
-                        .setListener(new DayDialog.OnListener() {
-                            @Override
-                            public void onSelected(BaseDialog dialog, int year, int month, int day) {
-                                toast(year + "岁" + month + getString(R.string.common_month) + day + getString(R.string.common_day));
-
-//                                // 如果不指定时分秒则默认为现在的时间
-//                                Calendar calendar = Calendar.getInstance();
-//                                calendar.set(Calendar.YEAR, year);
-//                                // 月份从零开始，所以需要减 1
-//                                calendar.set(Calendar.MONTH, month - 1);
-//                                calendar.set(Calendar.DAY_OF_MONTH, day);
-//                                toast("时间戳：" + calendar.getTimeInMillis());
-                                //toast(new SimpleDateFormat("yyyy年MM月dd日 kk:mm:ss").format(calendar.getTime()));
-                            }
-
-                            @Override
-                            public void onCancel(BaseDialog dialog) {
-                                toast("取消了");
-                            }
-                        })
-                        .show();
+//                // 日期选择对话框
+//                mDayDialog = new DayDialog.Builder(this);
+//                mDayDialog.setTitle(getString(R.string.age_title))
+//                        // 确定按钮文本
+//                        .setConfirm(getString(R.string.common_confirm))
+//                        // 设置 null 表示不显示取消按钮
+//                        .setCancel(getString(R.string.common_cancel))
+//                        // 设置日期
+//                        //.setDate("2018-12-31")
+//                        //.setDate("20181231")
+//                        //.setDate(1546263036137)
+//                        // 设置年份
+//                        .setYear(20)
+//                        // 设置月份
+//                        .setMonth(6)
+//                        // 设置天数
+//                        .setDay(18)
+//                        // 不选择天数
+//                        //.setIgnoreDay()
+//                        .setListener(new DayDialog.OnListener() {
+//                            @Override
+//                            public void onSelected(BaseDialog dialog, int year, int month, int day) {
+//                                toast(year + "岁" + month + getString(R.string.common_month) + day + getString(R.string.common_day));
+//
+////                                // 如果不指定时分秒则默认为现在的时间
+////                                Calendar calendar = Calendar.getInstance();
+////                                calendar.set(Calendar.YEAR, year);
+////                                // 月份从零开始，所以需要减 1
+////                                calendar.set(Calendar.MONTH, month - 1);
+////                                calendar.set(Calendar.DAY_OF_MONTH, day);
+////                                toast("时间戳：" + calendar.getTimeInMillis());
+//                                //toast(new SimpleDateFormat("yyyy年MM月dd日 kk:mm:ss").format(calendar.getTime()));
+//                            }
+//
+//                            @Override
+//                            public void onCancel(BaseDialog dialog) {
+//                                toast("取消了");
+//                            }
+//                        })
+//                        .show();
                 break;
         }
     }
 
     private void exit() {
-        new MessageDialog.Builder(UserMessageActivity.this)
-                // 标题可以不用填写
-                .setTitle("提示")
+        mExitDialog = new MessageDialog.Builder(UserMessageActivity.this);
+        // 标题可以不用填写
+        mExitDialog.setTitle("提示")
                 // 内容必须要填写
                 .setMessage("确定注销登录吗？")
                 // 确定按钮文本
@@ -192,12 +184,21 @@ public class UserMessageActivity extends MyActivity {
     }
 
     private void changePassword() {
+
+        if (getCurrentOnlineType()) {                 //在线模式
+            showChangeDialog();
+        } else {                                      //离线模式
+            toast("离线登录无法操作");
+        }
+
+
         if (getCurrentOnlineType()) {//在线用户才可以修改
 
+
         } else {
-            new MessageDialog.Builder(UserMessageActivity.this)
-                    // 标题可以不用填写
-                    .setTitle("提示")
+            mMessageDialog = new MessageDialog.Builder(UserMessageActivity.this);
+            // 标题可以不用填写
+            mMessageDialog.setTitle("提示")
                     // 内容必须要填写
                     .setMessage("离线用户无法修改密码")
                     // 确定按钮文本
@@ -220,6 +221,114 @@ public class UserMessageActivity extends MyActivity {
         }
 
 
+    }
+
+    //弹出修改密码dialog
+    private void showChangeDialog() {
+        new InputDialog.Builder(this)
+                // 标题可以不用填写
+                .setTitle("修改密码")
+                // 提示可以不用填写
+                .setHint("请输入原密码")
+                .setHintTow("请输入新密码")
+                // 确定按钮文本
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                // 设置点击按钮后不关闭对话框
+                //.setAutoDismiss(false)
+                .setListener(new InputDialog.OnListener() {
+
+                    @Override
+                    public void onConfirm(BaseDialog dialog, String str) {
+                        LogUtils.e("TAG===String=" + str);
+                        String[] split = str.split("&&");
+                        String oldPassword = split[0];
+                        String newPassword = split[1];
+                        if (oldPassword.equals("oldP")) {
+                            oldPassword = "";
+                        }
+                        if (newPassword.equals("newP")) {
+                            newPassword = "";
+                        }
+                        toast("旧密码：" + oldPassword + "===新密码：" + newPassword);
+                        toast("旧密码：" + oldPassword + "===新密码：" + newPassword);
+                        String currentPassword = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.Current_Password, "");
+                        String UserId = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.UserId, "");
+                        String UserName = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.Current_Username, "");
+                        LogUtils.e("TAG===currentPassword=" + currentPassword);
+                        LogUtils.e("TAG===oldPassword=" + oldPassword);
+                        LogUtils.e("TAG===newPassword=" + newPassword);
+
+                        if (currentPassword.equals(oldPassword)) {
+                            sendChangePasswordRequest(MD5ChangeUtil.Md5_32(newPassword), UserId, UserName);
+                        } else {
+                            toast("旧密码输入错误，请重新输入！");
+                        }
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                    }
+                })
+                .show();
+
+
+    }
+
+    /**
+     * 修改密码的请求
+     *
+     * @param UserName
+     * @param password
+     * @param userID
+     */
+    private void sendChangePasswordRequest(String password, String userID, String UserName) {
+        showDialog();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.User_ChangePassword)
+                .addParams("UserName", UserName)
+                .addParams("Password", password)
+                .addParams("userid", userID)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        toast("请求错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("=修改密码=onResponse==" + response);
+//                        返回值 1成功   0传入参数为空 -1用户id不存在
+                        if (response.equals("1")) {
+                            toast("密码修改成功");
+                        } else if (response.equals("0")) {
+                            toast("传入参数为空");
+                        } else if (response.equals("-1")) {
+                            toast("用户不存在");
+                        }
+
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        removeCallbacks();
+        if (mDayDialog != null) {
+            mDayDialog.dismiss();
+        }
+        if (mMessageDialog != null) {
+            mMessageDialog.dismiss();
+        }
+        if (mMessageDialog != null) {
+            mMessageDialog.dismiss();
+        }
     }
 
     /**

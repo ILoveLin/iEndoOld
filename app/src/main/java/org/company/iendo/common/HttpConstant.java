@@ -32,18 +32,10 @@ public class HttpConstant {
     /**
      * 用户管理
      */
-    public static final String User_List = "user_list.aspx";            //get 用户列表
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public static final String User_List = "user_list.aspx";                                //get 用户列表
+    public static final String User_ChangePassword = "update_userpassword.aspx";            //get 修改密码
+    public static final String User_Add = "add_users.aspx";            //post 添加用户
+    public static final String User_Delete = "user_delete.aspx";            //get、 删除用户
 
 
 }

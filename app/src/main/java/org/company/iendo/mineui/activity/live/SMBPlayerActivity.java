@@ -29,14 +29,14 @@ import moe.codeest.enviews.ENDownloadView;
 /**
  * LoveLin
  * <p>
- * Describe   查看SMB的视频
+ * Describe   MainActivity跳转过来的，查看SMB的视频
  */
 public class SMBPlayerActivity extends MyActivity {
     //public static final String path = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
     //public static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
 //    public static final String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
     public String path = "http://vfx.mtime.cn/Video/2019/06/29/mp4/190629004821240734.mp4";
-//    public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3771/祝期玲20200827172726951.mp4";
+    //    public String path = "smb://cmeftproot:lzjdzh19861207@192.168.128.96/ImageData/Videos/3771/祝期玲20200827172726951.mp4";
     //    public String path = "rtmp://58.200.131.2:1935/livetv/jxhd";
 //smb://cmeftproot:lzjdzh19861207@192.168.128.146/ImageData/Videos/4027/220201116141454985.mp4
     private MyVlcVideoView player;
@@ -93,6 +93,7 @@ public class SMBPlayerActivity extends MyActivity {
         path = getIntent().getStringExtra("url");
 //        path = getIntent().getStringExtra("url");
         mTopTitle.setText("" + getIntent().getStringExtra("title"));
+        path = getLiveConnectUrl();
     }
 
     @Override
@@ -141,9 +142,9 @@ public class SMBPlayerActivity extends MyActivity {
                 //mLoadingView   4隐藏  0显示
                 //一开始是隐藏的
                 Log.e("path=====Start:=====", "mLoadingView==type====" + mLoadingView.getVisibility());
-                if(mLoadingView.getVisibility()==View.VISIBLE){ //显示
+                if (mLoadingView.getVisibility() == View.VISIBLE) { //显示
                     mControlView.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
 
                     if (!isError) {  //url错误的时候不响应点击事件
                         if (mLockView.getVisibility() == View.VISIBLE) {

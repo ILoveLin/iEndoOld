@@ -56,6 +56,7 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
     private HintLayout mHintLayout;
     private TitleBar mTitleBar;
     private String endoType;
+    private MessageDialog.Builder builder;
 
     @Override
     protected int getLayoutId() {
@@ -119,6 +120,9 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (builder != null) {
+            builder.dismiss();
+        }
     }
 
     @Override
@@ -212,31 +216,33 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
                     toast("添加");
                     Intent intent = new Intent(CaseManageListActivity.this, AddEditActivity.class);
                     startActivity(intent);
-
-
                 } else {
-                    new MessageDialog.Builder(CaseManageListActivity.this)
-                            // 标题可以不用填写
-                            .setTitle("提示")
-                            // 内容必须要填写
-                            .setMessage("离线用户无法添加用户")
-                            // 确定按钮文本
-                            .setConfirm(getString(R.string.common_confirm))
-                            // 设置 null 表示不显示取消按钮
-                            .setCancel(getString(R.string.common_cancel))
-                            // 设置点击按钮后不关闭对话框
-                            //.setAutoDismiss(false)
-                            .setListener(new MessageDialog.OnListener() {
+                    if ("0".equals(getCurrentUserPower())) {
+                        builder = new MessageDialog.Builder(CaseManageListActivity.this);
+                        builder.setTitle("提示")// 标题可以不用填写
+                                // 内容必须要填写
+                                .setMessage("离线用户无法添加用户")
+                                // 确定按钮文本
+                                .setConfirm(getString(R.string.common_confirm))
+                                // 设置 null 表示不显示取消按钮
+                                .setCancel(getString(R.string.common_cancel))
+                                // 设置点击按钮后不关闭对话框
+                                //.setAutoDismiss(false)
+                                .setListener(new MessageDialog.OnListener() {
 
-                                @Override
-                                public void onConfirm(BaseDialog dialog) {
-                                }
+                                    @Override
+                                    public void onConfirm(BaseDialog dialog) {
+                                    }
 
-                                @Override
-                                public void onCancel(BaseDialog dialog) {
-                                }
-                            })
-                            .show();
+                                    @Override
+                                    public void onCancel(BaseDialog dialog) {
+                                    }
+                                })
+                                .show();
+                    } else {
+                        toast("普通用户暂无该权限");
+                    }
+
                 }
             }
         });

@@ -145,25 +145,49 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
                 }
                 break;
             case R.id.titile_print:       //打印
-                if (currentOnlineType) {
-                    sendRequest("printReport");
-                } else {
+                if (currentOnlineType) {                      //在线模式
+                    if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                        sendRequest("printReport");
+                    } else {                                  //普通用户
+                        toast("普通用户暂无该权限");
+                    }
+                } else {                                      //离线模式
                     toast("离线登录无法打印病例");
                 }
                 break;
             case R.id.titile_delete:      //删除
-                showDeleteDialog();
+                if (currentOnlineType) {                      //在线模式
+                    if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                        showDeleteDialog();
+                    } else {                                  //普通用户
+                        toast("普通用户暂无该权限");
+                    }
+                } else {                                      //离线模式
+                    if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                        showDeleteDialog();
+                    } else {                                  //普通用户
+                        toast("离线登录无法删除病例");
+                    }
+                }
                 break;
             case R.id.titile_download:     //下载
-                if (currentOnlineType) {
+                if (currentOnlineType) {                      //在线模式
                     showDownDialog();
-                } else {
-                    toast("病例已存在！");
+                    if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                    } else {                                        //普通用户
+                        toast("普通用户暂无该权限");
+                    }
+                } else {                                      //离线模式
+                    toast("离线登录无法打印病例");
                 }
                 break;
             case R.id.titile_edit:
                 if (currentOnlineType) {
-                    mAction.onEdit();
+                    if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                        mAction.onEdit();
+                    } else {        //普通用户
+                        toast("普通用户暂无该权限");
+                    }
                 } else {
                     toast("离线病例无法编辑");
                 }
@@ -235,7 +259,7 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     }
 
     private void sendDeleteRequest() {
-        if ("True".equals(getCurrentUserCan())) {  //可以删除
+        if ("True".equals(getCurrentUserPower())) {  //可以删除
             showDialog();
             OkHttpUtils.get()
                     .url(getCurrentHost() + HttpConstant.CaseManager_Live_Connect_Delete)

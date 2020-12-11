@@ -10,6 +10,8 @@ import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.helper.ActivityStackManager;
 import org.company.iendo.helper.DoubleClickHelper;
+import org.company.iendo.mineui.activity.live.LiveActivity;
+import org.company.iendo.mineui.activity.live.LiveConnectDeviceActivity;
 import org.company.iendo.mineui.activity.live.SMBPlayerActivity;
 import org.company.iendo.mineui.activity.user.UserMessageActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseManageListActivity;
@@ -63,8 +65,7 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
                 break;
             case R.id.cv_live:          //直播
 //                String item = mAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
-                intent.putExtra("url", getLiveConnectUrl());
+                Intent intent = new Intent(getActivity(), LiveActivity.class);
                 startActivity(intent);
 //                startActivity(LiveActivity.class);
                 break;

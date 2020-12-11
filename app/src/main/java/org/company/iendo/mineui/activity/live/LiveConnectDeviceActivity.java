@@ -237,7 +237,6 @@ public class LiveConnectDeviceActivity extends MyActivity {
 
             case R.id.lock_screen:
                 LogUtils.e("url====" + path);
-                toast(path);
                 if (lock_screen.getTag().equals("unLock")) {
                     lock_screen.setTag("Lock");
                     lock_screen.setBackgroundResource(R.drawable.video_lock_close_ic);

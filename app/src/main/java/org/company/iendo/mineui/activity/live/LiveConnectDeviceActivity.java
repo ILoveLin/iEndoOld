@@ -290,7 +290,6 @@ public class LiveConnectDeviceActivity extends MyActivity {
                 } else {
                     toast("当前病人与一体机选中病人不一致");
                 }
-
                 break;
             case R.id.snapShot:  //截图
                 if (id.equals(currentDeviceID+"")) {

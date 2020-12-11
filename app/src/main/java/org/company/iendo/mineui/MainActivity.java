@@ -64,7 +64,7 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
             case R.id.cv_live:          //直播
 //                String item = mAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
-                intent.putExtra("url", "");
+                intent.putExtra("url", getLiveConnectUrl());
                 startActivity(intent);
 //                startActivity(LiveActivity.class);
                 break;

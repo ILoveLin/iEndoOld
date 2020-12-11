@@ -259,7 +259,6 @@ public class UserMessageActivity extends MyActivity {
                         LogUtils.e("TAG===currentPassword=" + currentPassword);
                         LogUtils.e("TAG===oldPassword=" + oldPassword);
                         LogUtils.e("TAG===newPassword=" + newPassword);
-
                         if (currentPassword.equals(oldPassword)) {
                             sendChangePasswordRequest(MD5ChangeUtil.Md5_32(newPassword), UserId, UserName);
                         } else {

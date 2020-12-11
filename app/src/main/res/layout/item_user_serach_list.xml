@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.company.iendo.widget.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipeMenuLay"
     android:layout_width="match_parent"
@@ -9,7 +8,7 @@
     app:ios="false"
     app:leftSwipe="true"
     app:swipeEnable="true">
-
+<!--    org.company.iendo.widget.SwipeMenuLayout-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_65"
@@ -100,23 +99,23 @@
     </LinearLayout>
 
 
-    <Button
-        android:id="@+id/cancleBtn"
-        android:layout_width="@dimen/padding_80"
-        android:layout_height="match_parent"
-        android:background="@color/white50"
-        android:text="取消"
-        android:textColor="@color/color_50b3ff"
-        android:textSize="@dimen/padding_15"
-        android:visibility="gone" />
+<!--    <Button-->
+<!--        android:id="@+id/cancleBtn"-->
+<!--        android:layout_width="@dimen/padding_80"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/white50"-->
+<!--        android:text="取消"-->
+<!--        android:textColor="@color/color_50b3ff"-->
+<!--        android:textSize="@dimen/padding_15"-->
+<!--        android:visibility="gone" />-->
 
-    <Button
-        android:id="@+id/user_search_delBtn"
-        android:layout_width="@dimen/padding_80"
-        android:layout_height="match_parent"
-        android:background="@color/red"
-        android:text="删除"
-        android:textColor="@color/white"
-        android:textSize="@dimen/padding_15" />
+<!--    <Button-->
+<!--        android:id="@+id/user_search_delBtn"-->
+<!--        android:layout_width="@dimen/padding_80"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/red"-->
+<!--        android:text="删除"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="@dimen/padding_15" />-->
 
-</org.company.iendo.widget.SwipeMenuLayout>
+</LinearLayout>

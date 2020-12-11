@@ -32,6 +32,7 @@ import org.company.iendo.mineui.activity.casemsg.CaseManageListActivity;
 import org.company.iendo.mineui.activity.casemsg.SearchActivity;
 import org.company.iendo.mineui.activity.user.adapter.UserSearchListAdapter;
 import org.company.iendo.ui.dialog.InputDialog;
+import org.company.iendo.ui.dialog.InputDialogOne;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.MD5ChangeUtil;
@@ -112,7 +113,16 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
             @Override
             public void onChildClick(RecyclerView recyclerView, View childView, int position) {
                 if (currentOnlineType) {  //在线
-                    toast("删除====第：" + position + "的密码?");
+                    if (getCurrentUserPower().equals("0")) {
+                        String des = mAdapter.getItem(position).getDes();
+                        if (des.equals("超级管理员")) {
+                            toast("超级管理员不能被删除!");
+                        } else {
+                            showDeleteDialog(mAdapter.getItem(position));
+                        }
+                    } else {
+                        toast("普通用户不能修改密码");
+                    }
 
                 } else {
                     toast("离线用户不能修改密码");
@@ -124,21 +134,7 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
             @Override
             public void onChildClick(RecyclerView recyclerView, View childView, int position) {
                 if (currentOnlineType) {  //在线
-                    toast("修改====第：" + position + "的密码?");
-
-                } else {
-                    toast("离线用户不能修改密码");
-
-                }
-            }
-        });
-        mAdapter.setOnChildClickListener(R.id.user_search_delBtn, new BaseAdapter.OnChildClickListener() {
-            @Override
-            public void onChildClick(RecyclerView recyclerView, View childView, int position) {
-                //todo 超级管理员不能删除自己  这里需要做权限的判断
-                if (currentOnlineType) {  //在线
-                    toast("马上,删除第:" + position + "条item数据");
-
+                    showChangePasswordDialog(mAdapter.getItem(position));
 
                 } else {
                     toast("离线用户不能修改密码");
@@ -174,6 +170,96 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
 
             }
         });
+    }
+
+    private void showDeleteDialog(UserListBean.DsDTO item) {
+        new MessageDialog.Builder(UserListActivity.this)
+                // 标题可以不用填写
+                .setTitle("提示!")
+                // 内容必须要填写
+                .setMessage("确定删除该用户吗?")
+                // 确定按钮文本
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                // 设置点击按钮后不关闭对话框
+                //.setAutoDismiss(false)
+                .setListener(new MessageDialog.OnListener() {
+
+                    @Override
+                    public void onConfirm(BaseDialog dialog) {
+                        sendDeleteRequest(item.getUserID(), item);
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                    }
+                })
+                .show();
+
+    }
+
+    //删除用户请求
+    private void sendDeleteRequest(String UserID, UserListBean.DsDTO item) {
+//        User_ID  当前登入的id
+        String User_ID = (String) SharePreferenceUtil.get(UserListActivity.this, SharePreferenceUtil.UserId, "");
+
+        showDialog();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.User_Delete)
+                .addParams("UserID", UserID)
+                .addParams("User_ID", User_ID)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        toast("请求错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+                        LogUtils.e("=修改密码=onResponse==" + response);
+//                        返回值 1成功   0传入参数为空 -1用户id不存在
+                        if (response.equals("1")) {
+                            mAdapter.removeItem(item);
+                            mAdapter.notifyDataSetChanged();
+                        } else if (response.equals("0")) {
+                            toast("传入参数为空");
+                        } else if (response.equals("-1")) {
+                            toast("用户不存在");
+                        }
+
+                    }
+                });
+
+
+    }
+
+    private void showChangePasswordDialog(UserListBean.DsDTO item) {
+        new InputDialogOne.Builder(this)
+                // 标题可以不用填写
+                .setTitle("修改密码")
+                // 提示可以不用填写
+                .setHint("请输入新密码")
+                // 确定按钮文本
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                // 设置点击按钮后不关闭对话框
+                //.setAutoDismiss(false)
+                .setListener(new InputDialogOne.OnListener() {
+                    @Override
+                    public void onConfirm(BaseDialog dialog, String content) {
+                        sendChangePasswordRequest(MD5ChangeUtil.Md5_32(content), item.getUserID(), item.getUserName());
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                    }
+                })
+                .show();
     }
 
     private void showAddUserDialog() {
@@ -220,6 +306,43 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
                     }
                 })
                 .show();
+    }
+
+    /**
+     * 修改密码的请求
+     *
+     * @param password
+     */
+    private void sendChangePasswordRequest(String password, String userID, String UserName) {
+        showDialog();
+        OkHttpUtils.get()
+                .url(getCurrentHost() + HttpConstant.User_ChangePassword)
+                .addParams("UserName", UserName)
+                .addParams("Password", password)
+                .addParams("userid", userID)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        hideDialog();
+                        toast("请求错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        hideDialog();
+//                        返回值 1成功   0传入参数为空 -1用户id不存在
+                        if (response.equals("1")) {
+                            toast("密码修改成功");
+                        } else if (response.equals("0")) {
+                            toast("传入参数为空");
+                        } else if (response.equals("-1")) {
+                            toast("用户不存在");
+                        }
+
+                    }
+                });
+
     }
 
     //添加一个用户

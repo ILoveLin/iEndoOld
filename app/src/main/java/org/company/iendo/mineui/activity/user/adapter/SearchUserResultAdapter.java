@@ -30,16 +30,13 @@ public class SearchUserResultAdapter extends MyAdapter<UserListBean.DsDTO> {
     }
 
     private final class ViewHolder extends BaseAdapter.ViewHolder {
-        private Button mDeleteButton;
         private TextView mTitleName;
         private TextView mDec;
         private TextView mChange;
         private TextView mID;
-        private TextView mCreatorData;
 
         public ViewHolder() {
             super(R.layout.item_user_search_result);
-            mDeleteButton = (Button) findViewById(R.id.user_search_delBtn);
             mTitleName = (TextView) findViewById(R.id.tv_item_name);
             mDec = (TextView) findViewById(R.id.tv_item_power);
             mID = (TextView) findViewById(R.id.tv_id);

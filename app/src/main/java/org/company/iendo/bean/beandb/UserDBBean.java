@@ -17,7 +17,7 @@ public class UserDBBean {
     @Unique
     private String username;
     private String password;
-    private String userType;
+    private String userType;   //0是超级管理员
     private String tag;
 
     @Generated(hash = 1938892055)

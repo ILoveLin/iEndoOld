@@ -84,8 +84,10 @@ public class DownPictureThread implements Runnable {
                                     smbFiles[i].getName(), toFile.getAbsolutePath());
 
                         } else {
-                            SDFileUtil.downLoadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
-                                    smbFiles[i].getName(), toFile.getAbsolutePath());
+                            if (toFile.listFiles().length==smbFiles.length) { //SMB服务器图片数量和本地不同再次下载
+                                SDFileUtil.downLoadFileToFolder(remoteUrl, "ImageData/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/",
+                                        smbFiles[i].getName(), toFile.getAbsolutePath());
+                            }
                         }
                     }
                     if (mListener != null) {

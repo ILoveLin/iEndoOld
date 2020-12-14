@@ -10,6 +10,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseDetailMsgBean;
+import org.company.iendo.bean.CaseManagerListBean;
 import org.company.iendo.bean.event.RefreshFragmentEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyFragment;
@@ -87,12 +88,34 @@ public class Fragment02 extends MyFragment<MainActivity> implements StatusAction
 
     @Override
     protected void initData() {
-        sendRequest();
+
+        if (getCurrentOnlineType()) {
+            sendRequest();
+        } else {  //  CaseManagerListBean.DsDTO
+            CaseManagerListBean.DsDTO itemBean = mActivity.getItemBean();
+            case02_again_see.setText(itemBean.getReturnVisit());
+            case02_check_number.setText(itemBean.getCaseNo() + "");
+            case02_charge.setText(itemBean.getFee() + "");
+            case02_doctor.setText(itemBean.getSubmitDoctor() + "");
+            case02_device.setText("");  //设备
+            case02_case.setText(itemBean.getDepartment() + "");
+            case02_say.setText(itemBean.getChiefComplaint() + "");
+            case02_bed_see.setText(itemBean.getClinicalDiagnosis() + "");
+            case02_mirror_see.setText(itemBean.getCheckContent() + "");
+            case02_mirror_see_result.setText(itemBean.getCheckDiagnosis() + "");
+            case02_live_see.setText(itemBean.getBiopsy() + "");
+            case02_test.setText(itemBean.getTest() + "");
+            case02_cytology.setText(itemBean.getCtology() + "");
+            case02_pathology.setText(itemBean.getPathology() + "");
+            case02_advise.setText(itemBean.getAdvice() + "");
+            case02_check_doctor.setText(itemBean.getExaminingPhysician() + "");
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRefreshFragmentEvent(RefreshFragmentEvent event){
-        LogUtils.e("TAG--onRefreshFragmentEvent" + "event===="+event.getType());
+    public void onRefreshFragmentEvent(RefreshFragmentEvent event) {
+        LogUtils.e("TAG--onRefreshFragmentEvent" + "event====" + event.getType());
         if (event.getType().equals("refresh")) {
             LogUtils.e("TAG--onRefreshFragmentEvent" + "onRefreshFragmentEvent");
             sendRequest();

@@ -162,6 +162,75 @@ public class UserDetailMSGDBBean {
     @Generated(hash = 407973039)
     public UserDetailMSGDBBean() {
     }
+
+    @Override
+    public String toString() {
+        return "UserDetailMSGDBBean{" +
+                "id=" + id +
+                ", ID='" + ID + '\'' +
+                ", tag='" + tag + '\'' +
+                ", RecordType='" + RecordType + '\'' +
+                ", PatientID='" + PatientID + '\'' +
+                ", Married='" + Married + '\'' +
+                ", Name='" + Name + '\'' +
+                ", Sex='" + Sex + '\'' +
+                ", Tel='" + Tel + '\'' +
+                ", Address='" + Address + '\'' +
+                ", PatientNo='" + PatientNo + '\'' +
+                ", CardID='" + CardID + '\'' +
+                ", MedHistory='" + MedHistory + '\'' +
+                ", FamilyHistory='" + FamilyHistory + '\'' +
+                ", Race='" + Race + '\'' +
+                ", Occupatior='" + Occupatior + '\'' +
+                ", InsuranceID='" + InsuranceID + '\'' +
+                ", NativePlace='" + NativePlace + '\'' +
+                ", IsInHospital='" + IsInHospital + '\'' +
+                ", LastCheckUserID='" + LastCheckUserID + '\'' +
+                ", DOB='" + DOB + '\'' +
+                ", PatientAge='" + PatientAge + '\'' +
+                ", AgeUnit='" + AgeUnit + '\'' +
+                ", CaseNo='" + CaseNo + '\'' +
+                ", ReturnVisit='" + ReturnVisit + '\'' +
+                ", BedID='" + BedID + '\'' +
+                ", WardID='" + WardID + '\'' +
+                ", CaseID='" + CaseID + '\'' +
+                ", SubmitDoctor='" + SubmitDoctor + '\'' +
+                ", Department='" + Department + '\'' +
+                ", Device='" + Device + '\'' +
+                ", Fee='" + Fee + '\'' +
+                ", FeeType='" + FeeType + '\'' +
+                ", ChiefComplaint='" + ChiefComplaint + '\'' +
+                ", Test='" + Test + '\'' +
+                ", Advice='" + Advice + '\'' +
+                ", InpatientID='" + InpatientID + '\'' +
+                ", OutpatientID='" + OutpatientID + '\'' +
+                ", Others='" + Others + '\'' +
+                ", Await1='" + Await1 + '\'' +
+                ", Await2='" + Await2 + '\'' +
+                ", Await3='" + Await3 + '\'' +
+                ", Await4='" + Await4 + '\'' +
+                ", Await5='" + Await5 + '\'' +
+                ", Biopsy='" + Biopsy + '\'' +
+                ", Ctology='" + Ctology + '\'' +
+                ", Pathology='" + Pathology + '\'' +
+                ", CheckDate='" + CheckDate + '\'' +
+                ", RecordDate='" + RecordDate + '\'' +
+                ", Printed='" + Printed + '\'' +
+                ", Upload='" + Upload + '\'' +
+                ", Bespeak='" + Bespeak + '\'' +
+                ", Images='" + Images + '\'' +
+                ", ReportStyle='" + ReportStyle + '\'' +
+                ", UserName='" + UserName + '\'' +
+                ", EndoType='" + EndoType + '\'' +
+                ", StudyInstanceUID='" + StudyInstanceUID + '\'' +
+                ", SeriesInstanceUID='" + SeriesInstanceUID + '\'' +
+                ", ExaminingPhysician='" + ExaminingPhysician + '\'' +
+                ", ClinicalDiagnosis='" + ClinicalDiagnosis + '\'' +
+                ", CheckContent='" + CheckContent + '\'' +
+                ", CheckDiagnosis='" + CheckDiagnosis + '\'' +
+                '}';
+    }
+
     public Long getId() {
         return this.id;
     }

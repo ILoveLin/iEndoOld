@@ -15,10 +15,10 @@ import org.company.iendo.R;
 import org.company.iendo.widget.HintLayout;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/AndroidProject
- *    time   : 2019/12/08
- *    desc   : 界面状态提示
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/AndroidProject
+ * time   : 2019/12/08
+ * desc   : 界面状态提示
  */
 public interface StatusAction {
 
@@ -58,6 +58,10 @@ public interface StatusAction {
      */
     default void showEmpty() {
         showLayout(R.drawable.hint_empty_ic, R.string.hint_layout_no_data, null);
+    }
+
+    default void showNetEmpty() {
+        showLayout(R.drawable.hint_empty_ic, R.string.hint_layout_no_data_net, null);
     }
 
     /**

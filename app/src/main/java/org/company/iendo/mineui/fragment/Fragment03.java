@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +29,7 @@ import org.company.iendo.mineui.MainActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseDetailMsgActivity;
 import org.company.iendo.mineui.fragment.adapter.PictureAdapter;
 import org.company.iendo.ui.activity.ImagePreviewActivity;
+import org.company.iendo.util.BeanToUtils;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SDFileUtil;
 import org.company.iendo.util.SharePreferenceUtil;
@@ -60,7 +62,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     public ArrayList<String> mDataList = new ArrayList<>();
     private ImageListDownDBBean mImageListBean;
     private ArrayList<String> dimImageList;
-    private ArrayList<String> reallyPathList;
+    private ArrayList<String> reallyPathList =new ArrayList<>();
     private CaseDetailMsgActivity mActivity;
     private WrapRecyclerView mRecyclerView;
     public static final int REFRESH = 110;
@@ -93,6 +95,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
             }
         }
     };
+    private ArrayList viewPagerDataList;
 
 
     public Fragment03(CaseDetailMsgActivity Activity) {
@@ -119,6 +122,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initData() {
         //验证是否许可权限
@@ -134,7 +138,12 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                     return;
                 } else {
                     //这里就是权限打开之后自己要操作的逻辑
-                    responseListener();
+                    if (mActivity.getCurrentOnlineType()) {
+                        responseListener();
+                    } else {
+                        List<String> dimImagePathList = BeanToUtils.getDimImagePathList(mActivity.getItemBeanID());
+                        mAdapter.setData(dimImagePathList);
+                    }
 
                 }
             }
@@ -286,15 +295,32 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast(position);
-        if (canClick) { //跳转原图界面的开关
-            ArrayList viewPagerDataList = getViewPagerPicturePath();
-            if (viewPagerDataList.size() != 0) {
-                ImagePreviewActivity.start(getAttachActivity(), viewPagerDataList, viewPagerDataList.size() - 1);
+        if (mActivity.getCurrentOnlineType()) {
+            if (canClick) { //跳转原图界面的开关
+                viewPagerDataList = getViewPagerPicturePath();
+                if (viewPagerDataList.size() != 0) {
+                    ImagePreviewActivity.start(getAttachActivity(), viewPagerDataList, viewPagerDataList.size() - 1);
+                } else {
+                    toast("暂无数据!");
+                }
+            } else {
+                toast("原图读取中,请稍后再试。");
+            }
+        } else {
+            ArrayList<String> reallyImagePathList = (ArrayList<String>) BeanToUtils.getReallyImagePathList(mActivity.getItemBeanID());
+
+
+            Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.size());
+            for (int i = 0; i < reallyImagePathList.size(); i++) {
+                Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.get(i));
+
+            }
+
+            if (reallyImagePathList.size() != 0) {
+                ImagePreviewActivity.start(getAttachActivity(), reallyImagePathList, reallyImagePathList.size() - 1);
             } else {
                 toast("暂无数据!");
             }
-        } else {
-            toast("原图读取中,请稍后再试。");
         }
     }
 

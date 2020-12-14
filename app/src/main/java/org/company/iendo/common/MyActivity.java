@@ -18,11 +18,17 @@ import org.company.iendo.R;
 import org.company.iendo.action.SwipeAction;
 import org.company.iendo.action.TitleBarAction;
 import org.company.iendo.action.ToastAction;
+import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.beandb.UserDetailMSGDBBean;
 import org.company.iendo.http.model.HttpData;
 import org.company.iendo.ui.dialog.WaitDialog;
 import org.company.iendo.util.SharePreferenceUtil;
+import org.company.iendo.util.db.UserDetailMSGDBUtils;
 
 import com.hjq.http.listener.OnHttpListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 
@@ -56,6 +62,20 @@ public abstract class MyActivity extends BaseActivity
     private int mDialogTotal;
     public Gson mGson;
 
+    public List getUserDBList() {
+        List<UserDetailMSGDBBean> list = UserDetailMSGDBUtils.queryAll(UserDetailMSGDBBean.class);
+        ArrayList<CaseManagerListBean.DsDTO> mData = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            CaseManagerListBean.DsDTO mBean = new CaseManagerListBean.DsDTO();
+            mBean.setID(list.get(i).getID());
+            mBean.setEndoType(list.get(i).getEndoType());
+            mBean.setRecordDate(list.get(i).getRecordDate());
+            mBean.setPathology(list.get(i).getPathology());
+            mBean.setName(list.get(i).getName());
+            mData.add(mBean);
+        }
+        return mData;
+    }
 
     /**
      * 当前加载对话框是否在显示中
@@ -186,6 +206,7 @@ public abstract class MyActivity extends BaseActivity
     public void onLeftClick(View v) {
         onBackPressed();
     }
+
     /**
      * 获取当前用户权限
      *
@@ -194,6 +215,7 @@ public abstract class MyActivity extends BaseActivity
     public String getCurrentUserPower() {
         return (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_UserType, "");
     }
+
     /**
      * 获取userId
      *
@@ -227,7 +249,8 @@ public abstract class MyActivity extends BaseActivity
 
     /**
      * 获取登录模式
-     *默认在线登录
+     * 默认在线登录
+     *
      * @return
      */
     public Boolean getCurrentOnlineType() {
@@ -249,6 +272,7 @@ public abstract class MyActivity extends BaseActivity
 
     /**
      * 获取当前登入的用户名
+     *
      * @return
      */
     public String getCurrentUserName() {
@@ -256,6 +280,7 @@ public abstract class MyActivity extends BaseActivity
         return Host;
 
     }
+
     /**
      * 获取登录模式
      *

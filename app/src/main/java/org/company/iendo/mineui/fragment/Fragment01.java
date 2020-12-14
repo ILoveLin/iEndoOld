@@ -13,6 +13,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseDetailMsgBean;
+import org.company.iendo.bean.CaseManagerListBean;
 import org.company.iendo.bean.event.RefreshFragmentEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyFragment;
@@ -81,7 +82,20 @@ public class Fragment01 extends MyFragment<MainActivity> implements StatusAction
 
     @Override
     protected void initData() {
-        sendRequest();
+
+        if (getCurrentOnlineType()) {
+            sendRequest();
+        } else {  //  CaseManagerListBean.DsDTO
+            CaseManagerListBean.DsDTO itemBean = mActivity.getItemBean();
+            mNumber.setText("" + itemBean.getCaseID());
+            mName.setText("" + itemBean.getName());
+            mAge.setText("" + itemBean.getPatientAge() + itemBean.getAgeUnit());
+            mSex.setText("" + itemBean.getSex());
+            mProfession.setText("" + itemBean.getOccupatior());
+            mPhone.setText("" + itemBean.getTel());
+            mHistory.setText("" + itemBean.getMedHistory());
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

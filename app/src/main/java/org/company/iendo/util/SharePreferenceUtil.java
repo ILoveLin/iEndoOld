@@ -25,8 +25,8 @@ public class SharePreferenceUtil {
     public static final String FILE_NAME = "share_data";
     public static final String UID = "uid";
     public static final String UserId = "userid";       //当前用户id
-
-
+    //boolean 类型 ,数据库用户表是否创建了？
+    public static final String Flag_User_IsCreator = "Flag_User_IsCreator";
     /**
      * 引导界面
      */

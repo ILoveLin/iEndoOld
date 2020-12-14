@@ -101,9 +101,12 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
                     getActivity().requestPermissions(permissions, REQUEST_CODE_CONTACT);
                     return;
                 } else {
-                    //这里就是权限打开之后自己要操作的逻辑
-                    responseListener();
-
+                    if (mActivity.getCurrentOnlineType()){
+                        //这里就是权限打开之后自己要操作的逻辑
+                        responseListener();
+                    }else {
+                        showNetEmpty();
+                    }
                 }
             }
         }
@@ -153,14 +156,26 @@ public class Fragment04 extends MyFragment<MainActivity> implements StatusAction
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast(position);
-        String title = mAdapter.getItem(position);
-        Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
-        String url = "smb://cmeftproot:lzjdzh19861207@" + getCurrentIP() + "/ImageData/Videos/"
-                + CaseDetailMsgActivity.getCurrentID() + "/" + title;
-        intent.putExtra("url", url + "");
-        intent.putExtra("title", title + "");
-        toast(url);
-        startActivity(intent);
+
+
+        if (mActivity.getCurrentOnlineType()){
+
+        }else {
+
+        }
+
+
+        if (mActivity.getCurrentOnlineType()){
+            String title = mAdapter.getItem(position);
+            Intent intent = new Intent(getActivity(), SMBPlayerActivity.class);
+            String url = "smb://cmeftproot:lzjdzh19861207@" + getCurrentIP() + "/ImageData/Videos/"
+                    + CaseDetailMsgActivity.getCurrentID() + "/" + title;
+            intent.putExtra("url", url + "");
+            intent.putExtra("title", title + "");
+            toast(url);
+            startActivity(intent);
+        }
+
     }
 
     private void initSmb() throws UnknownHostException, SmbException, MalformedURLException {

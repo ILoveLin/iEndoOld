@@ -44,7 +44,6 @@ public final class ImagePreviewActivity extends MyActivity implements ViewPager.
         start(context, urls, 0);
     }
 
-    @CheckNet
     @DebugLog
     public static void start(Context context, ArrayList<String> urls, int index) {
         Intent intent = new Intent(context, ImagePreviewActivity.class);

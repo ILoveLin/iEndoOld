@@ -210,6 +210,8 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                                             for (int i = 0; i < mBean.getDs().size(); i++) {
 
                                                 String userType = mBean.getDs().get(mBean.getDs().size()-1).getRole();
+                                                LogUtils.e("=TAG=login=Current_UserType==" +userType);
+
                                                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, userType);
 
                                                 if (i == 0) {
@@ -270,6 +272,7 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                 //登录 就要存入当前用户名,密码,用户权限类型,是否记住密码,
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Username, dbusername + "");
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_Password, dbpassword + "");
+                LogUtils.e("=TAG=login=Current_UserType=====dbusertype==DB==" +dbusertype);
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, dbusertype + "");
 //                SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.isOnline, ifOnline);
                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.is_Remember_Password, mSwithRemeber.isChecked());  //是否记住密码

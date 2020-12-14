@@ -71,6 +71,7 @@
 
     <!-- 提示布局 -->
     <string name="hint_layout_no_data">空空如也</string>
+    <string name="hint_layout_no_data_net">离线登录模式,不能查看视频哦！</string>
     <string name="hint_layout_error_request">请求出错，点击重试</string>
     <string name="hint_layout_error_network">网络错误，点击重试</string>
 

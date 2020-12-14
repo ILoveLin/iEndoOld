@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.view.View;
 
+import com.hjq.base.BaseDialog;
+
 import org.company.iendo.R;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.helper.ActivityStackManager;
@@ -16,6 +18,7 @@ import org.company.iendo.mineui.activity.live.SMBPlayerActivity;
 import org.company.iendo.mineui.activity.user.UserMessageActivity;
 import org.company.iendo.mineui.activity.casemsg.CaseManageListActivity;
 import org.company.iendo.other.KeyboardWatcher;
+import org.company.iendo.ui.dialog.MessageDialog;
 
 /**
  * LoveLin
@@ -23,6 +26,9 @@ import org.company.iendo.other.KeyboardWatcher;
  * Describe主页
  */
 public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyboardStateListener {
+
+    private MessageDialog.Builder builder;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main_only;
@@ -64,12 +70,37 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
                 startActivity(CaseManageListActivity.class);
                 break;
             case R.id.cv_live:          //直播
-//                String item = mAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), LiveActivity.class);
-                startActivity(intent);
-//                startActivity(LiveActivity.class);
+
+                if (getCurrentOnlineType()) {
+                    Intent intent = new Intent(getActivity(), LiveActivity.class);
+                    startActivity(intent);
+                    showNetLiveDialog();
+                } else {
+                    showNetLiveDialog();
+                }
                 break;
         }
+    }
+
+    private void showNetLiveDialog() {
+        builder = new MessageDialog.Builder(MainActivity.this);
+        builder.setTitle("提示")
+                .setMessage("离线用户不能查看直播")
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                .setListener(new MessageDialog.OnListener() {
+                    @Override
+                    public void onConfirm(BaseDialog dialog) {
+
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+
+                    }
+                }).show();
+
     }
 
 
@@ -108,6 +139,9 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (builder != null) {
+            builder.dismiss();
+        }
     }
 
     @Override

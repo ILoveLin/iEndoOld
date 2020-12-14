@@ -64,9 +64,10 @@ public class UserMessageActivity extends MyActivity {
     @Override
     protected void initData() {
         String currentName = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.Current_Username, "");
+       //0是超级管理员，1是普通用户
         String currentUserType = (String) SharePreferenceUtil.get(UserMessageActivity.this, SharePreferenceUtil.Current_UserType, "1");//默认普通用户
         mUsername.setText(currentName + "");
-        if ("1".equals(currentUserType)) {
+        if ("0".equals(currentUserType)) {
             mDescribe.setText("超级管理员");
         } else {
             mDescribe.setText("普通用户");
@@ -93,12 +94,17 @@ public class UserMessageActivity extends MyActivity {
         switch (v.getId()) {
             case R.id.btn_user_msg_leave_user:  //离线用户
                 //设置当前为离线模式
-                setCurrentOnlineType(false);
+                if (getCurrentOnlineType()){
+                    showChangeOnLineTypeDialog();
+                }else {
+                    toast("当前就是离线模式，请勿重复操作！");
+                }
                 break;
             case R.id.btn_user_msg_change_password:
                 changePassword();
                 break;
             case R.id.btn_user_control_else_user:  //管理其他用户
+                toast(getCurrentUserPower());
                 if ("0".equals(getCurrentUserPower())) {  //超级管理员
                     startActivity(UserListActivity.class);
                 } else {        //普通用户
@@ -151,6 +157,29 @@ public class UserMessageActivity extends MyActivity {
 //                        .show();
                 break;
         }
+    }
+
+    private void showChangeOnLineTypeDialog() {
+        MessageDialog.Builder onLineBuilder = new MessageDialog.Builder(UserMessageActivity.this);
+        onLineBuilder.setTitle("提示")
+                .setMessage("确定切换到离线模式吗?")
+                .setConfirm(getString(R.string.common_confirm))
+                // 设置 null 表示不显示取消按钮
+                .setCancel(getString(R.string.common_cancel))
+                .setListener(new MessageDialog.OnListener() {
+                    @Override
+                    public void onConfirm(BaseDialog dialog) {
+                        setCurrentOnlineType(false);
+                        toast("切换成功！");
+                    }
+
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+
+                    }
+                }).show();
+
+
     }
 
     private void exit() {

@@ -39,8 +39,10 @@ import org.company.iendo.mineui.fragment.Fragment04;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.ui.dialog.SelectDialog;
 import org.company.iendo.ui.dialog.SelectDialogMy;
+import org.company.iendo.util.BeanToUtils;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SDFileUtil;
+import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.db.ImageDBUtils;
 import org.company.iendo.util.db.UserDetailMSGDBUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -78,6 +80,8 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     private TextView mPrint;
     private TextView mLive;
     private TextView mEdit;
+    private SelectDialogMy.Builder downBuilder;
+    private MessageDialog.Builder deleteBuilder;
 
     @Override
     protected int getLayoutId() {
@@ -104,6 +108,8 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         itemID = getIntent().getStringExtra("ID");
         deletePosition = Integer.parseInt(getIntent().getStringExtra("position"));
         bean = (CaseManagerListBean.DsDTO) getIntent().getSerializableExtra("bean");
+
+
         mPagerAdapter = new BaseFragmentAdapter<>(this);
         Fragment01 fragment01 = new Fragment01(this);
         Fragment02 fragment02 = new Fragment02(this);
@@ -115,7 +121,6 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         mPagerAdapter.addFragment(fragment04, "视频");
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        sendDetailMSGRequest();   //获取详情接口数据，不用再每个fragment里面处理下载存入到数据库中，更方便
 
     }
 
@@ -127,6 +132,19 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
                 finish();
             }
         });
+
+        if (getCurrentOnlineType()) {
+            sendDetailMSGRequest();   //获取详情接口数据，不用再每个fragment里面处理下载存入到数据库中，更方便
+        } else {
+        }
+
+    }
+
+    public String  getItemBeanID() {
+        return bean.getID();
+    }
+    public CaseManagerListBean.DsDTO getItemBean() {
+        return BeanToUtils.getDBBeanToJsonBean(bean);
     }
 
     @Override
@@ -173,8 +191,8 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
                 break;
             case R.id.titile_download:     //下载
                 if (currentOnlineType) {                      //在线模式
-                    showDownDialog();
                     if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                        showDownDialog();
                     } else {                                        //普通用户
                         toast("普通用户暂无该权限");
                     }
@@ -305,6 +323,7 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //itemID  是当前用户id
                 boolean isExist1 = ImageDBUtils.queryListIsExist(itemID);
                 LogUtils.e("====DP==删除,图片--表--是否存在====isExist1===" + isExist1);
                 if (ImageDBUtils.queryListIsExist(itemID)) {   //存在才删除
@@ -344,8 +363,8 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     }
 
     private void showDownDialog() {
-        new SelectDialogMy.Builder(this)
-                .setTitle("提示!")
+        downBuilder = new SelectDialogMy.Builder(this);
+        downBuilder.setTitle("提示!")
                 .setList("病例信息", "图片信息")
                 // 设置最大选择数
                 .setMaxSelect(2)
@@ -374,9 +393,9 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     }
 
     private void showDeleteDialog() {
-        new MessageDialog.Builder(CaseDetailMsgActivity.this)
-                // 标题可以不用填写
-                .setTitle("提示")
+        deleteBuilder = new MessageDialog.Builder(CaseDetailMsgActivity.this);
+        // 标题可以不用填写
+        deleteBuilder.setTitle("提示")
                 // 内容必须要填写
                 .setMessage("确定删除吗？")
                 // 确定按钮文本
@@ -428,43 +447,12 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
 
     //下载用户信息
     private void downLoadUserMsg() {
-        UserDetailMSGDBBean userDetailMSGDBBean = setUserMSGToDB(mBean);
+        UserDetailMSGDBBean userDetailMSGDBBean = BeanToUtils.getJsonBeanToDBBean(mBean);
         UserDetailMSGDBUtils.insertOrReplaceData(userDetailMSGDBBean);
+        SharePreferenceUtil.put(this, SharePreferenceUtil.Flag_User_IsCreator, true);
         LogUtils.e("选择的数据==db=用户表存=======存入成功");
     }
 
-    //设置数据,再获取到能存数据库的Bean
-    private UserDetailMSGDBBean setUserMSGToDB(CaseDetailMsgBean.DsDTO mBean) {
-        UserDetailMSGDBBean mDBDetailBean = new UserDetailMSGDBBean();
-        mDBDetailBean.setTag(getCurrentID());  //设置查询条件的TAG
-        mDBDetailBean.setCaseID("" + mBean.getCaseID());
-        mDBDetailBean.setName("" + mBean.getName());
-        mDBDetailBean.setPatientAge("" + mBean.getPatientAge());
-        mDBDetailBean.setSex("" + mBean.getSex());
-        mDBDetailBean.setOccupatior("" + mBean.getOccupatior());
-        mDBDetailBean.setTel("" + mBean.getTel());
-        mDBDetailBean.setMedHistory("" + mBean.getMedHistory());
-        if (mBean.getReturnVisit().equals("False")) {
-            mDBDetailBean.setReturnVisit("否");
-        } else {
-            mDBDetailBean.setReturnVisit("是");
-        }
-        mDBDetailBean.setCaseNo("" + mBean.getCaseNo());
-        mDBDetailBean.setFee("" + mBean.getFee());
-        mDBDetailBean.setSubmitDoctor("" + mBean.getSubmitDoctor());
-        mDBDetailBean.setDepartment("" + mBean.getDepartment());
-        mDBDetailBean.setChiefComplaint("" + mBean.getChiefComplaint());
-        mDBDetailBean.setClinicalDiagnosis("" + mBean.getClinicalDiagnosis());
-        mDBDetailBean.setCheckContent("" + mBean.getCheckContent());
-        mDBDetailBean.setCheckDiagnosis("" + mBean.getCheckDiagnosis());
-        mDBDetailBean.setBiopsy("" + mBean.getBiopsy());
-        mDBDetailBean.setTest("" + mBean.getTest());
-        mDBDetailBean.setCtology("" + mBean.getCtology());
-        mDBDetailBean.setPathology("" + mBean.getPathology());
-        mDBDetailBean.setAdvice("" + mBean.getAdvice());
-        mDBDetailBean.setExaminingPhysician("" + mBean.getExaminingPhysician());
-        return mDBDetailBean;
-    }
 
     /**
      * 此处下载用户信息或者图片信息
@@ -497,18 +485,20 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
 
     //下载图片信息
     private void downLoadPicture() {
+        //getCurrentID  == itemID  是当前用户id
         boolean isExist = ImageDBUtils.queryListIsExist(getCurrentID());
         //是否有本地缓存的标志
         File toFile = new File(Environment.getExternalStorageDirectory() +
                 "/MyData/Images/" + getCurrentID() + "/thumb/");
         if (isExist) { //存在,数据库缓存里面读取
-            List<ImageListDownDBBean> ImageListDownDBBeans = ImageDBUtils.queryListByTag(CaseDetailMsgActivity.getCurrentID());
+            List<ImageListDownDBBean> ImageListDownDBBeans = ImageDBUtils.queryListByTag(this.getCurrentID());
             LogUtils.e("选择的数据===数据库存在==里面读取=====");
             LogUtils.e("选择的数据===ImageListDownDBBeans.size()===" + ImageListDownDBBeans.size());
             //因为，只要进入03，我就全部下载存入数据库，downTag为0，这里用户选择了下载所以我们去数据库中获取数据更新为1
             ImageListDownDBBean mCacheBean = ImageListDownDBBeans.get(0);
             mCacheBean.setDownTag("1");
             ImageDBUtils.insertOrReplaceData(mCacheBean);       //手动更新，换当前用户缓存，设置为下载类型
+            this.onOverDownOK();
 
         } else {   //不存在,开启线程取下载SMB文件,并且存入数据库
 //                不存在,表示没有进入过03界面,本地没有缓存,所以需要开启线程下载
@@ -520,6 +510,16 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (deleteBuilder != null) {
+            deleteBuilder.dismiss();
+        }
+        if (downBuilder != null) {
+            downBuilder.dismiss();
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -547,14 +547,16 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
 
     @Override
     public void onOverDownOK() {
-        toast("图片下载完毕,并且存入数据库之中");
+        toast("图片下载完毕");
+
         /**
          * 存入数据库后获取图片。这里只是做数据的打印查看
+         * 图片下载完毕,并且存入数据库之中
          */
-        List<ImageListDownDBBean> ImageListDownDBBeans = ImageDBUtils.queryListByTag(CaseDetailMsgActivity.getCurrentID());
+        List<ImageListDownDBBean> ImageListDownDBBeans = ImageDBUtils.queryListByTag(this.getCurrentID());
         for (int i = 0; i < ImageListDownDBBeans.size(); i++) {
-            List<DimImageBean> mDimImageList = ImageListDownDBBeans.get(i).getMDimImageList();
-            List<ReallyImageBean> mReallyImageList = ImageListDownDBBeans.get(i).getMReallyImageList();
+//            List<DimImageBean> mDimImageList = ImageListDownDBBeans.get(i).getMDimImageList();
+//            List<ReallyImageBean> mReallyImageList = ImageListDownDBBeans.get(i).getMReallyImageList();
             LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getItemID());
             LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMDimImageList().size());
             LogUtils.e("====DP==ReallyPath=====DB之后==" + ImageListDownDBBeans.get(i).getMReallyImageList().size());

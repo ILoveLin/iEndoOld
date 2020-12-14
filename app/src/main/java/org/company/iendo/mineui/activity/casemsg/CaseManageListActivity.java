@@ -22,16 +22,17 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.beandb.UserDetailMSGDBBean;
 import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.casemsg.adapter.CaseManageAdapter;
-import org.company.iendo.mineui.activity.user.SearchUserResultActivity;
 import org.company.iendo.ui.dialog.MessageDialog;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.anim.EasyTransition;
 import org.company.iendo.util.anim.EasyTransitionOptions;
+import org.company.iendo.util.db.UserDetailMSGDBUtils;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 import org.greenrobot.eventbus.EventBus;
@@ -39,6 +40,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -57,6 +59,7 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
     private TitleBar mTitleBar;
     private String endoType;
     private MessageDialog.Builder builder;
+    private boolean mIsCreator;
 
     @Override
     protected int getLayoutId() {
@@ -101,7 +104,6 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAddDeleteEvent(AddDeleteEvent event) {
         if (mAdapter != null) {
-            LogUtils.e("=TAG=onAddDeleteEvent==" + event.getType());
             CaseManagerListBean.DsDTO bean = event.getBean();
             if (event.getType().equals("delete")) {
                 mAdapter.removeItem(event.getPosition());
@@ -133,8 +135,19 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
     @Override
     protected void initData() {
         endoType = (String) SharePreferenceUtil.get(CaseManageListActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
-        sendRequest();
+        mIsCreator = (boolean) SharePreferenceUtil.get(CaseManageListActivity.this, SharePreferenceUtil.Flag_User_IsCreator, false);
+        if (getCurrentOnlineType()) {
+            sendRequest();
+        } else {  //UserDetailMSGDBBean
+            if (mIsCreator) {
+                List userDBList = getUserDBList();
+                mAdapter.setData(userDBList);
+                mSmartRefreshLayout.finishRefresh();
+            } else {
+                showEmpty();
+            }
 
+        }
     }
 
     /**
@@ -189,9 +202,13 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
         toast("第" + position + "条目被点击了");
+        LogUtils.e("bean==数据====adapter===item====" + mAdapter.getItem(position).toString());
+
         LogUtils.e("=TAG=hy=position==" + mAdapter.getItem(position).toString());
         Intent intent = new Intent(CaseManageListActivity.this, CaseDetailMsgActivity.class);
         intent.putExtra("ID", mAdapter.getItem(position).getID());
+//        List<UserDetailMSGDBBean> userDetailMSGDBBeans = UserDetailMSGDBUtils.queryListByTag(mAdapter.getItem(position).getID());
+//        LogUtils.e("bean==数据==02==="+userDetailMSGDBBeans.get(0).toString());
         intent.putExtra("bean", mAdapter.getItem(position));
         intent.putExtra("position", position + "");
         startActivity(intent);

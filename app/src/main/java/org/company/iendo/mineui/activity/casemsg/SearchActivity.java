@@ -23,6 +23,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.beandb.UserDetailMSGDBBean;
 import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
@@ -30,6 +31,7 @@ import org.company.iendo.mineui.activity.casemsg.adapter.SearchAdapter;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.anim.EasyTransition;
+import org.company.iendo.util.db.UserDetailMSGDBUtils;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +39,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,7 +52,7 @@ import okhttp3.Call;
  * Describe搜索界面
  */
 public class SearchActivity extends MyActivity implements StatusAction, BaseAdapter.OnItemClickListener {
-    private List<CaseManagerListBean.DsDTO> mDataList;
+    private List<CaseManagerListBean.DsDTO> mDataList = new ArrayList<>();
     public List<CaseManagerListBean.DsDTO> mList;
     private WrapRecyclerView mRecyclerView;
     private ClearEditText mEditSearch;
@@ -61,6 +64,7 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     private String endoType;
     private TextView mBack;
     private String tag;
+    private Boolean mIsCreator;
 
     @Override
     protected int getLayoutId() {
@@ -92,10 +96,24 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initData() {
         tag = mCetSearch.getText().toString().trim();
-        sendRequest();
+        mIsCreator = (boolean) SharePreferenceUtil.get(this, SharePreferenceUtil.Flag_User_IsCreator, false);
+        if (getCurrentOnlineType()) {
+            sendRequest();
+        } else {  //UserDetailMSGDBBean
+            if (mIsCreator) {
+                if (!"".equals(tag)) {
+                    List userDBList = getUserDBList();
+                    Stream<CaseManagerListBean.DsDTO> stream = userDBList.stream();
+                    mDataList.clear();
+                    mDataList = stream.filter(bean -> bean.getName().startsWith(tag)).collect(Collectors.toList());
+                    mAdapter.setData(mDataList);
+                }
+            }
+        }
     }
 
     @Override
@@ -112,10 +130,23 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
                 break;
             case R.id.iv_user_search:   //本地搜索数据
                 tag = mCetSearch.getText().toString().trim();
-                if ("".startsWith(tag)) {
-                    toast("请输入搜索关键字");
-                } else {
-                    sendRequest();
+                mIsCreator = (boolean) SharePreferenceUtil.get(this, SharePreferenceUtil.Flag_User_IsCreator, false);
+                if (getCurrentOnlineType()) {
+                    if ("".startsWith(tag)) {
+                        toast("请输入搜索关键字");
+                    } else {
+                        sendRequest();
+                    }
+                } else {  //UserDetailMSGDBBean
+                    if (mIsCreator) {
+                        if (!"".equals(tag)) {
+                            List userDBList = getUserDBList();
+                            Stream<CaseManagerListBean.DsDTO> stream = userDBList.stream();
+                            mDataList.clear();
+                            mDataList = stream.filter(bean -> bean.getName().startsWith(tag)).collect(Collectors.toList());
+                            mAdapter.setData(mDataList);
+                        }
+                    }
                 }
                 break;
         }

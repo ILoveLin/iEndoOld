@@ -111,6 +111,7 @@ public class ImageDBUtils {
 
     }
     public static List<ImageListDownDBBean> queryListByTag(String tag) {
+        //tag 就是itemID
         DaoSession daoSession = MyApplication.getInstance().getDaoSession();
         QueryBuilder<ImageListDownDBBean> qb = daoSession.queryBuilder(ImageListDownDBBean.class);
         List<ImageListDownDBBean> ImageListDownDBBeans = daoSession.queryRaw(ImageListDownDBBean.class, "where tag = ?", tag);

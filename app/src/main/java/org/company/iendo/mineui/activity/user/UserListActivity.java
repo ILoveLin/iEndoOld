@@ -389,13 +389,8 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        showError(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                toast("网络请求错误");
-                            }
-                        });
-                        LogUtils.e("=TAG=hy=onSucceed==" + e);
+                        showComplete();
+
                     }
 
                     @RequiresApi(api = Build.VERSION_CODES.N)

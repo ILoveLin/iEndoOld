@@ -213,17 +213,8 @@ public class UserMessageActivity extends MyActivity {
     }
 
     private void changePassword() {
-
-        if (getCurrentOnlineType()) {                 //在线模式
-            showChangeDialog();
-        } else {                                      //离线模式
-            toast("离线登录无法操作");
-        }
-
-
         if (getCurrentOnlineType()) {//在线用户才可以修改
-
-
+            showChangeDialog();
         } else {
             mMessageDialog = new MessageDialog.Builder(UserMessageActivity.this);
             // 标题可以不用填写

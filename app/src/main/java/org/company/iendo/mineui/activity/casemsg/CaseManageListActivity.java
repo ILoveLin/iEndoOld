@@ -84,7 +84,6 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(this);
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(this);
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(v -> {
-            toast("点击搜索");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageListActivity.this, mHeaderView);
             Intent intent = new Intent(CaseManageListActivity.this, SearchActivity.class);
             EasyTransition.startActivity(intent, options);
@@ -92,7 +91,6 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
 
         });
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(v -> {
-            toast("点击搜索");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(CaseManageListActivity.this, mHeaderView);
             Intent intent = new Intent(CaseManageListActivity.this, SearchActivity.class);
             EasyTransition.startActivity(intent, options);
@@ -109,9 +107,11 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
                 mAdapter.removeItem(event.getPosition());
             } else if (event.getType().equals("edit")) {
                 mAdapter.notifyDataSetChanged();
+            } else if (event.getType().equals("offline_delete")) {
+                mAdapter.removeItem(event.getPosition());
+//                mAdapter.notifyDataSetChanged();
             } else {
                 mAdapter.addItem(0, event.getBean());
-
             }
             mAdapter.notifyDataSetChanged();
 
@@ -187,23 +187,19 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
     }
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.cet_user_search:
-                toast("点击搜索");
-                break;
-            case R.id.iv_user_search:
-                toast("开始搜索啦~");
-                break;
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.cet_user_search:
+//                break;
+//            case R.id.iv_user_search:
+//                break;
+//        }
+//    }
 
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-        toast("第" + position + "条目被点击了");
         LogUtils.e("bean==数据====adapter===item====" + mAdapter.getItem(position).toString());
-
         LogUtils.e("=TAG=hy=position==" + mAdapter.getItem(position).toString());
         Intent intent = new Intent(CaseManageListActivity.this, CaseDetailMsgActivity.class);
         intent.putExtra("ID", mAdapter.getItem(position).getID());
@@ -230,7 +226,6 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
             @Override
             public void onRightClick(View v) {
                 if (getCurrentOnlineType()) {
-                    toast("添加");
                     Intent intent = new Intent(CaseManageListActivity.this, AddEditActivity.class);
                     startActivity(intent);
                 } else {
@@ -280,6 +275,17 @@ public class CaseManageListActivity extends MyActivity implements StatusAction, 
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        sendRequest();
+        if (getCurrentOnlineType()) {
+            sendRequest();
+        } else {  //UserDetailMSGDBBean
+            if (mIsCreator) {
+                List userDBList = getUserDBList();
+                mAdapter.setData(userDBList);
+                mSmartRefreshLayout.finishRefresh();
+            } else {
+                showEmpty();
+            }
+
+        }
     }
 }

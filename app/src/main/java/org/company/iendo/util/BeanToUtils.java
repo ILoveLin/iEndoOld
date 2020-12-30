@@ -6,6 +6,8 @@ import androidx.annotation.RequiresApi;
 
 import org.company.iendo.bean.CaseDetailMsgBean;
 import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.UserListBean;
+import org.company.iendo.bean.beandb.UserDBBean;
 import org.company.iendo.bean.beandb.UserDetailMSGDBBean;
 import org.company.iendo.bean.beandb.image.DimImageBean;
 import org.company.iendo.bean.beandb.image.ImageListDownDBBean;
@@ -23,6 +25,7 @@ import java.util.List;
  */
 public class BeanToUtils {
     /**
+     * 病例管理 图片
      * 图片url数据转换
      */
 
@@ -41,6 +44,7 @@ public class BeanToUtils {
     }
 
     /**
+     * 病例管理 图片
      * dbbean中原图图片url数据转换为集合数据给list用
      */
 
@@ -59,6 +63,7 @@ public class BeanToUtils {
     }
 
     /**
+     * 病例管理
      * DBBean转换为jsonBean
      *
      * @param bean
@@ -99,8 +104,9 @@ public class BeanToUtils {
         return jsonBean;
     }
 
-
+//    UserListBean.DsDTO>
     /**
+     * 病例管理
      * jsonBean转换为DBBean
      *
      * @param
@@ -143,6 +149,22 @@ public class BeanToUtils {
         mDBDetailBean.setExaminingPhysician("" + mBean.getExaminingPhysician());
         return mDBDetailBean;
 
+    }
+
+
+    public static ArrayList<UserListBean.DsDTO>  getListUserBean(ArrayList<UserDBBean> list) {
+        ArrayList<UserListBean.DsDTO> mDataList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            UserDBBean bean = list.get(i);
+            UserListBean.DsDTO mBean = new UserListBean.DsDTO();
+            mBean.setUserID(bean.getTag());
+            mBean.setUserName(bean.getUsername());
+            mBean.setPassword(bean.getPassword());
+            mBean.setDes(bean.getUserType());
+            mDataList.add(mBean);
+
+        }
+        return mDataList;
     }
 
 }

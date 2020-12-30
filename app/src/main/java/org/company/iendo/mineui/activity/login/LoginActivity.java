@@ -208,12 +208,9 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
                                             }.getType();
                                             LoginBean mBean = mGson.fromJson(response, type);
                                             for (int i = 0; i < mBean.getDs().size(); i++) {
-
                                                 String userType = mBean.getDs().get(mBean.getDs().size()-1).getRole();
-                                                LogUtils.e("=TAG=login=Current_UserType==" +userType);
-
+                                                LogUtils.e("=TAG=login==onResponse==Current_UserType==" +userType);
                                                 SharePreferenceUtil.put(LoginActivity.this, SharePreferenceUtil.Current_UserType, userType);
-
                                                 if (i == 0) {
                                                     String createdAt = mBean.getDs().get(i).getCreatedAt();
                                                     String lastLoginAt = mBean.getDs().get(i).getLastLoginAt();
@@ -244,7 +241,6 @@ public final class LoginActivity extends MyActivity implements KeyboardWatcher.S
 
                 } else {//离线登录
                     LogUtils.e("==ifOnline==2==" + ifOnline);
-
                     checkDBDataToChangeCurrentUserMsg();
 
                 }

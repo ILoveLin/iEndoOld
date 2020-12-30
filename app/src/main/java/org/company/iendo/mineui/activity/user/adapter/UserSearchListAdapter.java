@@ -57,6 +57,13 @@ public class UserSearchListAdapter extends MyAdapter<UserListBean.DsDTO> {
             }
             mTitleName.setText("" + item.getUserName());
             mDec.setText("" + item.getDes());
+            if (item.getDes().equals("0")){
+                mDec.setText("超级管理员");
+
+            }else{
+                mDec.setText("普通用户");
+
+            }
 
 
         }

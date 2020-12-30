@@ -7,6 +7,7 @@ import java.util.List;
  * <p>
  * Describe 获取当前机器的userid
  */
+
 public class LiveConnectIDBean {
 
 
@@ -19,7 +20,6 @@ public class LiveConnectIDBean {
     public void setDs(List<DsDTO> ds) {
         this.ds = ds;
     }
-
     public static class DsDTO {
         /**
          * ID : 616

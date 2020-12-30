@@ -87,15 +87,10 @@ public final class ImagePreviewActivity extends MyActivity implements ViewPager.
         String[] split = imagesList.get(imagesList.size() - 1).split("/");
         String s = split[split.length - 1];
         mTitle.setText("" + s);
-
         //Indicator图片过多，就隐藏
         if (imagesList.size() > 6) {
-            toast("666666666666666666!");
-
             mIndicatorView.setVisibility(View.GONE);
         } else {
-            toast("00000000000000000000!");
-
             mIndicatorView.setVisibility(View.VISIBLE);
         }
 

@@ -34,7 +34,12 @@ public interface StatusAction {
         showLoading(R.raw.loading);
 //        showLoading(R.raw.loading);
     }
-
+    /**
+     * 显示加载中
+     */
+    default void showLoadingBySearch() {
+        showLoading(R.raw.searching_radius);
+    }
     default void showLoading(@RawRes int id) {
         HintLayout layout = getHintLayout();
         layout.show();

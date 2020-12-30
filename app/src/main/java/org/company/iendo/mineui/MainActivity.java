@@ -70,11 +70,9 @@ public class MainActivity extends MyActivity implements KeyboardWatcher.SoftKeyb
                 startActivity(CaseManageListActivity.class);
                 break;
             case R.id.cv_live:          //直播
-
                 if (getCurrentOnlineType()) {
                     Intent intent = new Intent(getActivity(), LiveActivity.class);
                     startActivity(intent);
-                    showNetLiveDialog();
                 } else {
                     showNetLiveDialog();
                 }

@@ -213,7 +213,7 @@ public abstract class MyActivity extends BaseActivity
      * @return
      */
     public String getCurrentUserPower() {
-        return (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_UserType, "");
+        return (String) SharePreferenceUtil.get(this, SharePreferenceUtil.Current_UserType, "1");
     }
 
     /**

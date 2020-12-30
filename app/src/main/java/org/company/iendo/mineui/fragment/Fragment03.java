@@ -62,7 +62,7 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     public ArrayList<String> mDataList = new ArrayList<>();
     private ImageListDownDBBean mImageListBean;
     private ArrayList<String> dimImageList;
-    private ArrayList<String> reallyPathList =new ArrayList<>();
+    private ArrayList<String> reallyPathList = new ArrayList<>();
     private CaseDetailMsgActivity mActivity;
     private WrapRecyclerView mRecyclerView;
     public static final int REFRESH = 110;
@@ -294,7 +294,6 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     @SuppressLint("NewApi")
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
-        toast(position);
         if (mActivity.getCurrentOnlineType()) {
             if (canClick) { //跳转原图界面的开关
                 viewPagerDataList = getViewPagerPicturePath();
@@ -304,18 +303,14 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                     toast("暂无数据!");
                 }
             } else {
-                toast("原图读取中,请稍后再试。");
+                toast("高清图读取中...,请稍后再试!");
             }
         } else {
             ArrayList<String> reallyImagePathList = (ArrayList<String>) BeanToUtils.getReallyImagePathList(mActivity.getItemBeanID());
-
-
             Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.size());
             for (int i = 0; i < reallyImagePathList.size(); i++) {
                 Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.get(i));
-
             }
-
             if (reallyImagePathList.size() != 0) {
                 ImagePreviewActivity.start(getAttachActivity(), reallyImagePathList, reallyImagePathList.size() - 1);
             } else {

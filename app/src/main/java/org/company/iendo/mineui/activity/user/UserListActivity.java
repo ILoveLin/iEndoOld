@@ -25,6 +25,7 @@ import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseManagerListBean;
 import org.company.iendo.bean.UserListBean;
+import org.company.iendo.bean.beandb.UserDBBean;
 import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
@@ -34,11 +35,13 @@ import org.company.iendo.mineui.activity.user.adapter.UserSearchListAdapter;
 import org.company.iendo.ui.dialog.InputDialog;
 import org.company.iendo.ui.dialog.InputDialogOne;
 import org.company.iendo.ui.dialog.MessageDialog;
+import org.company.iendo.util.BeanToUtils;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.MD5ChangeUtil;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.anim.EasyTransition;
 import org.company.iendo.util.anim.EasyTransitionOptions;
+import org.company.iendo.util.db.UserDBUtils;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,22 +84,30 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
         mTitlebar = findViewById(R.id.titlebar);
         mAdapter = new UserSearchListAdapter(this);
         endoType = (String) SharePreferenceUtil.get(UserListActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
-        responseListener();
         currentOnlineType = getCurrentOnlineType();
+        responseListener();
         mRecyclerView.setAdapter(mAdapter);
+        if (currentOnlineType) {
+            sendRequest();
+        } else {              //离线模式
+            showLoadingBySearch();
+            ArrayList<UserDBBean> list = (ArrayList<UserDBBean>) UserDBUtils.queryAll(UserDBBean.class);
+            ArrayList<UserListBean.DsDTO> listUserBean = BeanToUtils.getListUserBean(list);
+            mAdapter.setData(listUserBean);
+            showComplete();
+        }
+
         // 禁用动画效果
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.addItemDecoration(new RecycleViewDivider(getActivity(), 1, R.drawable.shape_divideritem_decoration));
         LinearLayout mHeaderView = mRecyclerView.addHeaderView(R.layout.header_user_search);
         mHeaderView.findViewById(R.id.cet_user_search).setOnClickListener(v -> {
-            toast("点击搜索");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(UserListActivity.this, mHeaderView);
             Intent intent = new Intent(UserListActivity.this, SearchUserResultActivity.class);
             EasyTransition.startActivity(intent, options);
 
         });
         mHeaderView.findViewById(R.id.iv_user_search).setOnClickListener(v -> {
-            toast("开始搜索啦~");
             EasyTransitionOptions options = EasyTransitionOptions.makeTransitionOptions(UserListActivity.this, mHeaderView);
             Intent intent = new Intent(UserListActivity.this, SearchUserResultActivity.class);
             EasyTransition.startActivity(intent, options);
@@ -105,7 +116,6 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
 
 
     private void responseListener() {
-        sendRequest();
 
         mSmartRefreshLayout.setOnRefreshLoadMoreListener(this);
         mSmartRefreshLayout.setEnableLoadMore(false);    //是否启用上拉加载功能
@@ -289,8 +299,6 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
                         if (password.equals("newP")) {
                             password = "";
                         }
-                        toast("旧密码：" + username + "===新密码：" + password);
-                        toast("旧密码：" + username + "===新密码：" + password);
                         String UserId = (String) SharePreferenceUtil.get(UserListActivity.this, SharePreferenceUtil.UserId, "");
                         LogUtils.e("TAG===oldPassword=" + username);
                         LogUtils.e("TAG===newPassword=" + password);
@@ -382,7 +390,7 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
 
     private void sendRequest() {
         LogUtils.e("=TAG=hy=onError==" + endoType);
-        showLoading();
+        showLoadingBySearch();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.User_List)
                 .build()
@@ -431,6 +439,13 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        sendRequest();
+        if (currentOnlineType){
+            sendRequest();
+        }else{
+            ArrayList<UserDBBean> list = (ArrayList<UserDBBean>) UserDBUtils.queryAll(UserDBBean.class);
+            ArrayList<UserListBean.DsDTO> listUserBean = BeanToUtils.getListUserBean(list);
+            mAdapter.setData(listUserBean);
+            mSmartRefreshLayout.finishRefresh();
+        }
     }
 }

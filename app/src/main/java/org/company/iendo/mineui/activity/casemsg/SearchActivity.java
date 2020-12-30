@@ -39,6 +39,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -161,7 +164,7 @@ public class SearchActivity extends MyActivity implements StatusAction, BaseAdap
         tag = mCetSearch.getText().toString().trim();
         LogUtils.e("=TAG=hy=onError==" + endoType);
         LogUtils.e("=TAG=hy=tag==" + tag);
-        showLoading();
+        showLoadingBySearch();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.CaseManager_List)
                 .addParams("endoType", endoType)

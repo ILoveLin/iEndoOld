@@ -21,6 +21,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.company.iendo.R;
 import org.company.iendo.bean.CaseDetailMsgBean;
 import org.company.iendo.bean.CaseManagerListBean;
+import org.company.iendo.bean.beandb.UserDBBean;
 import org.company.iendo.bean.beandb.UserDetailMSGDBBean;
 import org.company.iendo.bean.beandb.image.DimImageBean;
 import org.company.iendo.bean.beandb.image.ImageListDownDBBean;
@@ -140,9 +141,10 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
 
     }
 
-    public String  getItemBeanID() {
+    public String getItemBeanID() {
         return bean.getID();
     }
+
     public CaseManagerListBean.DsDTO getItemBean() {
         return BeanToUtils.getDBBeanToJsonBean(bean);
     }
@@ -354,6 +356,7 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
                                 "/MyData/Images/" + itemID);
                         LogUtils.e("====DP==删除,文件夹存在=====删除了==");
                     }
+
                     finish();
                 }
             }
@@ -407,13 +410,22 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
                 .setListener(new MessageDialog.OnListener() {
                     @Override
                     public void onConfirm(BaseDialog dialog) {
-                        toast("确定");
-                        sendDeleteRequest();
+                        if (getCurrentOnlineType()) {
+                            sendDeleteRequest();
+                        } else {
+                            //离线就删除本地用户和照片
+                            LogUtils.e("====DP==删除,文件夹存在=====getCurrentOnlineType=="+getCurrentOnlineType());
+                            if (!getCurrentOnlineType()) {  //离线模式才发送消息
+                                EventBus.getDefault().post(new AddDeleteEvent(bean, "offline_delete", deletePosition));
+                            }
+                            synchronizedDBDataAndFileData();
+                        }
+
                     }
 
                     @Override
                     public void onCancel(BaseDialog dialog) {
-                        toast("取消");
+
                     }
                 })
                 .show();
@@ -548,7 +560,6 @@ public class CaseDetailMsgActivity extends MyActivity implements DownPictureThre
     @Override
     public void onOverDownOK() {
         toast("图片下载完毕");
-
         /**
          * 存入数据库后获取图片。这里只是做数据的打印查看
          * 图片下载完毕,并且存入数据库之中

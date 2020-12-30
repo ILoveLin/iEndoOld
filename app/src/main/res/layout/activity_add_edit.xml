@@ -317,6 +317,7 @@
                     android:layout_weight="4"
                     android:background="@color/white"
                     android:hint="请输入"
+                    android:text=""
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingTop="@dimen/padding_6"
                     android:paddingRight="@dimen/padding_10"

@@ -73,7 +73,7 @@ public class GuideActivity extends MyActivity
         userDBBean.setUsername("Admin");
         userDBBean.setPassword("");
         userDBBean.setTag("Admin");
-        userDBBean.setUserType("1");
+        userDBBean.setUserType("0");   //超级管理员是0,普通用户是1
         userDBBean.setId(ID);
         UserDBUtils.insertOrReplaceData(userDBBean);
         boolean isExist = UserDBUtils.queryListIsExist("admin");

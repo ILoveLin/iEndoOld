@@ -25,16 +25,19 @@ import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
 import org.company.iendo.bean.CaseManagerListBean;
 import org.company.iendo.bean.UserListBean;
+import org.company.iendo.bean.beandb.UserDBBean;
 import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
 import org.company.iendo.mineui.activity.user.adapter.SearchUserResultAdapter;
 import org.company.iendo.ui.dialog.InputDialogOne;
 import org.company.iendo.ui.dialog.MessageDialog;
+import org.company.iendo.util.BeanToUtils;
 import org.company.iendo.util.LogUtils;
 import org.company.iendo.util.MD5ChangeUtil;
 import org.company.iendo.util.SharePreferenceUtil;
 import org.company.iendo.util.anim.EasyTransition;
+import org.company.iendo.util.db.UserDBUtils;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
 import org.greenrobot.eventbus.EventBus;
@@ -42,6 +45,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -66,6 +70,7 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
     private String endoType;
     private TextView mBack;
     private String tag;
+    private List<UserListBean.DsDTO> collectList;
 
     @Override
     protected int getLayoutId() {
@@ -94,9 +99,6 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
         mRecyclerView.addItemDecoration(new RecycleViewDivider(this, 1, R.drawable.shape_divideritem_decoration));
         endoType = (String) SharePreferenceUtil.get(SearchUserResultActivity.this, SharePreferenceUtil.Current_Case_Num, "3");
         showSoftInputFromWindow(this, mEditSearch);
-
-
-
 
     }
 
@@ -181,6 +183,7 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
                         hideDialog();
                         toast("请求错误");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                         hideDialog();
@@ -197,6 +200,7 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
                 });
 
     }
+
     private void showDeleteDialog(UserListBean.DsDTO item) {
         new MessageDialog.Builder(SearchUserResultActivity.this)
                 // 标题可以不用填写
@@ -229,7 +233,7 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
 //        User_ID  当前登入的id
         String User_ID = (String) SharePreferenceUtil.get(SearchUserResultActivity.this, SharePreferenceUtil.UserId, "");
 
-        showDialog();
+        showLoadingBySearch();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.User_Delete)
                 .addParams("UserID", UserID)
@@ -261,10 +265,16 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
 
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initData() {
         tag = mCetSearch.getText().toString().trim();
-        sendRequest();
+        if (getCurrentOnlineType()) {
+            sendRequest();
+        }
+
+
     }
 
     @Override
@@ -284,7 +294,17 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
                 if ("".startsWith(tag)) {
                     toast("请输入搜索关键字");
                 } else {
-                    sendRequest();
+                    if (getCurrentOnlineType()) {
+                        sendRequest();
+                    } else {
+//                        ArrayList<UserDBBean> list = (ArrayList<UserDBBean>) UserDBUtils.queryAll(UserDBBean.class);
+//                        ArrayList<UserListBean.DsDTO> listUserBean = BeanToUtils.getListUserBean(list);
+//                        mAdapter.setData(listUserBean);
+                        showLoadingBySearch();
+                        collectList = BeanToUtils.getListUserBean((ArrayList<UserDBBean>) UserDBUtils.queryAll(UserDBBean.class)).stream().filter(bean -> bean.getUserName().startsWith(tag)).collect(Collectors.toList());
+                        mAdapter.setData(collectList);
+                        showComplete();
+                    }
                 }
                 break;
         }
@@ -297,7 +317,7 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
      */
     private void sendRequest() {
         tag = mCetSearch.getText().toString().trim();
-        showLoading();
+        showLoadingBySearch();
         OkHttpUtils.get()
                 .url(getCurrentHost() + HttpConstant.User_List)
                 .build()
@@ -322,7 +342,7 @@ public class SearchUserResultActivity extends MyActivity implements StatusAction
                             Type type = new TypeToken<UserListBean>() {
                             }.getType();
                             UserListBean mBean = mGson.fromJson(response, type);
-                            mList =  mBean.getDs();
+                            mList = mBean.getDs();
                             Stream<UserListBean.DsDTO> stream = mList.stream();
                             mDataList = stream.filter(bean -> bean.getUserName().startsWith(tag)).collect(Collectors.toList());
                             if (mDataList.size() == 0) {

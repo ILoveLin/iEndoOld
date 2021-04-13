@@ -204,6 +204,8 @@ dependencies {
     //网络请求
     //https://www.jianshu.com/p/721381cf974f     okhttputils使用链接
     implementation 'com.zhy:okhttputils:2.6.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.3.0' //okttp依赖
+    implementation 'com.zhy:okhttputils:2.6.2'
 
 //    implementation 'com.github.huzenan:EasyTransition:v1.0.0'
     implementation 'com.shuyu:gsyVideoPlayer-java:7.0.1'
@@ -211,6 +213,7 @@ dependencies {
     implementation 'com.shuyu:GSYVideoPlayer-exo2:7.0.1'
     //更多ijk的编码支持
     implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.0.1'
+
 
 
     implementation 'org.greenrobot:eventbus:3.0.0'

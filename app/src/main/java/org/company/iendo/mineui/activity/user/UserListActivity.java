@@ -23,14 +23,10 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
-import org.company.iendo.bean.CaseManagerListBean;
 import org.company.iendo.bean.UserListBean;
 import org.company.iendo.bean.beandb.UserDBBean;
-import org.company.iendo.bean.event.AddDeleteEvent;
 import org.company.iendo.common.HttpConstant;
 import org.company.iendo.common.MyActivity;
-import org.company.iendo.mineui.activity.casemsg.CaseManageListActivity;
-import org.company.iendo.mineui.activity.casemsg.SearchActivity;
 import org.company.iendo.mineui.activity.user.adapter.UserSearchListAdapter;
 import org.company.iendo.ui.dialog.InputDialog;
 import org.company.iendo.ui.dialog.InputDialogOne;
@@ -44,14 +40,10 @@ import org.company.iendo.util.anim.EasyTransitionOptions;
 import org.company.iendo.util.db.UserDBUtils;
 import org.company.iendo.widget.HintLayout;
 import org.company.iendo.widget.RecycleViewDivider;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import okhttp3.Call;
 
@@ -439,9 +431,9 @@ public class UserListActivity extends MyActivity implements StatusAction, OnRefr
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        if (currentOnlineType){
+        if (currentOnlineType) {
             sendRequest();
-        }else{
+        } else {
             ArrayList<UserDBBean> list = (ArrayList<UserDBBean>) UserDBUtils.queryAll(UserDBBean.class);
             ArrayList<UserListBean.DsDTO> listUserBean = BeanToUtils.getListUserBean(list);
             mAdapter.setData(listUserBean);

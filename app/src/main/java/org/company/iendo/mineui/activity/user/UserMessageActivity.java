@@ -104,12 +104,16 @@ public class UserMessageActivity extends MyActivity {
                 changePassword();
                 break;
             case R.id.btn_user_control_else_user:  //管理其他用户
-                toast(getCurrentUserPower());
-                if ("0".equals(getCurrentUserPower())) {  //超级管理员
+                if (getCurrentOnlineType()){
                     startActivity(UserListActivity.class);
-                } else {        //普通用户
-                    toast("普通用户暂无该权限");
+                }else{
+                    toast("离线用户无法操作");
                 }
+//                if ("0".equals(getCurrentUserPower())) {  //超级管理员
+//                    startActivity(UserListActivity.class);
+//                } else {        //普通用户
+//                    toast("普通用户暂无该权限");
+//                }
                 break;
             case R.id.btn_user_exit:   //退出
                 exit();

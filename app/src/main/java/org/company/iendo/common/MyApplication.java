@@ -79,8 +79,9 @@ public final class MyApplication extends Application implements LifecycleOwner {
         super.onCreate();
         mLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         initSdk(this);
-        initGreenDao();
         initOkHttp();
+        initGreenDao();
+
 
 
     }

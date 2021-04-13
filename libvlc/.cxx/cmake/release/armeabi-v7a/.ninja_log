@@ -1,0 +1,4 @@
+# ninja log v5
+97	2806	631021029	CMakeFiles/yylRecord.dir/src/main/cpp/yyl_log.c.o	b5c4097ad8adfa2e
+2	2882	631021029	CMakeFiles/yylRecord.dir/src/main/cpp/yyl_record.c.o	847910954db559e3
+2883	3649	631021030	../../../../build/intermediates/cmake/release/obj/armeabi-v7a/libyylRecord.so	dc453fea01282d0b

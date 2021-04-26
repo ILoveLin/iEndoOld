@@ -44,11 +44,20 @@ public class PictureAdapter extends MyAdapter<String> {
 
         @Override
         public void onBindView(int position) {
-            File file = new File(getItem(position));
+//            SMB  写一下的显示图片
+//            File file = new File(getItem(position));
+//            Glide.with(getContext())
+//                    .load(file)
+//                    .into(mImage);
+
+//            http格式下的显示图片
+            String item = getItem(position);
             Glide.with(getContext())
-                    .load(file)
+                    .load(item)
+                    .error(R.mipmap.icon_case_btn)
                     .into(mImage);
-            Log.e("adapter", "item==path==" + file.getAbsolutePath() + "");
+            Log.e("adapter", "item==path==" + item+ "");
+//            Log.e("adapter", "item==path==" + file.getAbsolutePath() + "");
         }
     }
 

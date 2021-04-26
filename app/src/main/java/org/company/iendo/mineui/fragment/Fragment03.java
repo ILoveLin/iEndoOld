@@ -16,11 +16,17 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hjq.base.BaseAdapter;
 import com.hjq.widget.layout.WrapRecyclerView;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.company.iendo.R;
 import org.company.iendo.action.StatusAction;
+import org.company.iendo.bean.HttpImageBean;
 import org.company.iendo.bean.beandb.image.DimImageBean;
 import org.company.iendo.bean.beandb.image.ImageListDownDBBean;
 import org.company.iendo.bean.beandb.image.ReallyImageBean;
@@ -37,6 +43,7 @@ import org.company.iendo.util.db.ImageDBUtils;
 import org.company.iendo.widget.HintLayout;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -51,11 +58,15 @@ import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbSession;
+import okhttp3.Call;
 
 /**
  * LoveLin
  * <p>
  * Describe 第三个fragment   读取SMB 共享图片界面
+ * //图片视频查询
+ * images.aspx?UserID=  获取指定病人的图片信息       get           返回值 0传入参数为空  -1病人id不存在
+ * video.aspx？RecordID=    病人视频信息            get                 返回值 0传入参数为空  -1病人id不存在
  */
 public class Fragment03 extends MyFragment<MainActivity> implements StatusAction, BaseAdapter.OnItemClickListener {
     public HashMap<String, String> mPicMap = new HashMap<>();
@@ -90,12 +101,15 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
                     canClick = true;
                     break;
                 case EMPTY:
+
                     showEmpty();
                     break;
             }
         }
     };
     private ArrayList viewPagerDataList;
+    private ArrayList<String> mThumbImageList;
+    private ArrayList<String> mReallyImageList;
 
 
     public Fragment03(CaseDetailMsgActivity Activity) {
@@ -125,29 +139,80 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initData() {
-        //验证是否许可权限
-        if (Build.VERSION.SDK_INT >= 23) {
-            int REQUEST_CODE_CONTACT = 101;
-            String[] permissions = {
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            //验证是否许可权限
-            for (String str : permissions) {
-                if (getActivity().checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
-                    //申请权限
-                    getActivity().requestPermissions(permissions, REQUEST_CODE_CONTACT);
-                    return;
-                } else {
-                    //这里就是权限打开之后自己要操作的逻辑
-                    if (mActivity.getCurrentOnlineType()) {
-                        responseListener();
-                    } else {
-                        List<String> dimImagePathList = BeanToUtils.getDimImagePathList(mActivity.getItemBeanID());
-                        mAdapter.setData(dimImagePathList);
+        String mIP = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_IP, "");
+        String mPort = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_Port, "");
+        String mHost = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_Host, "");
+        SharePreferenceUtil.put(getActivity(), SharePreferenceUtil.Current_BaseUrl, "http://" + mIP + ":" + mPort);  //末尾不加斜杠
+        //http://192.168.66.42:8008
+        String mBaseUrl = (String) SharePreferenceUtil.get(getActivity(), SharePreferenceUtil.Current_BaseUrl, "");
+        LogUtils.e("mIP===" + mIP + "mPort====" + mPort + "mHost=====" + mHost);
+        String url = mBaseUrl + "/images.aspx?";
+        LogUtils.e("url===" + url);
+        OkHttpUtils.get()
+                .url(mBaseUrl + "/images.aspx?")
+                .addParams("UserID", CaseDetailMsgActivity.getCurrentID())
+                .build()
+                .execute(new StringCallback() {
+
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        toast("图片请求错误");
                     }
 
-                }
-            }
-        }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Gson mGson = new Gson();
+                        Type type = new TypeToken<HttpImageBean>() {
+                        }.getType();
+                        HttpImageBean mHttpImageBean = mGson.fromJson(response, type);
+                        /**
+                         * http格式下图片和视频访问路径
+                         * http://192.168.66.42:8008/Images/3915/thumb/001.jpg    //模糊图
+                         * http://192.168.66.42:8008/Images/3915/001.jpg   //高清图
+                         * http://192.168.66.42:8008/Videos/3874/444420210318164613550.mp4
+                         */
+
+
+                        String mThumbHeader = "http://192.168.66.42:8008" + "/Images/" + CaseDetailMsgActivity.getCurrentID() + "/thumb/";
+                        String mReallyHeader = "http://192.168.66.42:8008" + "/Images/" + CaseDetailMsgActivity.getCurrentID() + "/";
+                        mThumbImageList = new ArrayList<>();
+                        mReallyImageList = new ArrayList<>();
+                        for (int i = 0; i < mHttpImageBean.getDs().size(); i++) {
+                            //ThumbPath 模糊图        ImagePath  原图
+                            mThumbImageList.add(mThumbHeader + mHttpImageBean.getDs().get(i).getThumbPath());
+                            mReallyImageList.add(mReallyHeader + mHttpImageBean.getDs().get(i).getImagePath());
+                        }
+
+                        mAdapter.setData(mThumbImageList);
+
+                    }
+                });
+
+
+//        //验证是否许可权限
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            int REQUEST_CODE_CONTACT = 101;
+//            String[] permissions = {
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//            //验证是否许可权限
+//            for (String str : permissions) {
+//                if (getActivity().checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+//                    //申请权限
+//                    getActivity().requestPermissions(permissions, REQUEST_CODE_CONTACT);
+//                    return;
+//                } else {
+//                    //这里就是权限打开之后自己要操作的逻辑
+//                    if (mActivity.getCurrentOnlineType()) {
+//                        responseListener();
+//                    } else {
+//                        List<String> dimImagePathList = BeanToUtils.getDimImagePathList(mActivity.getItemBeanID());
+//                        mAdapter.setData(dimImagePathList);
+//                    }
+//
+//                }
+//            }
+//        }
     }
 
     private void responseListener() {
@@ -294,29 +359,70 @@ public class Fragment03 extends MyFragment<MainActivity> implements StatusAction
     @SuppressLint("NewApi")
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+
         if (mActivity.getCurrentOnlineType()) {
-            if (canClick) { //跳转原图界面的开关
-                viewPagerDataList = getViewPagerPicturePath();
-                if (viewPagerDataList.size() != 0) {
-                    ImagePreviewActivity.start(getAttachActivity(), viewPagerDataList, viewPagerDataList.size() - 1);
-                } else {
-                    toast("暂无数据!");
-                }
-            } else {
-                toast("高清图读取中...,请稍后再试!");
-            }
-        } else {
-            ArrayList<String> reallyImagePathList = (ArrayList<String>) BeanToUtils.getReallyImagePathList(mActivity.getItemBeanID());
-            Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.size());
-            for (int i = 0; i < reallyImagePathList.size(); i++) {
-                Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.get(i));
-            }
-            if (reallyImagePathList.size() != 0) {
-                ImagePreviewActivity.start(getAttachActivity(), reallyImagePathList, reallyImagePathList.size() - 1);
+
+            if (mReallyImageList.size() != 0) {
+                ImagePreviewActivity.start(getAttachActivity(), mReallyImageList, mReallyImageList.size() - 1);
             } else {
                 toast("暂无数据!");
             }
+        } else {
+//            ArrayList<String> reallyImagePathList = (ArrayList<String>) BeanToUtils.getReallyImagePathList(mActivity.getItemBeanID());
+//            Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.size());
+//            for (int i = 0; i < reallyImagePathList.size(); i++) {
+//                Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.get(i));
+//            }
+//            if (reallyImagePathList.size() != 0) {
+//                ImagePreviewActivity.start(getAttachActivity(), reallyImagePathList, reallyImagePathList.size() - 1);
+//            } else {
+//                toast("暂无数据!");
+//            }
         }
+
+//          原来SMB  服务下载原图的方法
+//        if (mActivity.getCurrentOnlineType()) {
+//            if (canClick) { //跳转原图界面的开关
+//                viewPagerDataList = getViewPagerPicturePath();
+//                if (viewPagerDataList.size() != 0) {
+//                    ImagePreviewActivity.start(getAttachActivity(), viewPagerDataList, viewPagerDataList.size() - 1);
+//                } else {
+//                    toast("暂无数据!");
+//                }
+//            } else {
+//                toast("高清图读取中...,请稍后再试!");
+//            }
+//        } else {
+//            ArrayList<String> reallyImagePathList = (ArrayList<String>) BeanToUtils.getReallyImagePathList(mActivity.getItemBeanID());
+//            Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.size());
+//            for (int i = 0; i < reallyImagePathList.size(); i++) {
+//                Log.e("========root=====", "local==reallyImagePathList==" + "" + reallyImagePathList.get(i));
+//            }
+//            if (reallyImagePathList.size() != 0) {
+//                ImagePreviewActivity.start(getAttachActivity(), reallyImagePathList, reallyImagePathList.size() - 1);
+//            } else {
+//                toast("暂无数据!");
+//            }
+//        }
+
+//   文件下载
+//        OkHttpUtils//
+//                .get()//
+//                .url("url")//
+//                .build()//传入文件需要保存的文件夹以及文件名。
+//                .execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath(), "gson-2.2.1.jar")
+//                {
+//                    @Override
+//                    public void onError(Call call, Exception e, int id) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(File response, int id) {
+//
+//                    }
+//
+//                });
     }
 
 

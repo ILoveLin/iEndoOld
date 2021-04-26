@@ -33,6 +33,11 @@ import jcifs.smb.SmbSession;
  * LoveLin
  * <p>
  * Describe  下载图片的线程
+ *
+ * http格式的url
+ * http://192.168.66.42:8008/Images/3915/thumb/001.jpg
+ *
+ * http://192.168.66.42:8008/Videos/3874/444420210318164613550.mp4
  */
 public class DownPictureThread implements Runnable {
     public HashMap<String, String> mPicMap = new HashMap<>();

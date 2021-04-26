@@ -27,6 +27,20 @@ public class SharePreferenceUtil {
     public static final String UserId = "userid";       //当前用户id
     //boolean 类型 ,数据库用户表是否创建了？
     public static final String Flag_User_IsCreator = "Flag_User_IsCreator";
+
+
+    /**
+     * http格式下图片和视频访问路径
+     * http://192.168.66.42:8008/Images/3915/thumb/001.jpg    //模糊图
+     * http://192.168.66.42:8008/Images/3915/001.jpg   //高清图
+     * http://192.168.66.42:8008/Videos/3874/444420210318164613550.mp4
+     */
+
+    public static final String Current_BaseUrl = "BaseUrl";     //末尾不加斜杠  http://192.168.66.42:8008
+
+
+
+
     /**
      * 引导界面
      */

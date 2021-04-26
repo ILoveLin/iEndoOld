@@ -11,6 +11,8 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
+
+import org.company.iendo.R;
 import org.company.iendo.aop.SingleClick;
 import org.company.iendo.http.glide.GlideApp;
 import org.company.iendo.mineui.MainActivity;
@@ -54,14 +56,23 @@ public final class ImagePagerAdapter extends PagerAdapter
 //        GlideApp.with(container.getContext())
 //                .load(mData.get(position))
 //                .into(view);
-
-        File file = new File(mData.get(position));
-        Log.e("Item","======file==path=="+mData.get(position));
-        Log.e("Item","======file===="+file.exists());
+//            http格式下的显示图片
         Glide.with(container.getContext())
-                .load(file)
+                .load(mData.get(position))
+                .error(R.mipmap.icon_case_btn)
                 .into(view);
+        Log.e("Item","======mData.get(position)===="+mData.get(position));
         container.addView(view);
+
+
+//        SMB协议下 加载本地图片
+//        File file = new File(mData.get(position));
+//        Log.e("Item","======file==path=="+mData.get(position));
+//        Log.e("Item","======file===="+file.exists());
+//        Glide.with(container.getContext())
+//                .load(file)
+//                .into(view);
+//        container.addView(view);
         return view;
     }
 

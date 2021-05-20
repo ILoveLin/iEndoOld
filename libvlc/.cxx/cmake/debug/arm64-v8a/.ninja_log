@@ -1,4 +1,4 @@
 # ninja log v5
-1	1096	627459692	CMakeFiles/yylRecord.dir/src/main/cpp/yyl_log.c.o	85c9e0185a0839fe
-31	1587	627459693	CMakeFiles/yylRecord.dir/src/main/cpp/yyl_record.c.o	cfb8bcd2308fa64f
-1588	2306	627459693	../../../../build/intermediates/cmake/debug/obj/arm64-v8a/libyylRecord.so	8cb922078a2204db
+1	820	643197146	CMakeFiles/yylRecord.dir/src/main/cpp/yyl_log.c.o	85c9e0185a0839fe
+5	1185	643197147	CMakeFiles/yylRecord.dir/src/main/cpp/yyl_record.c.o	cfb8bcd2308fa64f
+1185	1425	643197147	../../../../build/intermediates/cmake/debug/obj/arm64-v8a/libyylRecord.so	8cb922078a2204db
